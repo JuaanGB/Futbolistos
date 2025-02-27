@@ -1,0 +1,56 @@
+@startuml
+' Entidades del dominio
+
+entity Usuario
+entity Curso
+entity BloqueContenidos
+entity Pregunta
+entity PreguntaTest
+entity PreguntaCompletar
+entity Flashcard
+entity EstrategiaAprendizaje
+
+entity EstadoCurso {
+  progreso: float
+}
+
+entity Estadistica
+entity CursoCompartido
+entity Badge
+
+' Relaciones
+
+' Un Usuario crea uno o más Cursos
+Usuario "1" o-- "0..*" Curso : crea
+
+' Compartición: Un Usuario comparte cursos con otros
+Usuario "1" o-- "0..*" CursoCompartido : comparte
+CursoCompartido "1" o-- "1" Curso : referencia
+CursoCompartido "1" o-- "1" Usuario : destinatario
+
+' Un Curso se compone de uno o más BloqueContenidos
+Curso "1" *-- "1..*" BloqueContenidos : contiene
+
+' Cada BloqueContenidos incluye una o más Preguntas
+BloqueContenidos "1" *-- "1..*" Pregunta : incluye
+
+' Herencia de tipos de Pregunta
+Pregunta <|-- PreguntaTest
+Pregunta <|-- PreguntaCompletar
+Pregunta <|-- Flashcard
+
+' Un Curso utiliza una Estrategia de Aprendizaje
+Curso "1" o-- "1" EstrategiaAprendizaje : utiliza
+
+' El progreso de un Curso se guarda mediante EstadoCurso
+Usuario "1" o-- "0..*" EstadoCurso : guarda
+EstadoCurso "1" o-- "1" Curso : corresponde a
+
+' Estadísticas de uso generadas por el Usuario
+Usuario "1" o-- "0..*" Estadistica : genera
+
+' Gamificación: Relación muchos a muchos entre Usuario y Badge
+Usuario "0..*" -- "0..*" Badge : posee
+
+@enduml
+
