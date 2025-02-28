@@ -1,4 +1,4 @@
-@startuml
+@startuml modelo
 ' Entidades del dominio
 
 entity Usuario
@@ -9,6 +9,9 @@ entity PreguntaTest
 entity PreguntaCompletar
 entity Flashcard
 entity EstrategiaAprendizaje
+entity Secuencial
+entity Aleatorio
+entity Espaciada
 
 entity EstadoCurso {
   progreso: float
@@ -21,15 +24,15 @@ entity Badge
 ' Relaciones
 
 ' Un Usuario crea uno o más Cursos
-Usuario "1" o-- "0..*" Curso : crea
+Usuario "1" o-- "*" Curso : crea
 
 ' Compartición: Un Usuario comparte cursos con otros
-Usuario "1" o-- "0..*" CursoCompartido : comparte
+Usuario "1" o-- "*" CursoCompartido : comparte
 CursoCompartido "1" o-- "1" Curso : referencia
 CursoCompartido "1" o-- "1" Usuario : destinatario
 
 ' Un Curso se compone de uno o más BloqueContenidos
-Curso "1" *-- "1..*" BloqueContenidos : contiene
+Curso "1..*" -- "1..*" BloqueContenidos : contiene
 
 ' Cada BloqueContenidos incluye una o más Preguntas
 BloqueContenidos "1" *-- "1..*" Pregunta : incluye
@@ -39,18 +42,22 @@ Pregunta <|-- PreguntaTest
 Pregunta <|-- PreguntaCompletar
 Pregunta <|-- Flashcard
 
+' Herencia de tipos de EstrategiaAprendizaje
+EstrategiaAprendizaje <|-- Secuencial
+EstrategiaAprendizaje <|-- Aleatorio
+EstrategiaAprendizaje <|-- Espaciada
+
 ' Un Curso utiliza una Estrategia de Aprendizaje
-Curso "1" o-- "1" EstrategiaAprendizaje : utiliza
+Curso "*" -- "1" EstrategiaAprendizaje : utiliza
 
 ' El progreso de un Curso se guarda mediante EstadoCurso
-Usuario "1" o-- "0..*" EstadoCurso : guarda
-EstadoCurso "1" o-- "1" Curso : corresponde a
+Usuario "*" o-- "*" Curso : realiza
+EstadoCurso "1" --* "1" Curso : tiene asociado
 
 ' Estadísticas de uso generadas por el Usuario
-Usuario "1" o-- "0..*" Estadistica : genera
+Usuario "1" o-- "*" Estadistica : genera
 
 ' Gamificación: Relación muchos a muchos entre Usuario y Badge
-Usuario "0..*" -- "0..*" Badge : posee
+Usuario "*" -- "*" Badge : posee
 
 @enduml
-
