@@ -12,12 +12,16 @@ import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Font;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import PDS.Futbolistos.vistas.componentes.PanelCurso;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.File;
 
 public class VentanaPrincipal {
 
@@ -52,6 +56,8 @@ public class VentanaPrincipal {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 549, 773);
+		frame.setMinimumSize(new Dimension(549, 773));
+		frame.setTitle("FUTBOLISTOS");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JPanel panelNombreApp = new JPanel();
@@ -94,10 +100,11 @@ public class VentanaPrincipal {
 		
 		JButton btnCargarCurso = new JButton("Cargar Curso");
 		btnCargarCurso.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/PDS/Futbolistos/imagenes/subir.png")));
+		btnCargarCurso.addActionListener( e -> cargarCursoDesdeFichero());
 		panelUsuario.add(btnCargarCurso);
 
 		JPanel panelCursos = new JPanel(new GridLayout(0, 2, 10, 10)); // 2 columnas, celdas del mismo tamaño
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 11; i++) {
 		    PanelCurso p = new PanelCurso("Curso " + i, null);
 		    panelCursos.add(p);
 		}
@@ -113,5 +120,32 @@ public class VentanaPrincipal {
 		// Agregar al panel principal
 		panelUsuarioYCursos.add(scrollPane, BorderLayout.CENTER);
 	}
+
+	 private void cargarCursoDesdeFichero() {
+	        JFileChooser fileChooser = new JFileChooser();
+	        
+	        // Permitir solo archivos JSON y YAML
+	        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON y YAML (*.json, *.yaml, *.yml)", "json", "yaml", "yml");
+	        fileChooser.setFileFilter(filtro);
+
+	        int seleccion = fileChooser.showOpenDialog(frame);
+
+	        if (seleccion == JFileChooser.APPROVE_OPTION) {
+	            File archivoSeleccionado = fileChooser.getSelectedFile();
+	            String extension = obtenerExtension(archivoSeleccionado);
+
+	            System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
+	            System.out.println("Extensión: " + extension);
+	            
+	            // TODO: Delegar en el controlador que cogerá un parser u otro en función de la extensión y creará el objeto curso, que añadirá a la lista del usuario
+	            // y devolverá a esta llamada para actualizar la ventana
+	        }
+	    }
+
+	    private String obtenerExtension(File archivo) {
+	        String nombre = archivo.getName();
+	        int lastIndex = nombre.lastIndexOf(".");
+	        return (lastIndex == -1) ? "" : nombre.substring(lastIndex + 1).toLowerCase();
+	    }
 
 }

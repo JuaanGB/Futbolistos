@@ -5,6 +5,7 @@ import java.awt.*;
 
 public class PanelCurso extends JPanel {
     public PanelCurso(String nombre, ImageIcon imagen) {
+    	setBackground(new Color(255, 255, 255));
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createLineBorder(Color.GRAY, 1)); // Borde para separar los cursos
         setPreferredSize(new Dimension(200, 100)); // Tamaño fijo para que las celdas sean iguales
@@ -24,13 +25,16 @@ public class PanelCurso extends JPanel {
         JButton infoButton = new JButton("");
         infoButton.setIcon(new ImageIcon(PanelCurso.class.getResource("/PDS/Futbolistos/imagenes/letra-i.png")));
         infoButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Información sobre " + nombre));
-
+        infoButton.setContentAreaFilled(false);
+        infoButton.setBorderPainted(false);
+        
         // Botón "Comenzar"
         JButton comenzarButton = new JButton("Comenzar");
         comenzarButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Iniciando " + nombre));
 
         // Panel para los botones
         JPanel botonesPanel = new JPanel();
+        botonesPanel.setBackground(new Color(255, 255, 255));
         botonesPanel.add(infoButton);
         botonesPanel.add(comenzarButton);
 
