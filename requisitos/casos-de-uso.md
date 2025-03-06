@@ -9,6 +9,6 @@
 
 ## Aclaraciones
 <sup>*1</sup> Dentro de **Seleccionar curso** iría la estrategia concreta de estudio: **secuencial**, **aleatoria** o **espaciada** (flujos alternativos). Al igual que el sistema avisará de si hay algún progreso guardado para el curso, ofreciéndoselo al usuario para **reanudarlo**.
-
+La funcionalidad extra que hemos decidido implementar son medallas, que formarían parte del caso de uso de **Mostrar estadísticas de usuario** y un sistema de pistas en las preguntas, presente en el caso de uso **Realizar curso**
 
 ---
