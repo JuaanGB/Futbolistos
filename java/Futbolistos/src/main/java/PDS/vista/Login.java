@@ -27,12 +27,21 @@ public class Login extends JFrame {
         mainPanel.setBackground(new Color(30, 30, 30)); // Fondo oscuro
         mainPanel.setLayout(new BorderLayout());
         
-        // Etiqueta de título para la aplicación
-        JLabel lblTitle = new JLabel("Futbolistos", SwingConstants.CENTER);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 26));
-        lblTitle.setForeground(new Color(0, 204, 102)); // Color vibrante
+        // ---------------------
+        // Etiqueta con la imagen en la parte superior
+        // ---------------------
+        // Carga la imagen (asegúrate de que la ruta sea correcta)
+        ImageIcon icon = new ImageIcon("futbolistos.webp");
+        // Opcional: redimensionar la imagen (descomentar si lo deseas)
+        /*
+        Image image = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(image);
+        */
+        // Crea la etiqueta y añade la imagen
+        JLabel lblImage = new JLabel(icon);
+        lblImage.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Panel de formulario con GridBagLayout para mantener un diseño cuadrado
+        // Panel de formulario con GridBagLayout
         JPanel formPanel = new JPanel();
         formPanel.setBackground(new Color(30, 30, 30));
         formPanel.setLayout(new GridBagLayout());
@@ -47,7 +56,6 @@ public class Login extends JFrame {
         lblUsuario.setFont(new Font("Arial", Font.PLAIN, 16));
         JTextField txtUsuario = new JTextField();
         txtUsuario.setFont(new Font("Arial", Font.PLAIN, 16));
-        // Borde cuadrado personalizado
         txtUsuario.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
         
         // Campo de Contraseña
@@ -64,7 +72,8 @@ public class Login extends JFrame {
         btnLogin.setBackground(new Color(0, 204, 102));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setFocusPainted(false);
-        btnLogin.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+        btnLogin.setBorder(null); 
+        btnLogin.setPreferredSize(new Dimension(150, 50)); // Aumenta el tamaño del fondo verde
         
         // Botón de Registrarse
         JButton btnRegister = new JButton("Registrarse");
@@ -72,7 +81,8 @@ public class Login extends JFrame {
         btnRegister.setBackground(new Color(0, 204, 102));
         btnRegister.setForeground(Color.WHITE);
         btnRegister.setFocusPainted(false);
-        btnRegister.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+        btnRegister.setBorder(null); 
+        btnRegister.setPreferredSize(new Dimension(150, 50)); // Aumenta el tamaño del fondo verde
         
         // Agregar componentes al panel de formulario usando GridBagLayout
         gbc.gridx = 0;
@@ -101,10 +111,9 @@ public class Login extends JFrame {
         
         // Acción para abrir la ventana de registro
         btnRegister.addActionListener(e -> new Registro().setVisible(true));
-        // La acción para login se puede implementar en el futuro
         
-        // Agregar título y formulario al panel principal
-        mainPanel.add(lblTitle, BorderLayout.NORTH);
+        // Agregar la imagen y el formulario al panel principal
+        mainPanel.add(lblImage, BorderLayout.NORTH);
         mainPanel.add(formPanel, BorderLayout.CENTER);
         
         // Agregar el panel principal a la ventana

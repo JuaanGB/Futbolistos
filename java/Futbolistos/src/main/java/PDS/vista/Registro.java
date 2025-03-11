@@ -12,9 +12,12 @@ public class Registro extends JFrame {
         setTitle("Futbolistos - Registro");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(550, 500);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null); // Centrar la ventana
+        
+        // Establecer tamaño mínimo para que siempre se muestren todos los componentes
+        setMinimumSize(new Dimension(700, 500));
 
-        // Try to use Nimbus Look and Feel for a modern style
+        // Intentar usar Nimbus Look and Feel para un estilo moderno
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -23,20 +26,20 @@ public class Registro extends JFrame {
                 }
             }
         } catch (Exception e) {
-            // If Nimbus is not available, fallback to the default look and feel
+            // Si Nimbus no está disponible, se usará el look and feel por defecto
         }
         
-        // Main panel with a dark background
+        // Panel principal con fondo oscuro
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(30, 30, 30));
         
-        // Title label for the app
+        // Etiqueta de título para la app
         JLabel lblTitle = new JLabel("Futbolistos", SwingConstants.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 28));
         lblTitle.setForeground(new Color(0, 204, 102));
         mainPanel.add(lblTitle, BorderLayout.NORTH);
         
-        // Form panel using GridBagLayout for a modern design
+        // Panel del formulario usando GridBagLayout para un diseño moderno
         JPanel formPanel = new JPanel();
         formPanel.setBackground(new Color(30, 30, 30));
         formPanel.setLayout(new GridBagLayout());
@@ -63,6 +66,14 @@ public class Registro extends JFrame {
         txtApellido.setFont(fieldFont);
         txtApellido.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
         
+        // Usuario (nombre de usuario)
+        JLabel lblUsuario = new JLabel("Usuario:");
+        lblUsuario.setForeground(Color.WHITE);
+        lblUsuario.setFont(labelFont);
+        JTextField txtUsuario = new JTextField();
+        txtUsuario.setFont(fieldFont);
+        txtUsuario.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+        
         // Fecha de Nacimiento
         JLabel lblFechaNacimiento = new JLabel("Fecha de Nacimiento (dd/mm/yyyy):");
         lblFechaNacimiento.setForeground(Color.WHITE);
@@ -83,7 +94,7 @@ public class Registro extends JFrame {
         JScrollPane scrollSaludo = new JScrollPane(txtSaludo);
         scrollSaludo.setBorder(null);
         
-        // Imagen (optional)
+        // Imagen (opcional)
         JLabel lblImagen = new JLabel("Imagen (opcional):");
         lblImagen.setForeground(Color.WHITE);
         lblImagen.setFont(labelFont);
@@ -92,51 +103,57 @@ public class Registro extends JFrame {
         btnSeleccionarImagen.setBackground(new Color(0, 204, 102));
         btnSeleccionarImagen.setForeground(Color.WHITE);
         btnSeleccionarImagen.setFocusPainted(false);
-        btnSeleccionarImagen.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102),2));
         lblImage = new JLabel();
         lblImage.setPreferredSize(new Dimension(100, 100));
         lblImage.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
-        // Registrar button
+        // Botón Registrar
         JButton btnRegistrar = new JButton("Registrar");
         btnRegistrar.setFont(new Font("Arial", Font.BOLD, 16));
         btnRegistrar.setBackground(new Color(0, 204, 102));
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setFocusPainted(false);
-        btnRegistrar.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+
         
-        // Add components to the form panel (Row by row)
-        // Row 1 - Nombre
+        // Agregar componentes al panel del formulario (fila por fila)
+        // Fila 0 - Nombre
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(lblNombre, gbc);
         gbc.gridx = 1;
         formPanel.add(txtNombre, gbc);
         
-        // Row 2 - Apellido
+        // Fila 1 - Apellido
         gbc.gridx = 0;
         gbc.gridy = 1;
         formPanel.add(lblApellido, gbc);
         gbc.gridx = 1;
         formPanel.add(txtApellido, gbc);
         
-        // Row 3 - Fecha de Nacimiento
+        // Fila 2 - Usuario
         gbc.gridx = 0;
         gbc.gridy = 2;
+        formPanel.add(lblUsuario, gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtUsuario, gbc);
+        
+        // Fila 3 - Fecha de Nacimiento
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         formPanel.add(lblFechaNacimiento, gbc);
         gbc.gridx = 1;
         formPanel.add(txtFechaNacimiento, gbc);
         
-        // Row 4 - Saludo
+        // Fila 4 - Saludo
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         formPanel.add(lblSaludo, gbc);
         gbc.gridx = 1;
         formPanel.add(scrollSaludo, gbc);
         
-        // Row 5 - Imagen selection with button and preview
+        // Fila 5 - Imagen: botón y previsualización
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         formPanel.add(lblImagen, gbc);
         JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         imagePanel.setBackground(new Color(30, 30, 30));
@@ -145,31 +162,31 @@ public class Registro extends JFrame {
         gbc.gridx = 1;
         formPanel.add(imagePanel, gbc);
         
-        // Row 6 - Registrar button centered
+        // Fila 6 - Botón Registrar centrado
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridwidth = 2;
         formPanel.add(btnRegistrar, gbc);
-        gbc.gridwidth = 1; // reset
+        gbc.gridwidth = 1; // Reiniciar
         
-        // Assemble the main panel
+        // Ensamblar el panel principal
         mainPanel.add(formPanel, BorderLayout.CENTER);
         add(mainPanel);
         
-        // Action for selecting an image using JFileChooser
+        // Acción para seleccionar una imagen usando JFileChooser
         btnSeleccionarImagen.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(Registro.this);
             if(result == JFileChooser.APPROVE_OPTION) {
                 selectedImageFile = fileChooser.getSelectedFile();
                 ImageIcon icon = new ImageIcon(selectedImageFile.getAbsolutePath());
-                // Scale the image to fit the label
+                // Escalar la imagen para ajustarla al label
                 Image img = icon.getImage().getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);
                 lblImage.setIcon(new ImageIcon(img));
             }
         });
         
-        // The action for the 'Registrar' button will be implemented in the future
+        // La acción del botón 'Registrar' se implementará en el futuro
     }
     
     public static void main(String[] args) {
