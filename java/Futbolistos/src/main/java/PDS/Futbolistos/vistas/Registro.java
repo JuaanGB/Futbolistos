@@ -1,11 +1,15 @@
-package PDS.vista;
+package PDS.Futbolistos.vistas;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
 public class Registro extends JFrame {
-    private JLabel lblImage;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JLabel lblImage;
     private File selectedImageFile = null;
     
     public Registro() {
