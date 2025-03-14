@@ -14,12 +14,15 @@ import javax.swing.JFileChooser;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import PDS.Futbolistos.controlador.Controlador;
+import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.vistas.componentes.PanelCurso;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.File;
+import java.util.List;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -88,10 +91,8 @@ public class VentanaPrincipal extends JFrame {
 		panelUsuario.add(btnCargarCurso);
 
 		JPanel panelCursos = new JPanel(new GridLayout(0, 2, 10, 10)); // 2 columnas, celdas del mismo tamaño
-		for (int i = 1; i <= 11; i++) {
-			PanelCurso p = new PanelCurso("Curso " + i, null);
-			panelCursos.add(p);
-		}
+		List<Curso> cursos = Controlador.getInstancia().getCursosDisponibles();
+		for (Curso c : cursos) panelCursos.add(new PanelCurso(c));
 
 		// Envolverlo en un panel contenedor para que JScrollPane funcione bien
 		JPanel panelWrapper = new JPanel(new BorderLayout());

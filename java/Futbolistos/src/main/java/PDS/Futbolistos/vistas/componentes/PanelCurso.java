@@ -1,17 +1,15 @@
 package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
+
+import PDS.Futbolistos.modelado.Curso;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class PanelCurso extends JPanel {
 	
-	private String nombre;
-	private ImageIcon imagen;
-	
-    public PanelCurso(String nombre, ImageIcon imagen) {
-    	
-    	this.nombre = nombre;
-    	this.imagen = imagen;
+    public PanelCurso(Curso curso) {
     	
     	setBackground(new Color(255, 255, 255));
         setLayout(new BorderLayout());
@@ -20,25 +18,21 @@ public class PanelCurso extends JPanel {
 
         // Panel para la imagen (si existe)
         JLabel imagenLabel = new JLabel();
-        if (imagen != null) {
-            Image img = imagen.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            imagenLabel.setIcon(new ImageIcon(img));
-        }
-
+        
         // Nombre del curso
-        JLabel nombreLabel = new JLabel(nombre);
+        JLabel nombreLabel = new JLabel(curso.getNombre());
         nombreLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Botón "i" para información
         JButton infoButton = new JButton("");
         infoButton.setIcon(new ImageIcon(PanelCurso.class.getResource("/PDS/Futbolistos/imagenes/letra-i.png")));
-        infoButton.addActionListener(e -> mostrarInformacion() );
+        infoButton.addActionListener(e -> mostrarInformacion(curso) );
         infoButton.setContentAreaFilled(false);
         infoButton.setBorderPainted(false);
         
         // Botón "Comenzar"
         JButton comenzarButton = new JButton("Comenzar");
-        comenzarButton.addActionListener(e -> iniciarCurso() );
+        comenzarButton.addActionListener(e -> iniciarCurso(curso) );
 
         // Panel para los botones
         JPanel botonesPanel = new JPanel();
@@ -59,12 +53,12 @@ public class PanelCurso extends JPanel {
         botonesPanel.add(shareButton);
     }
     
-    private void iniciarCurso() {
-    	JOptionPane.showMessageDialog(this, "Iniciando " + nombre);
+    private void iniciarCurso(Curso c) {
+    	JOptionPane.showMessageDialog(this, "Iniciando " + c.getNombre());
     }
     
-    private void mostrarInformacion() {
-    	JOptionPane.showMessageDialog(this, "Información sobre " + nombre);
+    private void mostrarInformacion(Curso c) {
+    	JOptionPane.showMessageDialog(this, c.getDescripcion());
     }
     
     private void compartirCurso() {

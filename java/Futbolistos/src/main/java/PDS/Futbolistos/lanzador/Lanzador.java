@@ -29,20 +29,15 @@ public class Lanzador {
 	}
 	
 	public static void cambiarLookAndFeel() {
-        try {
-            // Configuración opcional del tema
-            Properties props = new Properties();
-            props.put("logoString", "MiApp"); // Cambia el texto en la barra de título
-            AluminiumLookAndFeel.setCurrentTheme(props);
-
-            // Aplicar el Look and Feel
-            UIManager.setLookAndFeel(new AluminiumLookAndFeel());
-
-            // Actualizar la interfaz de usuario de todos los componentes visibles
-            SwingUtilities.updateComponentTreeUI(JFrame.getFrames()[0]);
-
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
+		try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            // Si Nimbus no está disponible, se usará la apariencia por defecto
         }
     }
 }

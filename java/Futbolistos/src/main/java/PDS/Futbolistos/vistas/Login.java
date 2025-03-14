@@ -98,6 +98,10 @@ public class Login extends JFrame {
         btnLogin.setFocusPainted(false);
         btnLogin.setBorder(null);
         btnLogin.setPreferredSize(new Dimension(150, 50));
+        btnLogin.addActionListener( e -> {
+        	VentanaPrincipal v = new VentanaPrincipal();
+        	v.setVisible(true);
+        });
         gbcForm.gridx = 0;
         gbcForm.gridy = 2;
         formPanel.add(btnLogin, gbcForm);
