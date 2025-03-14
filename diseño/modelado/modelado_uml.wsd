@@ -19,6 +19,7 @@ entity EstrategiaAprendizaje
 entity Secuencial
 entity Aleatorio
 entity Espaciada
+entity Pista
 
 entity Estadistica
 entity CursoCompartido
@@ -44,6 +45,9 @@ BloqueContenidos "1" *-- "1..*" Pregunta : incluye
 Pregunta <|-- PreguntaTest
 Pregunta <|-- PreguntaCompletar
 Pregunta <|-- Flashcard
+
+' Pistas de pregunta
+Pregunta *-- "0..1" Pista : se puede resolver con
 
 ' Herencia de tipos de EstrategiaAprendizaje
 EstrategiaAprendizaje <|-- Secuencial
