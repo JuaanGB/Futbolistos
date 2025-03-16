@@ -11,8 +11,7 @@ public class SesionCurso {
 	private final EstrategiaAprendizaje estrategia;
 	private final List<Pregunta> preguntasRestantes; // Inicializada al orden concreto de la estrategia. Conforme respondemos las eliminamos.
 	private int puntuacion; // 0 mal, 1 bien
-	private int pistasRestantes;
-	private int numeroPreguntasRespondidas;
+	private int pistasRestantes, numeroPreguntasRespondidas, numTotalPreguntas;
 	
 	// Constructor
 	public SesionCurso(Curso c, EstrategiaAprendizaje e) {
@@ -22,6 +21,7 @@ public class SesionCurso {
 		this.puntuacion = 0;
 		this.pistasRestantes = 3;
 		this.numeroPreguntasRespondidas = 0;
+		this.numTotalPreguntas = preguntasRestantes.size();
 	}
 	
 	// Getters y setters
@@ -32,10 +32,12 @@ public class SesionCurso {
 	public int getPuntuacion() { return puntuacion; }  
 	public void setPuntuacion(int puntuacion) { this.puntuacion = puntuacion; }  
 	public int getPistasRestantes() { return pistasRestantes; }
+	public int getNumeroPreguntasRespondidas() { return numeroPreguntasRespondidas; }
+	public int getNumTotalPreguntas() { return numTotalPreguntas; }
 	
 	// Funcionalidad
 	public void incrementarPuntuacion(int i) { this.puntuacion += i; }
-	public void removePrimeraPregunta() { preguntasRestantes.remove(0); }
+	public void removePrimeraPregunta() { preguntasRestantes.remove(0); numeroPreguntasRespondidas++; }
 
 	
 }

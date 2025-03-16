@@ -3,9 +3,13 @@ package PDS.Futbolistos.controlador;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JPanel;
+
+import PDS.Futbolistos.modelado.BloqueDeContenido;
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.modelado.Pregunta;
+import PDS.Futbolistos.modelado.PreguntaTest;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.modelado.Usuario;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
@@ -33,7 +37,8 @@ public class Controlador {
 
 	// Funcionalidad
 	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
-		sesionCursoAct = usuarioAct.empezarCurso(c, e);
+		sesionCursoAct = new SesionCurso(c, e);
+		// sesionCursoAct = usuarioAct.empezarCurso(c, e);
 	}
 	
 	public boolean validarRespuesta(Pregunta p, String text) {
@@ -42,7 +47,8 @@ public class Controlador {
 		return res;
 	}
 	
-	public void actualizarPregunta() {
+	public void pasarASiguientePregunta() {
+		sesionCursoAct.removePrimeraPregunta();
 		Pregunta p = sesionCursoAct.getPreguntaActual();
 		// Notificar a la ventana de curso del cambio de pregunta y mostrar el nuevo panel. Observer?
 	}
@@ -54,9 +60,35 @@ public class Controlador {
 	// Métodos de prueba
 	private void anadirCursos() {
 		List<Curso> cursos = new LinkedList<>();
-		cursos.add(new Curso("Técnicas Básicas de Fútbol",
-				"Aprende las técnicas esenciales para jugar al fútbol, \ncomo el pase, el regate y el disparo.",
-				"https://example.com/images/futbol_basico.jpg"));
+
+		// Crear curso
+		Curso curso = new Curso(
+		    "Técnicas Básicas de Fútbol",
+		    "Aprende las técnicas esenciales para jugar al fútbol, \ncomo el pase, el regate y el disparo.",
+		    "https://example.com/images/futbol_basico.jpg"
+		);
+
+		// Crear bloque de contenido
+		BloqueDeContenido bloque = new BloqueDeContenido();
+
+		// Agregar pregunta al bloque
+		bloque.addPregunta(new PreguntaTest(
+		    "Enunciado number one",
+		    "uno",
+		    "esta es la pista",
+		    10,
+		    "hola",
+		    "uno",
+		    "dos",
+		    "tres"
+		));
+
+		// Agregar bloque al curso
+		curso.addBloqueDeContenido(bloque);
+
+		// Agregar curso a la lista
+		cursos.add(curso);
+		
 
 		cursos.add(new Curso("Estrategias Tácticas en Fútbol",
 				"Conoce las tácticas de juego más importantes, como el 4-4-2, el 4-3-3 y las formaciones defensivas.",

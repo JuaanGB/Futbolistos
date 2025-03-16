@@ -2,7 +2,10 @@ package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
 
+import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Curso;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
+import PDS.Futbolistos.vistas.VentanaCurso;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -54,7 +57,9 @@ public class PanelCurso extends JPanel {
     }
     
     private void iniciarCurso(Curso c) {
-    	JOptionPane.showMessageDialog(this, "Iniciando " + c.getNombre());
+    	Controlador.getInstancia().empezarCurso(c, new EstrategiaSecuencial());
+    	VentanaCurso vc = new VentanaCurso(Controlador.getInstancia().getSesionCursoAct());
+    	vc.setVisible(true);
     }
     
     private void mostrarInformacion(Curso c) {
