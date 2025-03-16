@@ -1,21 +1,30 @@
 package PDS.Futbolistos.modelado;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JPanel;
 
+import PDS.Futbolistos.vistas.componentes.PanelPreguntaTest;
+
 public class PreguntaTest extends Pregunta {
 
 	// Atributos
-	private Set<String> respuestas;
+	private List<String> respuestas;
 	
 	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String ...respuestas) {
 		super(enunciado, respuestaCorrecta, pista, segundos);
-		this.respuestas = new HashSet<>();
+		this.respuestas = new LinkedList<>();
 		for (String r : respuestas) this.respuestas.add(r);
 	}
 
+	// Nuevos métodos get
+	public String getRespuesta(int i) {
+		return respuestas.get(i);
+	}
+	
 	@Override
 	public boolean isRespuestaValida(String respuesta) {
 		return respuesta.equals(this.getRespuestaCorrecta());
@@ -23,9 +32,7 @@ public class PreguntaTest extends Pregunta {
 
 	@Override
 	public JPanel getPanel() {
-		// Algo como:
-		// return new PanelVentanaTest(this)
-		return null;
+		return new PanelPreguntaTest(this);
 	}
 
 }

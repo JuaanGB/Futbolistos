@@ -12,7 +12,10 @@ public class EstrategiaAleatoria implements EstrategiaAprendizaje {
 
 	@Override
 	public List<Pregunta> calcularOrden(Set<BloqueDeContenido> bloquesDeContenido) {
-		// TODO
-		return null;
+		List<Pregunta> preguntas = bloquesDeContenido.stream()
+										.flatMap( b -> b.getPreguntas().stream() )
+										.collect( Collectors.toList() );
+		Collections.shuffle(preguntas);
+		return preguntas;
 	}
 }

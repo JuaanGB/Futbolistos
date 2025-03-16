@@ -5,22 +5,48 @@ import java.util.List;
 
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
+import PDS.Futbolistos.modelado.Pregunta;
+import PDS.Futbolistos.modelado.SesionCurso;
+import PDS.Futbolistos.modelado.Usuario;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
 public class Controlador {
 
 	private static Controlador instancia;
+	
+	private Usuario usuarioAct;
+	private SesionCurso sesionCursoAct;
 
 	public Controlador() {
 		anadirCursos();
 	}
 
+	// Getters y setters
 	public static Controlador getInstancia() {
 		if (instancia == null)
 			instancia = new Controlador();
 		return instancia;
 	}
+	public Usuario getUsuarioAct() { return usuarioAct; }
+	public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
+	
 
 	// Funcionalidad
+	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
+		sesionCursoAct = usuarioAct.empezarCurso(c, e);
+	}
+	
+	public boolean validarRespuesta(Pregunta p, String text) {
+		boolean res = p.isRespuestaValida(text);
+		sesionCursoAct.removePrimeraPregunta();
+		return res;
+	}
+	
+	public void actualizarPregunta() {
+		Pregunta p = sesionCursoAct.getPreguntaActual();
+		// Notificar a la ventana de curso del cambio de pregunta y mostrar el nuevo panel. Observer?
+	}
+	
 	public List<Curso> getCursosDisponibles() {
 		return CatalogoCursos.getInstancia().obtenerCursos();
 	}
@@ -46,4 +72,5 @@ public class Controlador {
 		
 		for (Curso c : cursos) CatalogoCursos.getInstancia().agregarCurso(c);
 	}
+
 }

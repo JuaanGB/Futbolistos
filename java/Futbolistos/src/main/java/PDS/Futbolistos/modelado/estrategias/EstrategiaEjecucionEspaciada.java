@@ -12,10 +12,7 @@ public class EstrategiaEjecucionEspaciada implements EstrategiaAprendizaje {
 
 	@Override
 	public List<Pregunta> calcularOrden(Set<BloqueDeContenido> bloquesDeContenido) {
-		List<Pregunta> preguntas = bloquesDeContenido.stream()
-										.flatMap( b -> b.getPreguntas().stream() )
-										.collect( Collectors.toList() );
-		Collections.shuffle(preguntas);
-		return preguntas;
+		// TODO
+		return null;
 	}
 }

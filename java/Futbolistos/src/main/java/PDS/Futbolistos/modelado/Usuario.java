@@ -47,8 +47,10 @@ public class Usuario {
     public LocalDate getFecha() { return fecha; }
     
     // Funcionalidad
-    public boolean empezarCurso(Curso c, EstrategiaAprendizaje a) { 
-    	return sesionesCurso.add(new SesionCurso(c, a)); 
+    public SesionCurso empezarCurso(Curso c, EstrategiaAprendizaje a) { 
+    	SesionCurso sc = new SesionCurso(c, a);
+    	sesionesCurso.add(sc); 
+    	return sc;
     }
 	
 	
