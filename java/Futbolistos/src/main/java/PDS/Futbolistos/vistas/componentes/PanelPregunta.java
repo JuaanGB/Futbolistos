@@ -37,11 +37,10 @@ public abstract class PanelPregunta extends JPanel {
 	protected void personalizarDisplay(Pregunta p) {
 		txtrEnunciado.setText(p.getEnunciado());
 		/*
-		 * if (p.hasPista()) {
-		 *     btnPista.addActionListener( e -> ShowMessageDialogue...);
-		 *     btnPista.setEnabled(false);
-		 *     Controlador.getInstancia().disminuirNumeroPistasDisponibles();
-		 * } else btnPista.setEnabled(false);
+		 * if (p.hasPista()) { btnPista.addActionListener( e -> ShowMessageDialogue...);
+		 * btnPista.setEnabled(false);
+		 * Controlador.getInstancia().disminuirNumeroPistasDisponibles(); } else
+		 * btnPista.setEnabled(false);
 		 */
 		lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
 	}
@@ -109,7 +108,7 @@ public abstract class PanelPregunta extends JPanel {
 	 * @param respondidaCorrectamente true si el usuario respondió antes de tiempo,
 	 *                                false si el tiempo se agotó
 	 */
-	public void detenerTemporizador(boolean respondidaCorrectamente) {
+	public void detenerTemporizador(boolean respondida) {
 		timer.stop();
 	}
 
