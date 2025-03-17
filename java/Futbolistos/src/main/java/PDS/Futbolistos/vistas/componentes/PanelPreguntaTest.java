@@ -6,6 +6,7 @@ import javax.swing.JScrollPane;
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.PreguntaTest;
+import PDS.Futbolistos.vistas.VentanaPrincipal;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -90,6 +91,11 @@ public class PanelPreguntaTest extends PanelPregunta {
         if (!respondida) {
             JOptionPane.showMessageDialog(this, "¡Tiempo agotado! La respuesta correcta era:\n");
         }
-        Controlador.getInstancia().pasarASiguientePregunta();
+        boolean hayPregunta = Controlador.getInstancia().pasarASiguientePregunta();
+        if (!hayPregunta) {
+        	JOptionPane.showMessageDialog(this, "¡Curso completado!");
+        	VentanaPrincipal vp = new VentanaPrincipal();
+        	vp.setVisible(true);
+        }
     }
 }

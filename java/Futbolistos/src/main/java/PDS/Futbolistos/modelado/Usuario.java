@@ -45,6 +45,16 @@ public class Usuario {
     public String getApellidos() { return apellidos; }
     public String getContraseña() { return contraseña; }
     public LocalDate getFecha() { return fecha; }
+    public EstadisticasUsuario getEstadisticas() { return estadisticas; }
+    
+    // Actualización de estadísticas (evitamos que el Controlador conozca por completo las estadísticas haciendo
+    // .getEstadististicas().metodoDeModificacionDeEstadistica(...)
+    public void registrarRespuesta(boolean correcta) { estadisticas.registrarRespuesta(correcta); }
+    public void incrementarCursosRealizados() { estadisticas.incrementarCursosRealizados(); }
+    public void incrementarCursosCreados() { estadisticas.incrementarCursosCreados(); }
+    public void actualizarMejorRacha(int racha) { estadisticas.actualizarMejorRacha(racha); }
+    public void sumarTiempoDeUso(int segundos) { estadisticas.sumarTiempo(segundos); }
+
     
     // Funcionalidad
     public SesionCurso empezarCurso(Curso c, EstrategiaAprendizaje a) { 

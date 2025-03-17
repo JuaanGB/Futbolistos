@@ -56,7 +56,14 @@ public abstract class PanelPregunta extends JPanel {
 		txtrEnunciado.setLineWrap(true);
 		txtrEnunciado.setEditable(false);
 		txtrEnunciado.setText(
-				"Enunciado de la pregunta que puede ser tan grande como se deseé. Es un JTextArea para que se ponga en varias líneas.");
+		    "Enunciado de la pregunta que puede ser tan grande como se deseé. Es un JTextArea para que se ponga en varias líneas.");
+
+		// Alineación centrada dentro del JTextArea
+		txtrEnunciado.setAlignmentX(Component.CENTER_ALIGNMENT);
+		txtrEnunciado.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+		// Eliminar borde por defecto
+		txtrEnunciado.setBorder(null);
 
 		JScrollPane scrollPane = new JScrollPane(txtrEnunciado);
 		scrollPane.setMaximumSize(new Dimension(400, 100));
@@ -98,6 +105,7 @@ public abstract class PanelPregunta extends JPanel {
 			tiempoRestante--;
 			lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
 		} else {
+			detenerTemporizador(false);
 			manejarTiempoTerminado(false); // Se acabó el tiempo sin respuesta
 		}
 	}

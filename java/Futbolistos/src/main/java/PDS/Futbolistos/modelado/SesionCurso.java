@@ -38,6 +38,7 @@ public class SesionCurso {
 	// Funcionalidad
 	public void incrementarPuntuacion(int i) { this.puntuacion += i; }
 	public void removePrimeraPregunta() { preguntasRestantes.remove(0); numeroPreguntasRespondidas++; }
+	public boolean quedanPreguntas() { return preguntasRestantes.size() > 0; }
 
 	
 }

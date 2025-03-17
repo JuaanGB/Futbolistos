@@ -9,6 +9,7 @@ import PDS.Futbolistos.modelado.BloqueDeContenido;
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.modelado.Pregunta;
+import PDS.Futbolistos.modelado.PreguntaObserver;
 import PDS.Futbolistos.modelado.PreguntaTest;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.modelado.Usuario;
@@ -20,8 +21,12 @@ public class Controlador {
 	
 	private Usuario usuarioAct;
 	private SesionCurso sesionCursoAct;
+	
+	// Actualización de la pregunta en VentanaCurso
+	private List<PreguntaObserver> observadoresPregunta;
 
 	public Controlador() {
+		observadoresPregunta = new LinkedList<>();
 		anadirCursos();
 	}
 
@@ -34,6 +39,10 @@ public class Controlador {
 	public Usuario getUsuarioAct() { return usuarioAct; }
 	public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
 	
+	// Observer
+	public void addPreguntaObserver(PreguntaObserver o) { observadoresPregunta.add(o); }
+	public void deletePreguntaObserver(PreguntaObserver o) { observadoresPregunta.remove(o); }
+	private void notificarPreguntaObserver(Pregunta p) { observadoresPregunta.stream().forEach( o -> o.actualizarPregunta(p)); }
 
 	// Funcionalidad
 	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
@@ -43,14 +52,18 @@ public class Controlador {
 	
 	public boolean validarRespuesta(Pregunta p, String text) {
 		boolean res = p.isRespuestaValida(text);
-		sesionCursoAct.removePrimeraPregunta();
+		// usuarioAct.registrarRespuesta(res); // No importa modificar las estadísticas porque no se persisten en BBDD hasta que guarda o termina el curso.
 		return res;
 	}
 	
-	public void pasarASiguientePregunta() {
+	public boolean pasarASiguientePregunta() {
 		sesionCursoAct.removePrimeraPregunta();
-		Pregunta p = sesionCursoAct.getPreguntaActual();
-		// Notificar a la ventana de curso del cambio de pregunta y mostrar el nuevo panel. Observer?
+		if (sesionCursoAct.quedanPreguntas()) {
+			Pregunta p = sesionCursoAct.getPreguntaActual();
+			notificarPreguntaObserver(p);
+			return true;
+		}
+		return false;
 	}
 	
 	public List<Curso> getCursosDisponibles() {
@@ -73,15 +86,48 @@ public class Controlador {
 
 		// Agregar pregunta al bloque
 		bloque.addPregunta(new PreguntaTest(
-		    "Enunciado number one",
-		    "uno",
-		    "esta es la pista",
-		    10,
-		    "hola",
-		    "uno",
-		    "dos",
-		    "tres"
-		));
+			    "¿Cuántos jugadores tiene un equipo de fútbol en el campo al inicio del partido?",
+			    "11",
+			    "Piensa en los titulares sin contar suplentes.",
+			    10,
+			    "10",
+			    "11",
+			    "12",
+			    "9"
+			));
+
+			bloque.addPregunta(new PreguntaTest(
+			    "¿Qué parte del cuerpo no pueden usar los jugadores de campo, excepto el portero?",
+			    "Las manos",
+			    "Es la principal diferencia entre el portero y el resto.",
+			    10,
+			    "Las manos",
+			    "Los pies",
+			    "La cabeza",
+			    "El pecho"
+			));
+
+			bloque.addPregunta(new PreguntaTest(
+			    "¿Cuántos minutos dura un partido de fútbol profesional sin contar el tiempo añadido?",
+			    "90",
+			    "Se divide en dos mitades iguales.",
+			    10,
+			    "80",
+			    "90",
+			    "100",
+			    "120"
+			));
+
+			bloque.addPregunta(new PreguntaTest(
+			    "¿Cómo se llama el tiro libre directo desde los once metros en el área rival?",
+			    "Penalti",
+			    "Se concede por una falta grave dentro del área.",
+			    10,
+			    "Falta",
+			    "Córner",
+			    "Penalti",
+			    "Saque de banda"
+			));
 
 		// Agregar bloque al curso
 		curso.addBloqueDeContenido(bloque);
