@@ -6,11 +6,11 @@ import java.awt.*;
 public class Login extends JFrame {
     
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	public Login() {
+    public Login() {
         setTitle("Futbolistos - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Aumentar el ancho para estirar horizontalmente
@@ -98,10 +98,6 @@ public class Login extends JFrame {
         btnLogin.setFocusPainted(false);
         btnLogin.setBorder(null);
         btnLogin.setPreferredSize(new Dimension(150, 50));
-        btnLogin.addActionListener( e -> {
-        	VentanaPrincipal v = new VentanaPrincipal();
-        	v.setVisible(true);
-        });
         gbcForm.gridx = 0;
         gbcForm.gridy = 2;
         formPanel.add(btnLogin, gbcForm);
@@ -131,15 +127,38 @@ public class Login extends JFrame {
         
         // Agregar el panel principal a la ventana
         add(mainPanel);
+        
+        // Lógica del login
+        btnLogin.addActionListener(e -> {
+            String usuario = txtUsuario.getText().trim();
+            String password = new String(txtPassword.getPassword());
+            
+            if (usuario.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(Login.this, "¡Debe llenar todos los campos!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Aquí se simula la lógica de un login. Se consideran válidas las credenciales "admin"/"admin"
+            if ("admin".equals(usuario) && "admin".equals(password)) {
+                // Inicio de sesión exitoso
+                JOptionPane.showMessageDialog(Login.this, "Inicio de sesión exitoso", "Información", JOptionPane.INFORMATION_MESSAGE);
+                VentanaPrincipal v = new VentanaPrincipal();
+                v.setVisible(true);
+                dispose(); // Cerrar la ventana de login
+            } else {
+                // Credenciales incorrectas
+                JOptionPane.showMessageDialog(Login.this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
     
     // Clase interna para redimensionar dinámicamente la imagen sin estirarla demasiado
     private static class ScaledImageLabel extends JLabel {
         /**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		private Image originalImage;
+         * 
+         */
+        private static final long serialVersionUID = 1L;
+        private Image originalImage;
         
         public ScaledImageLabel(Image originalImage) {
             this.originalImage = originalImage;
@@ -172,7 +191,5 @@ public class Login extends JFrame {
         }
     }
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Login().setVisible(true));
-    }
+
 }
