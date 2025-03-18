@@ -3,14 +3,23 @@ package PDS.Futbolistos.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 public class Registro extends JFrame {
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JLabel lblImage;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+    private JLabel lblImage;
     private File selectedImageFile = null;
+    
+    // Simulación de almacenamiento de usuarios ya registrados (cuando haya persistencia, se reemplazará con la base de datos)
+    private static Set<String> registeredUsernames = new HashSet<>();
+    
+    // Patrón para fecha en formato dd/mm/yyyy
+    private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");
     
     public Registro() {
         setTitle("Futbolistos - Registro");
@@ -19,7 +28,7 @@ public class Registro extends JFrame {
         setLocationRelativeTo(null); // Centrar la ventana
         
         // Establecer tamaño mínimo para que siempre se muestren todos los componentes
-        setMinimumSize(new Dimension(700, 500));
+        setMinimumSize(new Dimension(800, 600));
 
         // Intentar usar Nimbus Look and Feel para un estilo moderno
         try {
@@ -78,6 +87,22 @@ public class Registro extends JFrame {
         txtUsuario.setFont(fieldFont);
         txtUsuario.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
         
+        // Contraseña
+        JLabel lblPassword = new JLabel("Contraseña:");
+        lblPassword.setForeground(Color.WHITE);
+        lblPassword.setFont(labelFont);
+        JPasswordField txtPassword = new JPasswordField();
+        txtPassword.setFont(fieldFont);
+        txtPassword.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+        
+        // Confirmar Contraseña
+        JLabel lblConfirmPassword = new JLabel("Confirmar Contraseña:");
+        lblConfirmPassword.setForeground(Color.WHITE);
+        lblConfirmPassword.setFont(labelFont);
+        JPasswordField txtConfirmPassword = new JPasswordField();
+        txtConfirmPassword.setFont(fieldFont);
+        txtConfirmPassword.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
+        
         // Fecha de Nacimiento
         JLabel lblFechaNacimiento = new JLabel("Fecha de Nacimiento (dd/mm/yyyy):");
         lblFechaNacimiento.setForeground(Color.WHITE);
@@ -118,7 +143,6 @@ public class Registro extends JFrame {
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setFocusPainted(false);
 
-        
         // Agregar componentes al panel del formulario (fila por fila)
         // Fila 0 - Nombre
         gbc.gridx = 0;
@@ -141,23 +165,37 @@ public class Registro extends JFrame {
         gbc.gridx = 1;
         formPanel.add(txtUsuario, gbc);
         
-        // Fila 3 - Fecha de Nacimiento
+        // Fila 3 - Contraseña
         gbc.gridx = 0;
         gbc.gridy = 3;
+        formPanel.add(lblPassword, gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtPassword, gbc);
+        
+        // Fila 4 - Confirmar Contraseña
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        formPanel.add(lblConfirmPassword, gbc);
+        gbc.gridx = 1;
+        formPanel.add(txtConfirmPassword, gbc);
+        
+        // Fila 5 - Fecha de Nacimiento
+        gbc.gridx = 0;
+        gbc.gridy = 5;
         formPanel.add(lblFechaNacimiento, gbc);
         gbc.gridx = 1;
         formPanel.add(txtFechaNacimiento, gbc);
         
-        // Fila 4 - Saludo
+        // Fila 6 - Saludo
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 6;
         formPanel.add(lblSaludo, gbc);
         gbc.gridx = 1;
         formPanel.add(scrollSaludo, gbc);
         
-        // Fila 5 - Imagen: botón y previsualización
+        // Fila 7 - Imagen: botón y previsualización
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 7;
         formPanel.add(lblImagen, gbc);
         JPanel imagePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         imagePanel.setBackground(new Color(30, 30, 30));
@@ -166,12 +204,12 @@ public class Registro extends JFrame {
         gbc.gridx = 1;
         formPanel.add(imagePanel, gbc);
         
-        // Fila 6 - Botón Registrar centrado
+        // Fila 8 - Botón Registrar centrado
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 8;
         gbc.gridwidth = 2;
         formPanel.add(btnRegistrar, gbc);
-        gbc.gridwidth = 1; // Reiniciar
+        gbc.gridwidth = 1;
         
         // Ensamblar el panel principal
         mainPanel.add(formPanel, BorderLayout.CENTER);
@@ -190,10 +228,50 @@ public class Registro extends JFrame {
             }
         });
         
-        // La acción del botón 'Registrar' se implementará en el futuro
+        // Acción para el botón 'Registrar'
+        btnRegistrar.addActionListener(e -> {
+            String nombre = txtNombre.getText().trim();
+            String apellido = txtApellido.getText().trim();
+            String usuario = txtUsuario.getText().trim();
+            String password = new String(txtPassword.getPassword());
+            String confirmPassword = new String(txtConfirmPassword.getPassword());
+            String fechaNacimiento = txtFechaNacimiento.getText().trim();
+            String saludo = txtSaludo.getText().trim();
+            
+            // Validación básica de campos obligatorios
+            if(nombre.isEmpty() || apellido.isEmpty() || usuario.isEmpty() || password.isEmpty() 
+                    || confirmPassword.isEmpty() || fechaNacimiento.isEmpty()){
+                JOptionPane.showMessageDialog(Registro.this, "Por favor, complete todos los campos obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Validar que las contraseñas coincidan
+            if(!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(Registro.this, "Las contraseñas no coinciden. Por favor, verifique.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Validar el formato de la fecha
+            if(!DATE_PATTERN.matcher(fechaNacimiento).matches()){
+                JOptionPane.showMessageDialog(Registro.this, "El formato de la fecha es incorrecto. Use dd/mm/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Validar que no exista un usuario con el mismo nombre ya registrado
+            if(registeredUsernames.contains(usuario)){
+                JOptionPane.showMessageDialog(Registro.this, "El nombre de usuario ya existe. Por favor elija otro.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Simulación de registro (aquí se guardaría en la base de datos en el futuro)
+            registeredUsernames.add(usuario);
+            JOptionPane.showMessageDialog(Registro.this, "Registro exitoso para el usuario: " + usuario, "Información", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Cerrar la ventana de registro y abrir la de Login
+            dispose();
+            Login login = new Login();
+            login.setVisible(true);
+        });
     }
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Registro().setVisible(true));
-    }
 }
