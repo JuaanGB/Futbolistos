@@ -10,7 +10,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
 
-import PDS.Futbolistos.vistas.VentanaPrincipal;
+import PDS.Futbolistos.vistas.Login;
+
 
 public class Lanzador {
 	
@@ -18,7 +19,7 @@ public class Lanzador {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaPrincipal window = new VentanaPrincipal();
+					Login window = new Login();
 					window.setVisible(true);
 					// cambiarLookAndFeel();
 				} catch (Exception e) {
