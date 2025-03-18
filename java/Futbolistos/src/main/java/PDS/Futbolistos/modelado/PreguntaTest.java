@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import PDS.Futbolistos.vistas.componentes.PanelPreguntaTest;
 
-public class PreguntaTest extends Pregunta {
+public class PreguntaTest extends Pregunta /* implements Visitable */ {
 
 	// Atributos
 	private List<String> respuestas;
@@ -34,5 +34,11 @@ public class PreguntaTest extends Pregunta {
 	public JPanel getPanel() {
 		return new PanelPreguntaTest(this);
 	}
+	/*
+	public void accept(Visitor v) {
+		v.visitPreguntaTest(this);
+	}
 
+	map.put(PreguntaTest.class, () )
+	*/
 }

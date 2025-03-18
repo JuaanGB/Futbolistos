@@ -3,6 +3,7 @@ package PDS.Futbolistos.vistas.componentes;
 import javax.swing.*;
 import java.awt.*;
 import PDS.Futbolistos.modelado.Pregunta;
+import PDS.Futbolistos.vistas.VentanaCurso;
 
 public abstract class PanelPregunta extends JPanel {
 
@@ -13,6 +14,9 @@ public abstract class PanelPregunta extends JPanel {
 	private JButton btnPista;
 	private JLabel lblTiempoRestante;
 	private Timer timer;
+	
+	// Ventana en la que está contenido el panel para actualizar dependencias
+	private VentanaCurso ventanaCurso;
 
 	// Actualización del tiempo
 	private int tiempoRestante;
@@ -24,6 +28,14 @@ public abstract class PanelPregunta extends JPanel {
 		personalizarDisplay(p);
 		empezarTemporizador();
 
+	}
+	
+	public void setVentanaCurso(VentanaCurso ventanaCurso) {
+		this.ventanaCurso = ventanaCurso;
+	}
+	
+	public VentanaCurso getVentanaCurso() {
+		return ventanaCurso;
 	}
 
 	private void empezarTemporizador() {

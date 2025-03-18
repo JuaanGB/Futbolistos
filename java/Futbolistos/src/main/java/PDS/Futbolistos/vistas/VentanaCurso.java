@@ -4,20 +4,23 @@ import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.PreguntaObserver;
 import PDS.Futbolistos.modelado.SesionCurso;
+import PDS.Futbolistos.vistas.componentes.PanelPregunta;
+import PDS.Futbolistos.vistas.componentes.PanelPreguntaTest;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class VentanaCurso extends JFrame implements PreguntaObserver {
+public class VentanaCurso extends JFrame {
 
     private JLabel lblTitulo;
-    private JPanel panelPregunta;
+    private PanelPregunta panelPregunta;
     private JLabel lblPistasRestantes;
     private JLabel lblProgreso;
     private JButton btnGuardar;
     private SesionCurso sesionCurso;
 
     public VentanaCurso(SesionCurso sesionCurso) {
-        Controlador.getInstancia().addPreguntaObserver(this);
+
         this.sesionCurso = sesionCurso;
         
         // Establecer estética oscura similar a VentanaPrincipal
@@ -36,7 +39,8 @@ public class VentanaCurso extends JFrame implements PreguntaObserver {
         getContentPane().add(lblTitulo, BorderLayout.NORTH);
 
         // Panel de la pregunta actual, se invoca el panel del objeto Pregunta
-        panelPregunta = sesionCurso.getPreguntaActual().getPanel();
+        panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
+        panelPregunta.setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 
@@ -93,7 +97,6 @@ public class VentanaCurso extends JFrame implements PreguntaObserver {
     /**
      * Actualiza la vista cuando se avanza a la siguiente pregunta.
      */
-    @Override
     public void actualizarPregunta(Pregunta nuevaPregunta) {
         int preguntaActual = sesionCurso.getNumeroPreguntasRespondidas() + 1;
         // Actualizar título y progreso
@@ -103,12 +106,17 @@ public class VentanaCurso extends JFrame implements PreguntaObserver {
 
         // Cambiar el panel de la pregunta y actualizar la estética
         getContentPane().remove(panelPregunta);
-        panelPregunta = sesionCurso.getPreguntaActual().getPanel();
+        panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
+        panelPregunta.setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 
         // Refrescar la ventana
         revalidate();
         repaint();
+    }
+    
+    public void actualizarPistasRestantes() {
+    	System.err.println();
     }
 }

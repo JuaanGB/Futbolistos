@@ -101,11 +101,13 @@ public class PanelPreguntaTest extends PanelPregunta {
             JOptionPane.showMessageDialog(this, 
                 "¡Tiempo agotado! La respuesta correcta era:\n");
         }
-        boolean hayPregunta = Controlador.getInstancia().pasarASiguientePregunta();
-        if (!hayPregunta) {
+        Pregunta p = Controlador.getInstancia().pasarASiguientePregunta();
+        if (p == null) {
             JOptionPane.showMessageDialog(this, "¡Curso completado!");
             VentanaPrincipal vp = new VentanaPrincipal();
             vp.setVisible(true);
+        } else {
+        	this.getVentanaCurso().actualizarPregunta(p);
         }
     }
 }

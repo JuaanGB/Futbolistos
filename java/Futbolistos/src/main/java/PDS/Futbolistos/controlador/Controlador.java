@@ -22,11 +22,7 @@ public class Controlador {
 	private Usuario usuarioAct;
 	private SesionCurso sesionCursoAct;
 	
-	// Actualización de la pregunta en VentanaCurso
-	private List<PreguntaObserver> observadoresPregunta;
-
 	public Controlador() {
-		observadoresPregunta = new LinkedList<>();
 		anadirCursos();
 	}
 
@@ -39,10 +35,6 @@ public class Controlador {
 	public Usuario getUsuarioAct() { return usuarioAct; }
 	public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
 	
-	// Observer
-	public void addPreguntaObserver(PreguntaObserver o) { observadoresPregunta.add(o); }
-	public void deletePreguntaObserver(PreguntaObserver o) { observadoresPregunta.remove(o); }
-	private void notificarPreguntaObserver(Pregunta p) { observadoresPregunta.stream().forEach( o -> o.actualizarPregunta(p)); }
 
 	// Funcionalidad
 	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
@@ -56,14 +48,13 @@ public class Controlador {
 		return res;
 	}
 	
-	public boolean pasarASiguientePregunta() {
+	public Pregunta pasarASiguientePregunta() {
 		sesionCursoAct.removePrimeraPregunta();
 		if (sesionCursoAct.quedanPreguntas()) {
 			Pregunta p = sesionCursoAct.getPreguntaActual();
-			notificarPreguntaObserver(p);
-			return true;
+			return p;
 		}
-		return false;
+		return null;
 	}
 	
 	public List<Curso> getCursosDisponibles() {
