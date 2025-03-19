@@ -30,5 +30,7 @@ public abstract class Pregunta {
 	// Funcionalidad
 	public abstract boolean isRespuestaValida(String respuesta);
 	public abstract JPanel getPanel();
+	public boolean hasPista() {	return pista != null; }
+
 
 }

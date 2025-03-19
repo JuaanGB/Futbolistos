@@ -57,6 +57,10 @@ public class Controlador {
 		return null;
 	}
 	
+	public boolean quedanPistasDisponibles() { return sesionCursoAct.quedanPistasDisponibles(); }
+	
+	public void disminuirPistasDisponibles() { sesionCursoAct.disminuirPistasDisponibles(); }
+	
 	public List<Curso> getCursosDisponibles() {
 		return CatalogoCursos.getInstancia().obtenerCursos();
 	}
@@ -141,5 +145,6 @@ public class Controlador {
 		
 		for (Curso c : cursos) CatalogoCursos.getInstancia().agregarCurso(c);
 	}
+	
 
 }

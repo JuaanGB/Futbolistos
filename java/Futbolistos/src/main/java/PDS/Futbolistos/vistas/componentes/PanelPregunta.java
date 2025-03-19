@@ -2,8 +2,11 @@ package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
 import java.awt.*;
+
+import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.vistas.VentanaCurso;
+import PDS.Futbolistos.vistas.VentanaPrincipal;
 
 public abstract class PanelPregunta extends JPanel {
 
@@ -30,22 +33,62 @@ public abstract class PanelPregunta extends JPanel {
 
 	}
 	
-	public void setVentanaCurso(VentanaCurso ventanaCurso) {
-		this.ventanaCurso = ventanaCurso;
-	}
-	
-	public VentanaCurso getVentanaCurso() {
-		return ventanaCurso;
-	}
+	public void setVentanaCurso(VentanaCurso ventanaCurso) { this.ventanaCurso = ventanaCurso; }
+	public VentanaCurso getVentanaCurso() { return ventanaCurso; }
 
+	// Gestión del tiempo
 	private void empezarTemporizador() {
 		timer = new Timer(1000, e -> actualizarTiempo());
 		timer.start();
 	}
+	
+	private void actualizarTiempo() {
+		if (tiempoRestante > 0) {
+			tiempoRestante--;
+			lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
+		} else {
+			detenerTemporizador(false);
+			manejarTiempoTerminado(false); // Se acabó el tiempo sin respuesta
+		}
+	}
 
+	/**
+	 * Detiene el temporizador.
+	 * 
+	 * @param respondida true si el usuario respondió antes de tiempo, false si el tiempo se agotó
+	 */
+	public void detenerTemporizador(boolean respondida) {
+		timer.stop();
+	}
+
+	// Método que cada tipo de pregunta implementará para manejar cuando se termine el tiempo.
+	protected final void manejarTiempoTerminado(boolean respondida) {
+		gestionarPreguntaRespondida(respondida);
+		
+		// Siempre se ejecuta el código de pasar a siguiente pregunta, independientemente del tipo de pregunta.
+		Pregunta p = Controlador.getInstancia().pasarASiguientePregunta();
+        if (p == null) {
+            JOptionPane.showMessageDialog(this, "¡Curso completado!");
+            VentanaPrincipal vp = new VentanaPrincipal();
+            vp.setVisible(true);
+        } else {
+        	this.getVentanaCurso().actualizarPregunta(p);
+        }
+	}
+	
+	protected abstract void gestionarPreguntaRespondida(boolean respondida);
+
+	// Dibujar el panel
 	protected void personalizarDisplay(Pregunta p) {
 		txtrEnunciado.setText(p.getEnunciado());
-		// Se puede implementar la lógica para el botón de pista, en base a si la pregunta tiene pista disponible.
+		if (!Controlador.getInstancia().quedanPistasDisponibles() || !p.hasPista() ) 
+			btnPista.setEnabled(false);
+		btnPista.addActionListener( e -> {
+			JOptionPane.showMessageDialog(this, p.getPista());
+			Controlador.getInstancia().disminuirPistasDisponibles();
+			btnPista.setEnabled(false);
+			ventanaCurso.actualizarPistasRestantes();
+		});
 		lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
 	}
 
@@ -116,25 +159,5 @@ public abstract class PanelPregunta extends JPanel {
 		add(lblTiempoRestante);
 	}
 
-	private void actualizarTiempo() {
-		if (tiempoRestante > 0) {
-			tiempoRestante--;
-			lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
-		} else {
-			detenerTemporizador(false);
-			manejarTiempoTerminado(false); // Se acabó el tiempo sin respuesta
-		}
-	}
-
-	/**
-	 * Detiene el temporizador.
-	 * 
-	 * @param respondida true si el usuario respondió antes de tiempo, false si el tiempo se agotó
-	 */
-	public void detenerTemporizador(boolean respondida) {
-		timer.stop();
-	}
-
-	// Método que cada tipo de pregunta implementará para manejar cuando se termine el tiempo.
-	protected abstract void manejarTiempoTerminado(boolean respondida);
+	
 }

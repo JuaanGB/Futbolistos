@@ -117,6 +117,6 @@ public class VentanaCurso extends JFrame {
     }
     
     public void actualizarPistasRestantes() {
-    	System.err.println();
+    	lblPistasRestantes.setText("Pistas restantes: " + sesionCurso.getPistasRestantes());
     }
 }

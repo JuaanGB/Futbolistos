@@ -44,7 +44,7 @@ public class PanelPreguntaTest extends PanelPregunta {
                             "Respuesta incorrecta.\nLa respuesta correcta era:\n" + p.getRespuestaCorrecta(),
                             "Fallo.", JOptionPane.ERROR_MESSAGE);
                 }
-                manejarTiempoTerminado(true);
+                this.manejarTiempoTerminado(true);
             });
         }
     }
@@ -96,18 +96,11 @@ public class PanelPreguntaTest extends PanelPregunta {
     }
 
     @Override
-    protected void manejarTiempoTerminado(boolean respondida) {
-        if (!respondida) {
+    protected void gestionarPreguntaRespondida(boolean respondida) {
+    	if (!respondida) {
             JOptionPane.showMessageDialog(this, 
                 "¡Tiempo agotado! La respuesta correcta era:\n");
-        }
-        Pregunta p = Controlador.getInstancia().pasarASiguientePregunta();
-        if (p == null) {
-            JOptionPane.showMessageDialog(this, "¡Curso completado!");
-            VentanaPrincipal vp = new VentanaPrincipal();
-            vp.setVisible(true);
-        } else {
-        	this.getVentanaCurso().actualizarPregunta(p);
-        }
+    	}
     }
+    
 }
