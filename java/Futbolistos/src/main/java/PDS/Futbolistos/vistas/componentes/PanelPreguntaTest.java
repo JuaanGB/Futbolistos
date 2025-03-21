@@ -1,28 +1,24 @@
 package PDS.Futbolistos.vistas.componentes;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.PreguntaTest;
-import PDS.Futbolistos.vistas.VentanaPrincipal;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.BoxLayout;
-import javax.swing.SwingConstants;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JTextArea;
 import java.awt.Color;
-import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.JButton;
 
 public class PanelPreguntaTest extends PanelPregunta {
 
-    private static int NUM_RESPUESTAS = 4;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private static int NUM_RESPUESTAS = 4;
 
     private JButton btnRespuesta1, btnRespuesta2, btnRespuesta3, btnRespuesta4;
     private List<JButton> botones;

@@ -1,8 +1,5 @@
 package PDS.Futbolistos.modelado;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.swing.JPanel;
 
 public abstract class Pregunta {
