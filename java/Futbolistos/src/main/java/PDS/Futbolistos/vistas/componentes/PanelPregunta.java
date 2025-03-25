@@ -10,6 +10,10 @@ import PDS.Futbolistos.vistas.VentanaPrincipal;
 
 public abstract class PanelPregunta extends JPanel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Elementos comunes a todas las preguntas
 	private JTextArea txtrEnunciado;
 	private JLabel lblFoto;

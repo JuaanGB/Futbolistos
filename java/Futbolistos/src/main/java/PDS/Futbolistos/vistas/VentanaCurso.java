@@ -1,18 +1,18 @@
 package PDS.Futbolistos.vistas;
 
-import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
-import PDS.Futbolistos.modelado.PreguntaObserver;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.vistas.componentes.PanelPregunta;
-import PDS.Futbolistos.vistas.componentes.PanelPreguntaTest;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaCurso extends JFrame {
 
-    private JLabel lblTitulo;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JLabel lblTitulo;
     private PanelPregunta panelPregunta;
     private JLabel lblPistasRestantes;
     private JLabel lblProgreso;

@@ -3,13 +3,10 @@ package PDS.Futbolistos.controlador;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import PDS.Futbolistos.modelado.BloqueDeContenido;
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.modelado.Pregunta;
-import PDS.Futbolistos.modelado.PreguntaObserver;
 import PDS.Futbolistos.modelado.PreguntaTest;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.modelado.Usuario;

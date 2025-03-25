@@ -10,7 +10,12 @@ import PDS.Futbolistos.vistas.VentanaCurso;
 
 public class PanelCurso extends JPanel {
     
-    public PanelCurso(Curso curso) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public PanelCurso(Curso curso) {
         // Utilizamos fondo oscuro que sigue la estética de VentanaPrincipal
         setBackground(new Color(30, 30, 30));
         setLayout(new BorderLayout());

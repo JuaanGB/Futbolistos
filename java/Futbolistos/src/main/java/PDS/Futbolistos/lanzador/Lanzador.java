@@ -1,15 +1,7 @@
 package PDS.Futbolistos.lanzador;
 
 import java.awt.EventQueue;
-import java.util.Properties;
-
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import com.jtattoo.plaf.aluminium.AluminiumLookAndFeel;
-
 import PDS.Futbolistos.vistas.Login;
 
 

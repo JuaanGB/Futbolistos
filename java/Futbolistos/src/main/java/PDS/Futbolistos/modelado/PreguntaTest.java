@@ -1,10 +1,7 @@
 package PDS.Futbolistos.modelado;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
 import javax.swing.JPanel;
 
 import PDS.Futbolistos.vistas.componentes.PanelPreguntaTest;

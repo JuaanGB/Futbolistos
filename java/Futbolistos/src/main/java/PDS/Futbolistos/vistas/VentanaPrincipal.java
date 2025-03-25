@@ -1,7 +1,6 @@
 package PDS.Futbolistos.vistas;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Curso;
