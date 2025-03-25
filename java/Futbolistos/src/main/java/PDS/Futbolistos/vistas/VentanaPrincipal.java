@@ -66,16 +66,27 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelBotonesUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         panelBotonesUsuario.setBackground(new Color(30, 30, 30));
 
+        Controlador ctrl = Controlador.getInstancia();
+        String currentUserName = (ctrl.getUsuarioAct() != null) ? ctrl.getUsuarioAct().getNombreUsuario() : "Usuario";
+        // Check if the current user has a custom image
+        Icon userIcon = null;
+        if (ctrl.getUsuarioAct() != null && ctrl.getUsuarioAct().getImagen() != null) {
+            Image scaledImage = ctrl.getUsuarioAct().getImagen()
+                    .getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+            userIcon = new ImageIcon(scaledImage);
+        } else {
+            userIcon = loadScaledImage("/PDS/Futbolistos/imagenes/usuario.png", 32, 32);
+        }
+
         // Botón "Usuario" con icono escalado (por ejemplo, 32x32)
-        JButton btnUsuario = new JButton("Usuario");
+        JButton btnUsuario = new JButton(currentUserName, userIcon);
         btnUsuario.setFont(new Font("Arial", Font.BOLD, 16));
         btnUsuario.setBackground(new Color(0, 204, 102));
         btnUsuario.setForeground(Color.WHITE);
         btnUsuario.setFocusPainted(false);
         btnUsuario.setBorder(null);
         btnUsuario.setPreferredSize(new Dimension(200, 50));
-        btnUsuario.setIcon(loadScaledImage("/PDS/Futbolistos/imagenes/usuario.png", 32, 32));
-        btnUsuario.addActionListener(e -> { /* Acción a implementar en el futuro */ });
+        btnUsuario.addActionListener(e -> new PerfilUsuario().setVisible(true));
         
         // Botón "Estadísticas"
         JButton btnEstadsticas = new JButton("Estadísticas");
@@ -105,7 +116,7 @@ public class VentanaPrincipal extends JFrame {
 
         JPanel panelCursos = new JPanel(new GridLayout(0, 2, 10, 10));
         panelCursos.setBackground(new Color(30, 30, 30));
-        List<Curso> cursos = Controlador.getInstancia().getCursosDisponibles();
+        List<Curso> cursos = ctrl.getCursosDisponibles();
         for (Curso c : cursos) {
             panelCursos.add(new PanelCurso(c));
         }
@@ -141,7 +152,6 @@ public class VentanaPrincipal extends JFrame {
         fileChooser.setFileFilter(filtro);
 
         int seleccion = fileChooser.showOpenDialog(this);
-
         if (seleccion == JFileChooser.APPROVE_OPTION) {
             File archivoSeleccionado = fileChooser.getSelectedFile();
             String extension = obtenerExtension(archivoSeleccionado);

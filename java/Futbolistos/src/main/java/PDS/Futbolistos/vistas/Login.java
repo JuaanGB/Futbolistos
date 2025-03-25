@@ -2,22 +2,20 @@ package PDS.Futbolistos.vistas;
 
 import javax.swing.*;
 import java.awt.*;
+import PDS.Futbolistos.controlador.Controlador;
+import PDS.Futbolistos.modelado.Usuario;
 
 public class Login extends JFrame {
-    
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
+    
     public Login() {
         setTitle("Futbolistos - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Aumentar el ancho para estirar horizontalmente
         setSize(700, 450);
         setLocationRelativeTo(null); // Centrar la ventana en la pantalla
 
-        // Intenta utilizar Nimbus Look and Feel para un estilo moderno
+        // Intentar utilizar Nimbus Look and Feel para un estilo moderno
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -26,10 +24,10 @@ public class Login extends JFrame {
                 }
             }
         } catch (Exception e) {
-            // Si Nimbus no está disponible, se usará la apariencia por defecto
+            // Si Nimbus no está disponible, se empleará la apariencia por defecto
         }
         
-        // Panel principal con GridBagLayout para centrar vertical y horizontalmente
+        // Panel principal con GridBagLayout para centrar la interfaz
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(new Color(30, 30, 30));
         GridBagConstraints gbcMain = new GridBagConstraints();
@@ -39,35 +37,29 @@ public class Login extends JFrame {
         gbcMain.anchor = GridBagConstraints.CENTER;
         gbcMain.weightx = 1.0;
         gbcMain.weighty = 1.0;
-
-        // ---------------------
-        // Etiqueta con la imagen que actuará como logo
-        // ---------------------
+        
+        // Etiqueta que contiene el logo
         ImageIcon icon = new ImageIcon(getClass().getResource("/PDS/Futbolistos/imagenes/futbolistos.png"));
-        // Obtener la imagen original sin cambiarle el tamaño
         Image image = icon.getImage();
-        // Utilizar una etiqueta personalizada que redimensiona la imagen según su contenedor sin estirarla exageradamente
         JLabel lblImage = new ScaledImageLabel(image);
         gbcMain.gridy = 0;
         mainPanel.add(lblImage, gbcMain);
         
-        // ---------------------
-        // Panel de formulario utilizando GridBagLayout
-        // ---------------------
+        // Panel del formulario de login
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(new Color(30, 30, 30));
         GridBagConstraints gbcForm = new GridBagConstraints();
         gbcForm.insets = new Insets(10, 10, 10, 10);
         gbcForm.fill = GridBagConstraints.HORIZONTAL;
         
-        // Campo de Usuario
+        // Campo de usuario
         JLabel lblUsuario = new JLabel("Usuario:");
         lblUsuario.setForeground(Color.WHITE);
         lblUsuario.setFont(new Font("Arial", Font.PLAIN, 16));
         gbcForm.gridx = 0;
         gbcForm.gridy = 0;
         formPanel.add(lblUsuario, gbcForm);
-        
+
         JTextField txtUsuario = new JTextField();
         txtUsuario.setFont(new Font("Arial", Font.PLAIN, 16));
         txtUsuario.setBorder(BorderFactory.createLineBorder(new Color(0, 204, 102), 2));
@@ -75,7 +67,7 @@ public class Login extends JFrame {
         gbcForm.gridy = 0;
         formPanel.add(txtUsuario, gbcForm);
         
-        // Campo de Contraseña
+        // Campo de contraseña
         JLabel lblPassword = new JLabel("Contraseña:");
         lblPassword.setForeground(Color.WHITE);
         lblPassword.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -120,7 +112,6 @@ public class Login extends JFrame {
         GridBagConstraints gbcFormContainer = new GridBagConstraints();
         gbcFormContainer.gridx = 0;
         gbcFormContainer.gridy = 1;
-        gbcFormContainer.insets = new Insets(0, 0, 0, 0);
         gbcFormContainer.fill = GridBagConstraints.HORIZONTAL;
         gbcFormContainer.anchor = GridBagConstraints.CENTER;
         mainPanel.add(formPanel, gbcFormContainer);
@@ -128,7 +119,7 @@ public class Login extends JFrame {
         // Agregar el panel principal a la ventana
         add(mainPanel);
         
-        // Lógica del login
+        // Lógica de login que utiliza el Controlador para acceder al repositorio
         btnLogin.addActionListener(e -> {
             String usuario = txtUsuario.getText().trim();
             String password = new String(txtPassword.getPassword());
@@ -138,25 +129,22 @@ public class Login extends JFrame {
                 return;
             }
             
-            // Aquí se simula la lógica de un login. Se consideran válidas las credenciales "admin"/"admin"
-            if ("admin".equals(usuario) && "admin".equals(password)) {
-                // Inicio de sesión exitoso
+            Controlador controlador = Controlador.getInstancia();
+            // Se asume que el Controlador tiene el método "autenticar" que retorna el Usuario si las
+            // credenciales son válidas o null en caso contrario.
+            Usuario u = controlador.autenticar(usuario, password);
+            if (u != null) {
                 JOptionPane.showMessageDialog(Login.this, "Inicio de sesión exitoso", "Información", JOptionPane.INFORMATION_MESSAGE);
-                VentanaPrincipal v = new VentanaPrincipal();
-                v.setVisible(true);
-                dispose(); // Cerrar la ventana de login
+                new VentanaPrincipal().setVisible(true);
+                dispose(); // Cerrar ventana de login
             } else {
-                // Credenciales incorrectas
                 JOptionPane.showMessageDialog(Login.this, "Credenciales incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
     
-    // Clase interna para redimensionar dinámicamente la imagen sin estirarla demasiado
+    // Clase interna para redimensionar la imagen manteniendo la proporción
     private static class ScaledImageLabel extends JLabel {
-        /**
-         * 
-         */
         private static final long serialVersionUID = 1L;
         private Image originalImage;
         
@@ -176,20 +164,14 @@ public class Login extends JFrame {
                 int imgHeight = originalImage.getHeight(null);
 
                 if (imgWidth > 0 && imgHeight > 0) {
-                    // Calcular el factor de escala manteniendo la proporción
                     double scaleFactor = Math.min((double) compWidth / imgWidth, (double) compHeight / imgHeight);
                     int scaledWidth = (int) (imgWidth * scaleFactor);
                     int scaledHeight = (int) (imgHeight * scaleFactor);
-                    
-                    // Calcular la posición para centrar la imagen
                     int x = (compWidth - scaledWidth) / 2;
                     int y = (compHeight - scaledHeight) / 2;
-                    
                     g.drawImage(originalImage, x, y, scaledWidth, scaledHeight, this);
                 }
             }
         }
     }
-    
-
 }

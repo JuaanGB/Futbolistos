@@ -3,20 +3,16 @@ package PDS.Futbolistos.vistas;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
+import PDS.Futbolistos.controlador.Controlador;
 
 public class Registro extends JFrame {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private JLabel lblImage;
     private File selectedImageFile = null;
-    
-    // Simulación de almacenamiento de usuarios ya registrados (cuando haya persistencia, se reemplazará con la base de datos)
-    private static Set<String> registeredUsernames = new HashSet<>();
     
     // Patrón para fecha en formato dd/mm/yyyy
     private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");
@@ -257,21 +253,30 @@ public class Registro extends JFrame {
                 return;
             }
             
-            // Validar que no exista un usuario con el mismo nombre ya registrado
-            if(registeredUsernames.contains(usuario)){
-                JOptionPane.showMessageDialog(Registro.this, "El nombre de usuario ya existe. Por favor elija otro.", "Error", JOptionPane.ERROR_MESSAGE);
+            LocalDate fecha;
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                fecha = LocalDate.parse(fechaNacimiento, formatter);
+            } catch (DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(Registro.this, "Fecha inválida.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            // Simulación de registro (aquí se guardaría en la base de datos en el futuro)
-            registeredUsernames.add(usuario);
-            JOptionPane.showMessageDialog(Registro.this, "Registro exitoso para el usuario: " + usuario, "Información", JOptionPane.INFORMATION_MESSAGE);
+            // Obtener la URL de la imagen seleccionada (opcional)
+            String imagenURL = "";
+            if(selectedImageFile != null) {
+                imagenURL = selectedImageFile.getAbsolutePath();
+            }
             
-            // Cerrar la ventana de registro y abrir la de Login
-            dispose();
-            Login login = new Login();
-            login.setVisible(true);
+            // Utilizar el Controlador para registrar el usuario
+            Controlador controlador = Controlador.getInstancia();
+            if(controlador.registrar(nombre, apellido, usuario, password, saludo, imagenURL, fecha) == null) {
+                JOptionPane.showMessageDialog(Registro.this, "El nombre de usuario ya existe. Por favor, elija otro.", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(Registro.this, "Registro exitoso para el usuario: " + usuario, "Información", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
+                new Login().setVisible(true);
+            }
         });
     }
-    
 }

@@ -32,6 +32,7 @@ public class Usuario {
 		this.estadisticas = new EstadisticasUsuario();
 		this.sesionesCurso = new LinkedList<>();
 	}
+	
 
 	// Getters y setters
 	public String getSaludo() { return saludo; }
