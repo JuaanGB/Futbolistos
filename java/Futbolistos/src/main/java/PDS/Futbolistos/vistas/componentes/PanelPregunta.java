@@ -71,6 +71,8 @@ public abstract class PanelPregunta extends JPanel {
             JOptionPane.showMessageDialog(this, "¡Curso completado!");
             VentanaPrincipal vp = new VentanaPrincipal();
             vp.setVisible(true);
+            JFrame ventanaCurso = (JFrame) SwingUtilities.getWindowAncestor(PanelPregunta.this);
+            if (ventanaCurso != null) ventanaCurso.dispose();
         } else {
         	this.getVentanaCurso().actualizarPregunta(p);
         }

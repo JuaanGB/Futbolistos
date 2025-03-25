@@ -69,6 +69,8 @@ public class PanelCurso extends JPanel {
         Controlador.getInstancia().empezarCurso(c, new EstrategiaSecuencial());
         VentanaCurso vc = new VentanaCurso(Controlador.getInstancia().getSesionCursoAct());
         vc.setVisible(true);
+        JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(PanelCurso.this);
+        if (ventana != null) ventana.dispose();
     }
     
     private void mostrarInformacion(Curso c) {
