@@ -17,7 +17,7 @@ public class SesionCurso {
 	public SesionCurso(Curso c, EstrategiaAprendizaje e) {
 		this.curso = c;
 		this.estrategia = e;
-		this.preguntasRestantes = this.estrategia.calcularOrden(c.getBloquesDeContenido());
+		this.preguntasRestantes = this.estrategia.calcularOrden(c);
 		this.puntuacion = 0;
 		this.pistasRestantes = 3;
 		this.numeroPreguntasRespondidas = 0;
