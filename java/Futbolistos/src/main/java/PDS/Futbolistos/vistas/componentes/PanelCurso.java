@@ -2,8 +2,12 @@ package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
+
 import PDS.Futbolistos.controlador.Controlador;
+import PDS.Futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import PDS.Futbolistos.modelado.Curso;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
 import PDS.Futbolistos.vistas.VentanaCurso;
 import PDS.Futbolistos.vistas.componentes.FactoriaComponentes;
@@ -59,12 +63,34 @@ public class PanelCurso extends JPanel {
 	}
 
 	private void iniciarCurso(Curso c) {
-		Controlador.getInstancia().empezarCurso(c, new EstrategiaSecuencial());
-		VentanaCurso vc = new VentanaCurso(Controlador.getInstancia().getSesionCursoAct());
-		vc.setVisible(true);
-		JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(PanelCurso.this);
-		if (ventana != null)
-			ventana.dispose();
+		
+		Set<String> estrategias = FactoriaEstrategiasAprendizaje.getInstancia().getEstrategias();
+		JComboBox<String> comboBox = new JComboBox<>(estrategias.toArray(new String[0]));
+
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("Selecciona una estrategia:"));
+		panel.add(comboBox);
+
+		int option = JOptionPane.showConfirmDialog(this, panel, "Seleccionar Estrategia", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (option == JOptionPane.OK_OPTION) {
+			String estrategiaSeleccionada = (String) comboBox.getSelectedItem();
+
+			EstrategiaAprendizaje estrategia = FactoriaEstrategiasAprendizaje.getInstancia().obtenerEstrategia(estrategiaSeleccionada);
+
+			if (estrategia != null) {
+				Controlador.getInstancia().empezarCurso(c, estrategia);
+				VentanaCurso vc = new VentanaCurso(Controlador.getInstancia().getSesionCursoAct());
+				vc.setVisible(true);
+				JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(PanelCurso.this);
+				if (ventana != null)
+					ventana.dispose();
+			} else {
+				JOptionPane.showMessageDialog(this, "Error al seleccionar la estrategia", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	private void mostrarInformacion(Curso c) {
