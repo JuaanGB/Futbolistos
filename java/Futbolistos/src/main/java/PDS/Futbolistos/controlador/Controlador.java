@@ -2,6 +2,9 @@ package PDS.Futbolistos.controlador;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import PDS.Futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import PDS.Futbolistos.modelado.BloqueDeContenido;
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
@@ -18,6 +21,7 @@ public class Controlador {
     
     // Variable global para el repositorio de usuarios
     private final RepositorioUsuario repositorio;
+    private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
     
     private Usuario usuarioAct;
     private SesionCurso sesionCursoAct;
@@ -25,6 +29,7 @@ public class Controlador {
     public Controlador() {
         // Se inicializa el repositorio una sola vez, evitando su definición en cada método
         repositorio = RepositorioUsuario.getUnicainstancia();
+        factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
         anadirCursos();
     }
 
@@ -47,7 +52,7 @@ public class Controlador {
     public Usuario autenticar(String nombreUsuario, String contraseña) {
         // Se usa el repositorio global en lugar de crear uno nuevo cada vez
         Usuario u = repositorio.getUsuario(nombreUsuario);
-        if (u != null && u.getContraseña().equals(contraseña)) {
+        if (u != null && u.checkContraseña(contraseña)) {
             this.usuarioAct = u;
             return u;
         }
@@ -55,14 +60,12 @@ public class Controlador {
     }
     
     // Método de registro que utiliza el repositorio global
-    public Usuario registrar(String nombre, String apellidos, String usuario, String contraseña, String saludo, String imagenURL, java.time.LocalDate fecha) {
-        if (repositorio.getUsuario(usuario) != null) {
-            return null;
+    public boolean registrar(String usuario, String contraseña) {
+        if (repositorio.existeNombre(usuario)) {
+            return false;
         }
-        Usuario u = repositorio.añadirUsuario(usuario, nombre, apellidos, contraseña, saludo, imagenURL, fecha);
-        // Opcional: establecer usuario actual después del registro
-        this.usuarioAct = u;
-        return u;
+        usuarioAct = repositorio.añadirUsuario(usuario, contraseña);
+        return true;
     }
     
     // Funcionalidad para iniciar el curso
@@ -174,4 +177,12 @@ public class Controlador {
             CatalogoCursos.getInstancia().agregarCurso(c);
         }
     }
+
+	public Set<String> getEstrategias() {
+		return factoriaEstrategias.getEstrategias();
+	}
+
+	public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
+		return factoriaEstrategias.obtenerEstrategia(estrategiaSeleccionada);
+	}
 }

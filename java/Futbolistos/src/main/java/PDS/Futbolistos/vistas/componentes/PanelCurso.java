@@ -2,6 +2,7 @@ package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ResourceBundle.Control;
 import java.util.Set;
 
 import PDS.Futbolistos.controlador.Controlador;
@@ -64,7 +65,7 @@ public class PanelCurso extends JPanel {
 
 	private void iniciarCurso(Curso c) {
 		
-		Set<String> estrategias = FactoriaEstrategiasAprendizaje.getInstancia().getEstrategias();
+		Set<String> estrategias = Controlador.getInstancia().getEstrategias();
 		JComboBox<String> comboBox = new JComboBox<>(estrategias.toArray(new String[0]));
 
 		JPanel panel = new JPanel();
@@ -77,7 +78,7 @@ public class PanelCurso extends JPanel {
 		if (option == JOptionPane.OK_OPTION) {
 			String estrategiaSeleccionada = (String) comboBox.getSelectedItem();
 
-			EstrategiaAprendizaje estrategia = FactoriaEstrategiasAprendizaje.getInstancia().obtenerEstrategia(estrategiaSeleccionada);
+			EstrategiaAprendizaje estrategia = Controlador.getInstancia().getEstrategia(estrategiaSeleccionada);
 
 			if (estrategia != null) {
 				Controlador.getInstancia().empezarCurso(c, estrategia);

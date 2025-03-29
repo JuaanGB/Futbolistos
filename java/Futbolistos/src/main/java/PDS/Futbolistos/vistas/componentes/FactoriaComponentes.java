@@ -69,4 +69,14 @@ public class FactoriaComponentes {
 		boton.setFocusPainted(false);
 		return boton;
 	}
+	
+	public static JCheckBox crearCheckBox(String texto) {
+        JCheckBox checkBox = new JCheckBox(texto);
+        checkBox.setBackground(new Color(30, 30, 30));
+        checkBox.setForeground(Color.WHITE);
+        checkBox.setFocusPainted(false);
+        checkBox.setFont(new Font("Arial", Font.PLAIN, 12));
+        checkBox.setBorder(BorderFactory.createLineBorder(BORDER_COLOR, 2));
+        return checkBox;
+    }
 }

@@ -10,24 +10,16 @@ import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 public class Usuario {
 
 	// Atributos
-	private final String nombreUsuario, nombre, apellidos, contraseña;
-	private String saludo, imagenURL;
-	private final LocalDate fecha;
-	private BufferedImage imagen;
+	private final String nombreUsuario, contraseña;
 	
 	private final List<SesionCurso> sesionesCurso;
 	private final EstadisticasUsuario estadisticas;
 
 	// Constructor
-	public Usuario(String nombreUsuario, String nombre, String apellidos, String contraseña, String saludo,
-			String imagenURL, LocalDate fecha) {
+	public Usuario(String nombreUsuario, String contraseña) {
 		this.nombreUsuario = nombreUsuario;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
 		this.contraseña = contraseña;
-		this.saludo = saludo;
-		this.imagenURL = imagenURL;
-		this.fecha = fecha;
+
 		// Cargar imagen
 		this.estadisticas = new EstadisticasUsuario();
 		this.sesionesCurso = new LinkedList<>();
@@ -35,17 +27,8 @@ public class Usuario {
 	
 
 	// Getters y setters
-	public String getSaludo() { return saludo; }
-    public void setSaludo(String saludo) { this.saludo = saludo; }
-    public String getImagenURL() { return imagenURL; }
-    public void setImagenURL(String imagenURL) { this.imagenURL = imagenURL; }
-    public BufferedImage getImagen() { return imagen; }
-    public void setImagen(BufferedImage imagen) { this.imagen = imagen; }
     public String getNombreUsuario() { return nombreUsuario; }
-    public String getNombre() { return nombre; }
-    public String getApellidos() { return apellidos; }
     public String getContraseña() { return contraseña; }
-    public LocalDate getFecha() { return fecha; }
     public EstadisticasUsuario getEstadisticas() { return estadisticas; }
     
     // Actualización de estadísticas (evitamos que el Controlador conozca por completo las estadísticas haciendo
@@ -58,6 +41,8 @@ public class Usuario {
 
     
     // Funcionalidad
+    public boolean checkContraseña(String otra) { return this.contraseña.equals(otra); }
+    
     public SesionCurso empezarCurso(Curso c, EstrategiaAprendizaje a) { 
     	SesionCurso sc = new SesionCurso(c, a);
     	sesionesCurso.add(sc); 

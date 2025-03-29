@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Curso;
+import PDS.Futbolistos.vistas.componentes.FactoriaComponentes;
 import PDS.Futbolistos.vistas.componentes.PanelCurso;
 import java.awt.*;
 import java.io.File;
@@ -14,17 +15,8 @@ public class VentanaPrincipal extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public VentanaPrincipal() {
-        // Intentar utilizar Nimbus Look and Feel
-        try {
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // Si Nimbus no está disponible, se usará la apariencia por defecto
-        }
+        
+    	FactoriaComponentes.utilizarNimbusLookAndFeel();
         initialize();
     }
 
@@ -69,14 +61,7 @@ public class VentanaPrincipal extends JFrame {
         Controlador ctrl = Controlador.getInstancia();
         String currentUserName = (ctrl.getUsuarioAct() != null) ? ctrl.getUsuarioAct().getNombreUsuario() : "Usuario";
         // Check if the current user has a custom image
-        Icon userIcon = null;
-        if (ctrl.getUsuarioAct() != null && ctrl.getUsuarioAct().getImagen() != null) {
-            Image scaledImage = ctrl.getUsuarioAct().getImagen()
-                    .getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-            userIcon = new ImageIcon(scaledImage);
-        } else {
-            userIcon = loadScaledImage("/PDS/Futbolistos/imagenes/usuario.png", 32, 32);
-        }
+        Icon userIcon = loadScaledImage("/PDS/Futbolistos/imagenes/usuario.png", 32, 32);
 
         // Botón "Usuario" con icono escalado (por ejemplo, 32x32)
         JButton btnUsuario = new JButton(currentUserName, userIcon);
@@ -170,7 +155,4 @@ public class VentanaPrincipal extends JFrame {
         return (lastIndex == -1) ? "" : nombre.substring(lastIndex + 1).toLowerCase();
     }
     
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new VentanaPrincipal().setVisible(true));
-    }
 }

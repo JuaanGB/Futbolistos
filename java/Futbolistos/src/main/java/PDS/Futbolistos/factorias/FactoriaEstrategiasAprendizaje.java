@@ -3,7 +3,7 @@ package PDS.Futbolistos.factorias;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaAleatoria;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,7 +13,7 @@ public class FactoriaEstrategiasAprendizaje {
 	private Map<String, EstrategiaAprendizaje> estrategias;
 
 	private FactoriaEstrategiasAprendizaje() {
-		estrategias = new HashMap<>();
+		estrategias = new LinkedHashMap<>();
 		inicializarEstrategias();
 	}
 
