@@ -82,6 +82,7 @@ public class VentanaPrincipal extends JFrame {
         btnEstadsticas.setBorder(null);
         btnEstadsticas.setPreferredSize(new Dimension(200, 50));
         btnEstadsticas.setIcon(loadScaledImage("/PDS/Futbolistos/imagenes/tendencia.png", 32, 32));
+        btnEstadsticas.addActionListener( e -> System.out.println(Controlador.getInstancia().getUsuarioAct().getEstadisticas()));
 
         // Botón "Cargar Curso"
         JButton btnCargarCurso = new JButton("Cargar Curso");

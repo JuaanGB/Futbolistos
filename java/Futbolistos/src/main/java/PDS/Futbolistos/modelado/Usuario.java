@@ -48,6 +48,10 @@ public class Usuario {
     	sesionesCurso.add(sc); 
     	return sc;
     }
+    
+    public void actualizarEstadisticas(SesionCurso s, boolean completado) { 
+    	estadisticas.actualizar(s, completado); 
+    };
 	
 	
 	

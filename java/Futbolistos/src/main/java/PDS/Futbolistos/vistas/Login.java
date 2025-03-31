@@ -78,7 +78,7 @@ public class Login extends JFrame {
 		formPanel.add(btnRegister, gbcForm);
 
 		// Acción para abrir la ventana de registro
-		btnRegister.addActionListener(e -> new Registro().setVisible(true));
+		btnRegister.addActionListener(e -> {new Registro().setVisible(true); this.dispose(); });
 
 		// Añadir el formulario al panel principal
 		GridBagConstraints gbcFormContainer = new GridBagConstraints();

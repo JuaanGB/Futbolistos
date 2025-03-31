@@ -40,15 +40,10 @@ public class Controlador {
         return instancia;
     }
     
-    public Usuario getUsuarioAct() { 
-        return usuarioAct; 
-    }
-    
-    public SesionCurso getSesionCursoAct() { 
-        return sesionCursoAct; 
-    }
+    public Usuario getUsuarioAct() { return usuarioAct; }
+    public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
 
-    // Método de autenticación que utiliza el repositorio global para consultar y verificar credenciales
+    // CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
     public Usuario autenticar(String nombreUsuario, String contraseña) {
         // Se usa el repositorio global en lugar de crear uno nuevo cada vez
         Usuario u = repositorio.getUsuario(nombreUsuario);
@@ -59,7 +54,7 @@ public class Controlador {
         return null;
     }
     
-    // Método de registro que utiliza el repositorio global
+    // CASO DE USO: REGISTRARSE EN EL SISTEMA
     public boolean registrar(String usuario, String contraseña) {
         if (repositorio.existeNombre(usuario)) {
             return false;
@@ -68,13 +63,27 @@ public class Controlador {
         return true;
     }
     
-    // Funcionalidad para iniciar el curso
+    // CASO DE USO: CARGAR CURSOS DISPONIBLES
+    public List<Curso> getCursosDisponibles() { return CatalogoCursos.getInstancia().obtenerCursos(); }
+    
+    // CASO DE USO: SELECCIONAR CURSO
+    public Set<String> getEstrategias() { return factoriaEstrategias.getEstrategias(); }
+    public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
+		return factoriaEstrategias.obtenerEstrategia(estrategiaSeleccionada);
+	}
+    
     public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
         sesionCursoAct = new SesionCurso(c, e);
     }
     
+    // CASO DE USO: REALIZAR CURSO
+    public boolean quedanPistasDisponibles() { return sesionCursoAct.quedanPistasDisponibles(); }
+    public void disminuirPistasDisponibles() { sesionCursoAct.disminuirPistasDisponibles(); }
+    
     public boolean validarRespuesta(Pregunta p, String text) {
-        return p.isRespuestaValida(text);
+        boolean correcta = p.isRespuestaValida(text);
+        if (correcta) sesionCursoAct.incrementarPuntuacion(1);
+        return correcta;
     }
     
     public Pregunta pasarASiguientePregunta() {
@@ -85,17 +94,24 @@ public class Controlador {
         return null;
     }
     
-    public boolean quedanPistasDisponibles() { 
-        return sesionCursoAct.quedanPistasDisponibles(); 
+    // CASO DE USO: GUARDAR PROGRESO DEL CURSO
+    // TODO
+    
+    // CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
+    // TODO
+    
+    // CASO DE USO: CREAR CURSO
+    // TODO
+    
+    // CASO DE USO: COMPARTIR CURSO
+    // TODO
+    
+    // CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar curso)
+    public void actualizarEstadisticasUsuario(boolean completado) {
+    	usuarioAct.actualizarEstadisticas(sesionCursoAct, completado);
+    	// sesionCursoAct.reiniciarEstadisticas(); // Necesario por si se guarda el progreso, para no sumar muchas veces a la estad globales
     }
     
-    public void disminuirPistasDisponibles() { 
-        sesionCursoAct.disminuirPistasDisponibles(); 
-    }
-    
-    public List<Curso> getCursosDisponibles() {
-        return CatalogoCursos.getInstancia().obtenerCursos();
-    }
 
     // Métodos de prueba para añadir cursos de ejemplo
     private void anadirCursos() {
@@ -178,11 +194,5 @@ public class Controlador {
         }
     }
 
-	public Set<String> getEstrategias() {
-		return factoriaEstrategias.getEstrategias();
-	}
-
-	public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
-		return factoriaEstrategias.obtenerEstrategia(estrategiaSeleccionada);
-	}
+	
 }

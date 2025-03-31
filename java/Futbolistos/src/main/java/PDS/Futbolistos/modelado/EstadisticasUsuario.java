@@ -5,7 +5,7 @@ import java.time.Duration;
 public class EstadisticasUsuario {
 	
 	// Atributos
-    private int preguntasRespondidas, preguntasAcertadas, cursosRealizados, cursosCreados, mejorRachaDias;
+    private int preguntasRespondidas, preguntasAcertadas, cursosRealizados, cursosCreados, mejorRachaDias, pistasConsultadas;
     private Duration tiempoTotalDeUso;
 
     // Constructor
@@ -15,6 +15,7 @@ public class EstadisticasUsuario {
     	this.cursosRealizados = 0;
     	this.cursosCreados = 0;
     	this.mejorRachaDias = 0; 
+    	this.pistasConsultadas = 0;
     	this.tiempoTotalDeUso = Duration.ZERO; 
     }
 
@@ -25,6 +26,7 @@ public class EstadisticasUsuario {
     public int getCursosCreados() { return cursosCreados; }
     public int getMejorRachaDias() { return mejorRachaDias; }
     public Duration getTiempoTotalDeUso() { return tiempoTotalDeUso; }
+    public int getPistasConsultadas() { return pistasConsultadas; }
 
     // Funcionalidad
     public void registrarRespuesta(boolean correcta) { 
@@ -40,5 +42,19 @@ public class EstadisticasUsuario {
     public void sumarTiempo(int segundos) { tiempoTotalDeUso = tiempoTotalDeUso.plusSeconds(segundos); }
     
     @Override
-    public String toString() { return "Estadísticas: Preguntas Respondidas: " + preguntasRespondidas + ", Preguntas Acertadas: " + preguntasAcertadas + ", Cursos Realizados: " + cursosRealizados + ", Cursos Creados: " + cursosCreados + ", Mejor Racha de Días: " + mejorRachaDias + ", Tiempo Total de Uso: " + tiempoTotalDeUso.toMinutes() + " min"; }
+	public String toString() {
+		return "EstadisticasUsuario [preguntasRespondidas=" + preguntasRespondidas + ", preguntasAcertadas="
+				+ preguntasAcertadas + ", cursosRealizados=" + cursosRealizados + ", cursosCreados=" + cursosCreados
+				+ ", mejorRachaDias=" + mejorRachaDias + ", pistasConsultadas=" + pistasConsultadas
+				+ ", tiempoTotalDeUso=" + tiempoTotalDeUso + "]";
+	}
+
+	public void actualizar(SesionCurso s, boolean completado) {
+		if (completado) this.cursosRealizados++;
+		this.preguntasAcertadas += s.getPuntuacion();
+		this.preguntasRespondidas += s.getNumeroPreguntasRespondidas();
+		this.pistasConsultadas += 3 - s.getPistasRestantes();
+	}
+	
+	
 }

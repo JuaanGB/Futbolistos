@@ -2,6 +2,7 @@ package PDS.Futbolistos.vistas;
 
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.SesionCurso;
+import PDS.Futbolistos.vistas.componentes.PanelEstadisticasCurso;
 import PDS.Futbolistos.vistas.componentes.PanelPregunta;
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ public class VentanaCurso extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JLabel lblTitulo;
-    private PanelPregunta panelPregunta;
+    private JPanel panelPregunta;
     private JLabel lblPistasRestantes;
     private JLabel lblProgreso;
     private JButton btnGuardar;
@@ -40,7 +41,7 @@ public class VentanaCurso extends JFrame {
 
         // Panel de la pregunta actual, se invoca el panel del objeto Pregunta
         panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
-        panelPregunta.setVentanaCurso(this);
+        ((PanelPregunta) panelPregunta).setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 
@@ -93,6 +94,18 @@ public class VentanaCurso extends JFrame {
 
         setVisible(true);
     }
+    
+    public void mostrarEstadisticas() {
+    	getContentPane().remove(panelPregunta);
+    	panelPregunta = new PanelEstadisticasCurso(this);
+    	getContentPane().add(panelPregunta, BorderLayout.CENTER);
+    	
+    	lblTitulo.setText("RESUMEN DEL CURSO");
+    	btnGuardar.setEnabled(false);
+    	
+    	revalidate();
+    	repaint();
+    }
 
     /**
      * Actualiza la vista cuando se avanza a la siguiente pregunta.
@@ -107,7 +120,7 @@ public class VentanaCurso extends JFrame {
         // Cambiar el panel de la pregunta y actualizar la estética
         getContentPane().remove(panelPregunta);
         panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
-        panelPregunta.setVentanaCurso(this);
+        ((PanelPregunta) panelPregunta).setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 
