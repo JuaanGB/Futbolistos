@@ -9,3 +9,7 @@
 
 ## Profesor responsable:
 - Jesús Sánchez Cuadrado
+
+# Documentación importante:
+- [Casos de uso](requisitos/casos-de-uso.md).
+- [Modelado de dominio](diseño/modelado/modelado_uml.png).
