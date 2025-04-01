@@ -2,6 +2,8 @@ package PDS.Futbolistos.vistas.componentes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.HierarchyEvent;
+import java.awt.event.HierarchyListener;
 
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
@@ -21,24 +23,29 @@ public abstract class PanelPregunta extends JPanel {
 	private JButton btnPista;
 	private JLabel lblTiempoRestante;
 	private Timer timer;
-	
-	// Ventana en la que está contenido el panel para actualizar dependencias
-	private VentanaCurso ventanaCurso;
 
 	// Actualización del tiempo
 	private int tiempoRestante;
+	
+	// VentanaCurso
+	protected VentanaCurso ventanaCurso;
 
 	public PanelPregunta(Pregunta p) {
 
 		this.tiempoRestante = p.getSegundos();
+		
+		// Necesario para estar seguros de que se llama al método getWindowAncestor después de que se añada
+		// el panel a la ventana. Si no, devuelve null.
+		this.addHierarchyListener( e -> {
+			if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
+				ventanaCurso = (VentanaCurso)SwingUtilities.getWindowAncestor(PanelPregunta.this);
+            }
+		});
 		inicializarComponentes();
 		personalizarDisplay(p);
 		empezarTemporizador();
 
 	}
-	
-	public void setVentanaCurso(VentanaCurso ventanaCurso) { this.ventanaCurso = ventanaCurso; }
-	public VentanaCurso getVentanaCurso() { return ventanaCurso; }
 
 	// Gestión del tiempo
 	private void empezarTemporizador() {
@@ -73,9 +80,9 @@ public abstract class PanelPregunta extends JPanel {
 		Pregunta p = Controlador.getInstancia().pasarASiguientePregunta();
         if (p == null) {
             JOptionPane.showMessageDialog(this, "¡Curso completado!");
-            this.getVentanaCurso().mostrarEstadisticas();
+            this.ventanaCurso.mostrarEstadisticas();
         } else {
-        	this.getVentanaCurso().actualizarPregunta(p);
+            this.ventanaCurso.actualizarPregunta(p);
         }
 	}
 	
@@ -90,7 +97,7 @@ public abstract class PanelPregunta extends JPanel {
 			JOptionPane.showMessageDialog(this, p.getPista());
 			Controlador.getInstancia().disminuirPistasDisponibles();
 			btnPista.setEnabled(false);
-			ventanaCurso.actualizarPistasRestantes();
+			this.ventanaCurso.actualizarPistasRestantes();
 		});
 		lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
 	}

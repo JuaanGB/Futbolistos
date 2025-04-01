@@ -41,7 +41,6 @@ public class VentanaCurso extends JFrame {
 
         // Panel de la pregunta actual, se invoca el panel del objeto Pregunta
         panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
-        ((PanelPregunta) panelPregunta).setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 
@@ -97,7 +96,7 @@ public class VentanaCurso extends JFrame {
     
     public void mostrarEstadisticas() {
     	getContentPane().remove(panelPregunta);
-    	panelPregunta = new PanelEstadisticasCurso(this);
+    	panelPregunta = new PanelEstadisticasCurso();
     	getContentPane().add(panelPregunta, BorderLayout.CENTER);
     	
     	lblTitulo.setText("RESUMEN DEL CURSO");
@@ -120,7 +119,6 @@ public class VentanaCurso extends JFrame {
         // Cambiar el panel de la pregunta y actualizar la estética
         getContentPane().remove(panelPregunta);
         panelPregunta = (PanelPregunta) sesionCurso.getPreguntaActual().getPanel();
-        ((PanelPregunta) panelPregunta).setVentanaCurso(this);
         panelPregunta.setBackground(new Color(30, 30, 30));
         getContentPane().add(panelPregunta, BorderLayout.CENTER);
 

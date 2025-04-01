@@ -3,7 +3,11 @@ package PDS.Futbolistos.vistas.componentes;
 import PDS.Futbolistos.controlador.Controlador;
 import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.PreguntaTest;
+import PDS.Futbolistos.vistas.VentanaCurso;
+
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Color;
@@ -22,22 +26,24 @@ public class PanelPreguntaTest extends PanelPregunta {
 
     private JButton btnRespuesta1, btnRespuesta2, btnRespuesta3, btnRespuesta4;
     private List<JButton> botones;
+    private PreguntaTest pt;
 
     public PanelPreguntaTest(Pregunta p) {
         super(p);
         setBackground(new Color(30, 30, 30)); // Fondo oscuro
-        añadirAcciones(p);
+        añadirAcciones();
+        this.pt = (PreguntaTest)p;
     }
 
-    private void añadirAcciones(Pregunta p) {
+    private void añadirAcciones() {
         for (JButton boton : botones) {
             boton.addActionListener(e -> {
                 detenerTemporizador(true);
-                if (Controlador.getInstancia().validarRespuesta(p, boton.getText())) {
+                if (Controlador.getInstancia().validarRespuesta(pt, boton.getText())) {
                     JOptionPane.showMessageDialog(this, "Respuesta correcta", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this,
-                            "Respuesta incorrecta.\nLa respuesta correcta era:\n" + p.getRespuestaCorrecta(),
+                            "Respuesta incorrecta.\nLa respuesta correcta era:\n" + pt.getRespuestaCorrecta(),
                             "Fallo.", JOptionPane.ERROR_MESSAGE);
                 }
                 this.manejarTiempoTerminado(true);
@@ -95,7 +101,7 @@ public class PanelPreguntaTest extends PanelPregunta {
     protected void gestionarPreguntaRespondida(boolean respondida) {
     	if (!respondida) {
             JOptionPane.showMessageDialog(this, 
-                "¡Tiempo agotado! La respuesta correcta era:\n");
+                "¡Tiempo agotado! La respuesta correcta era:\n" + pt.getRespuestaCorrecta());
     	}
     }
     

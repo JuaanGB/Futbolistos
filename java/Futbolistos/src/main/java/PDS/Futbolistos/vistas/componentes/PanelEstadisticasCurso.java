@@ -18,7 +18,7 @@ public class PanelEstadisticasCurso extends JPanel {
 	private JLabel lblPreguntasRespondidas;
 	private JButton btnRegresar;
 
-	public PanelEstadisticasCurso(JFrame ventanaActual) {
+	public PanelEstadisticasCurso() {
 		setLayout(new GridLayout(5, 2, 10, 10));
 		setBackground(new Color(30, 30, 30));
 		setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.WHITE),

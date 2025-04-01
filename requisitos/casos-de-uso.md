@@ -2,7 +2,7 @@
 
 | Actor Principal | Caso de Uso |
 |---------------|------------|
-| **Usuario**   | - Registrarse en el sistema <br> - Iniciar sesión en el sistema |
+| **Usuario**   | - [Registrarse en el sistema](https://github.com/JuaanGB/Practicas-PDS/issues/11) <br> - [Iniciar sesión en el sistema](https://github.com/JuaanGB/Practicas-PDS/issues/10) |
 | **Alumno**   | - [Seleccionar curso <sup>*1</sup>](https://github.com/JuaanGB/Practicas-PDS/issues/8) <br> - [Realizar curso](https://github.com/JuaanGB/Practicas-PDS/issues/1) <br> - Guardar progreso del curso <br> - [Mostrar estadísticas de usuario](https://github.com/JuaanGB/Practicas-PDS/issues/3) |
 | **Creador**   | - Crear curso <br> - Compartir curso |
 | **Sistema**   | - [Actualizar estadísticas de usuario](https://github.com/JuaanGB/Practicas-PDS/issues/9) <br> - Cargar cursos disponibles |
