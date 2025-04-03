@@ -21,16 +21,24 @@ public class Controlador {
     
     // Variable global para el repositorio de usuarios
     private final RepositorioUsuario repositorio;
+    private final CatalogoCursos catalogoCursos;
     private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
     
     private Usuario usuarioAct;
     private SesionCurso sesionCursoAct;
     
-    public Controlador() {
+    private Controlador() {
         // Se inicializa el repositorio una sola vez, evitando su definición en cada método
         repositorio = RepositorioUsuario.getUnicainstancia();
         factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+        catalogoCursos = CatalogoCursos.getInstancia();
         anadirCursos();
+    }
+    
+    public Controlador(RepositorioUsuario repoUsuarios, CatalogoCursos repoCursos) {
+    	this.repositorio = repoUsuarios;
+    	this.catalogoCursos = repoCursos;
+    	this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
     }
 
     // Getters y setters
@@ -64,7 +72,7 @@ public class Controlador {
     }
     
     // CASO DE USO: CARGAR CURSOS DISPONIBLES
-    public List<Curso> getCursosDisponibles() { return CatalogoCursos.getInstancia().obtenerCursos(); }
+    public List<Curso> getCursosDisponibles() { return catalogoCursos.obtenerCursos(); }
     
     // CASO DE USO: SELECCIONAR CURSO
     public Set<String> getEstrategias() { return factoriaEstrategias.getEstrategias(); }
@@ -73,7 +81,7 @@ public class Controlador {
 	}
     
     public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
-        sesionCursoAct = new SesionCurso(c, e);
+        sesionCursoAct = usuarioAct.iniciarCurso(c, e);
     }
     
     // CASO DE USO: REALIZAR CURSO

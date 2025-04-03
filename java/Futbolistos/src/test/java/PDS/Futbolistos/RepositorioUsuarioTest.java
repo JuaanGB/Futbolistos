@@ -1,26 +1,24 @@
 package PDS.Futbolistos;
 
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import PDS.Futbolistos.modelado.RepositorioUsuario;
 import PDS.Futbolistos.modelado.Usuario;
 
 /**
- * Clase de prueba para RepositorioUsuario.
- * Se ha agregado el uso de reflection con setAccessible(true)
- * para reiniciar la lista de usuarios al comienzo de cada test.
+ * Pruebas unitarias para la clase RepositorioUsuario usando JUnit 5.
  */
 public class RepositorioUsuarioTest {
 
     private RepositorioUsuario repositorio;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         repositorio = RepositorioUsuario.getUnicainstancia();
         limpiarUsuarios();
@@ -29,7 +27,8 @@ public class RepositorioUsuarioTest {
     @Test
     public void testUnicainstancia() {
         RepositorioUsuario otraReferencia = RepositorioUsuario.getUnicainstancia();
-        assertSame("La instancia recuperada debería ser la misma (singleton).", repositorio, otraReferencia);
+        assertSame(repositorio, otraReferencia, 
+                   "La instancia recuperada debería ser la misma (singleton).");
     }
 
     @Test
@@ -39,9 +38,11 @@ public class RepositorioUsuarioTest {
 
         Usuario usuario = repositorio.añadirUsuario(nombre, pass);
         
-        assertNotNull("El usuario devuelto no debe ser nulo", usuario);
-        assertEquals("El nombre de usuario debe coincidir", nombre, usuario.getNombreUsuario());
-        assertTrue("El repositorio debe indicar que el nombre existe", repositorio.existeNombre(nombre));
+        assertNotNull(usuario, "El usuario devuelto no debe ser nulo");
+        assertEquals(nombre, usuario.getNombreUsuario(), 
+                     "El nombre de usuario debe coincidir");
+        assertTrue(repositorio.existeNombre(nombre), 
+                   "El repositorio debe indicar que el nombre existe");
     }
 
     @Test
@@ -51,8 +52,9 @@ public class RepositorioUsuarioTest {
         repositorio.añadirUsuario(nombre, pass);
 
         Usuario obtenido = repositorio.getUsuario(nombre);
-        assertNotNull("Debería poder recuperar el usuario", obtenido);
-        assertEquals("El nombre de usuario debe coincidir", nombre, obtenido.getNombreUsuario());
+        assertNotNull(obtenido, "Debería poder recuperar el usuario");
+        assertEquals(nombre, obtenido.getNombreUsuario(), 
+                     "El nombre de usuario debe coincidir");
     }
 
     @Test
@@ -61,12 +63,14 @@ public class RepositorioUsuarioTest {
         String pass = "somePass";
         repositorio.añadirUsuario(nombre, pass);
 
-        assertTrue("Debería indicar que el nombre existe", repositorio.existeNombre(nombre));
-        assertFalse("No debería existir un usuario distinto", repositorio.existeNombre("otroUsuario"));
+        assertTrue(repositorio.existeNombre(nombre), 
+                   "Debería indicar que el nombre existe");
+        assertFalse(repositorio.existeNombre("otroUsuario"), 
+                    "No debería existir un usuario distinto");
     }
 
     /**
-     * Método auxiliar para limpiar la lista de usuarios en la configuración (@Before).
+     * Método auxiliar para limpiar la lista de usuarios antes de cada prueba.
      */
     private void limpiarUsuarios() {
         try {

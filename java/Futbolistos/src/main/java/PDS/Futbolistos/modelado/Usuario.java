@@ -51,7 +51,12 @@ public class Usuario {
     
     public void actualizarEstadisticas(SesionCurso s, boolean completado) { 
     	estadisticas.actualizar(s, completado); 
-    };
+    }
+
+
+	public SesionCurso iniciarCurso(Curso c, EstrategiaAprendizaje e) {
+		return new SesionCurso(c, e);
+	}
 	
 	
 	
