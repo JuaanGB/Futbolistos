@@ -1,6 +1,7 @@
 package PDS.Futbolistos;
 
 import PDS.Futbolistos.controlador.Controlador;
+import PDS.Futbolistos.modelado.BloqueDeContenido;
 import PDS.Futbolistos.modelado.CatalogoCursos;
 import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.modelado.Pregunta;
@@ -9,9 +10,15 @@ import PDS.Futbolistos.modelado.RepositorioUsuario;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.modelado.Usuario;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +29,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
+
+import javax.swing.JPanel;
 
 /**
  * Pruebas de la clase Controlador utilizando JUnit 5.11.4.
@@ -34,35 +44,45 @@ public class ControladorTest {
 	private static final String CONTRASEÑA_NUEVO_USUARIO = "nuevapass";
 
 	private Controlador controlador;
-	private RepositorioUsuario catalogoMock;
-	private SesionCurso sesionCursoMock;
+	
+	// Servicios con mock
+	private RepositorioUsuario catalogoUsuariosMock;
 	private CatalogoCursos catalogoCursosMock;
-	private Curso cursoMock;
-	private EstrategiaAprendizaje estrategiaMock;
+	
+	// Instancias del modelo de dominio "falsas" para pruebas
+	private Usuario usuarioFalso;
+	private SesionCurso sesionCursoFalsa;
+	private Curso cursoFalso;
+	private EstrategiaAprendizaje estrategiaFalsa;
 
 	@BeforeEach
 	public void setUp() {
 
+		// Mocks de servicios
 		catalogoCursosMock = mock(CatalogoCursos.class);
-		catalogoMock = mock(RepositorioUsuario.class);
-		controlador = new Controlador(catalogoMock, catalogoCursosMock);
-		sesionCursoMock = mock(SesionCurso.class);
-		estrategiaMock = mock(EstrategiaAprendizaje.class);
+		catalogoUsuariosMock = mock(RepositorioUsuario.class);
+		
+		controlador = new Controlador(catalogoUsuariosMock, catalogoCursosMock);
+		usuarioFalso = new Usuario(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE);
+		estrategiaFalsa = new EstrategiaSecuencial();
 
+		cursoFalso = new Curso("Curso 1", "Descripción del Curso 1", null);
+		BloqueDeContenido b = new BloqueDeContenido();
+		cursoFalso.addBloqueDeContenido(b);
+
+		controlador.setUsuarioAct(usuarioFalso); // Necesito un usuario para añadirle la sesion
+		
 		// Simulamos que hay un usuario en el repositorio
-		when(catalogoMock.existeNombre(USUARIO_EXISTENTE)).thenReturn(true);
-		when(catalogoMock.getUsuario(USUARIO_EXISTENTE))
-				.thenReturn(new Usuario(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE));
+		when(catalogoUsuariosMock.existeNombre(USUARIO_EXISTENTE)).thenReturn(true);
+		when(catalogoUsuariosMock.getUsuario(USUARIO_EXISTENTE))
+				.thenReturn(usuarioFalso);
 
 		// simulamos el comportamiento del repositorio ante el registro de un usuario
 		// nuevo
-		when(catalogoMock.existeNombre(NUEVO_USUARIO)).thenReturn(false);
-		when(catalogoMock.añadirUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO))
+		when(catalogoUsuariosMock.existeNombre(NUEVO_USUARIO)).thenReturn(false);
+		when(catalogoUsuariosMock.añadirUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO))
 				.thenReturn(new Usuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO));
-		when(catalogoMock.getUsuario(NUEVO_USUARIO)).thenReturn(null);
-
-		// Comportamiento de la estrategia
-		when(estrategiaMock.calcularOrden(cursoMock)).thenReturn(new LinkedList<>());
+		when(catalogoUsuariosMock.getUsuario(NUEVO_USUARIO)).thenReturn(null);
 		
 	}
 
@@ -74,7 +94,7 @@ public class ControladorTest {
 		assertNotNull(autenticado, "El usuario debería poder autenticarse si existe y la contraseña es correcta");
 		assertEquals(USUARIO_EXISTENTE, autenticado.getNombreUsuario(),
 				"El nombre de usuario autenticado debería coincidir");
-		verify(catalogoMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(catalogoUsuariosMock, times(1)).getUsuario(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -82,7 +102,7 @@ public class ControladorTest {
 
 		Usuario autenticado = controlador.autenticar(USUARIO_EXISTENTE, "contraseñaIncorrecta");
 		assertNull(autenticado, "El usuario no debería poder autenticarse con una contraseña incorrecta");
-		verify(catalogoMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(catalogoUsuariosMock, times(1)).getUsuario(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -90,7 +110,7 @@ public class ControladorTest {
 
 		Usuario autenticado = controlador.autenticar(NUEVO_USUARIO, "");
 		assertNull(autenticado, "El usuario no debería poder autenticarse si no existe");
-		verify(catalogoMock, times(1)).getUsuario(NUEVO_USUARIO);
+		verify(catalogoUsuariosMock, times(1)).getUsuario(NUEVO_USUARIO);
 	}
 
 	/* ----------- TESTS DE REGISTRO ---------- */
@@ -100,7 +120,7 @@ public class ControladorTest {
 
 		boolean res = controlador.registrar(USUARIO_EXISTENTE, "");
 		assertFalse(res, "Ya existe un usuario con ese nombre.");
-		verify(catalogoMock, times(1)).existeNombre(USUARIO_EXISTENTE);
+		verify(catalogoUsuariosMock, times(1)).existeNombre(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -108,7 +128,7 @@ public class ControladorTest {
 
 		boolean res = controlador.registrar(NUEVO_USUARIO, "");
 		assertTrue(res, "No existe un usuario con ese nombre.");
-		verify(catalogoMock, times(1)).existeNombre(NUEVO_USUARIO);
+		verify(catalogoUsuariosMock, times(1)).existeNombre(NUEVO_USUARIO);
 	}
 
 	@Test
@@ -130,77 +150,102 @@ public class ControladorTest {
 	@Test
 	public void testEmpezarCurso() {
 		
-		controlador.autenticar(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE); // Necesito un usuario para añadirle la sesion
-		controlador.empezarCurso(cursoMock, estrategiaMock);
+		controlador.empezarCurso(cursoFalso, estrategiaFalsa);
 
 		assertNotNull(controlador.getSesionCursoAct(), "La sesión de curso no debe ser nula después de empezar el curso");
 
-		assertEquals(cursoMock, controlador.getSesionCursoAct().getCurso(), "El curso de la sesión debería ser el correcto");
-		assertEquals(estrategiaMock, controlador.getSesionCursoAct().getEstrategia(),
+		assertEquals(cursoFalso, controlador.getSesionCursoAct().getCurso(), "El curso de la sesión debería ser el correcto");
+		assertEquals(estrategiaFalsa, controlador.getSesionCursoAct().getEstrategia(),
 				"La estrategia de la sesión debería ser la correcta");
 
 	}
+	
+	@ParameterizedTest
+	@CsvSource({
+	    "0, false",
+	    "1, true"
+	})
+	public void testQuedanPistasDisponibles(int num, boolean esperado) {
+		
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa.setPistasRestantes(num);
+		
+		controlador.setSesionCursoAct(sesionCursoFalsa);
+		boolean res = controlador.quedanPistasDisponibles();
+		
+		assertEquals(esperado, res);
+		
+	}
+	
+	@Test
+	public void testDisminuirPistasDisponibles() {
+		
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa.setPistasRestantes(1);
+		controlador.setSesionCursoAct(sesionCursoFalsa);
+		
+		controlador.disminuirPistasDisponibles();
+		
+		assertEquals(0, controlador.getSesionCursoAct().getPistasRestantes());
+		
+	}
+	
+	private static Stream<Arguments> proveedorPreguntas() {
+		PreguntaTest pt = new PreguntaTest("pregunta1", "correcta", "", 100, "1", "2", "3", "correcta");
+		return Stream.of(
+				Arguments.of(pt, "incorrecta", false),
+				Arguments.of(pt, "correcta", true));
+	}
+	
+	@ParameterizedTest
+	@MethodSource("proveedorPreguntas")
+	public void testValidarRespuesta(Pregunta p, String respuesta, boolean esperado) {
+		
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		controlador.setSesionCursoAct(sesionCursoFalsa);
+		
+		boolean res = controlador.validarRespuesta(p, respuesta);
+		assertEquals(esperado, res);
+	}
+	
+	@Test
+	public void testPasarASiguientePregunta() {
+		
+		BloqueDeContenido b = new BloqueDeContenido();
+		cursoFalso.addBloqueDeContenido(b);
+		b.addPregunta(new PreguntaTest("pregunta1", "correcta", "", 100, "1", "2", "3", "correcta"));
+		b.addPregunta(new PreguntaTest("pregunta2", "correcta", "", 100, "1", "2", "3", "correcta"));
+		
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		controlador.setSesionCursoAct(sesionCursoFalsa);
+		
+		controlador.pasarASiguientePregunta();
+		
+		Pregunta p = controlador.getSesionCursoAct().getPreguntaActual();
+		
+		assertEquals("pregunta2", p.getEnunciado()); // Funciona porque estrategiaFalse es la secuencial
+		
+	}
+	
+	// 
+	@ParameterizedTest
+	@CsvSource({
+	    "true",
+	    "false"
+	})
+	public void testActualizarEstadisticasUsuario(boolean completado) {
+		
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa.setEstadisticas(3, 4, 2);
+		controlador.setSesionCursoAct(sesionCursoFalsa);
+		controlador.setUsuarioAct(usuarioFalso);
+		
+		controlador.actualizarEstadisticasUsuario(completado);
+		
+		assertEquals(3, controlador.getUsuarioAct().getEstadisticas().getPreguntasAcertadas());
+		assertEquals(4, controlador.getUsuarioAct().getEstadisticas().getPreguntasRespondidas());
+		assertEquals(3-2, controlador.getUsuarioAct().getEstadisticas().getPistasConsultadas());
+		assertEquals(completado ? 1 : 0, controlador.getUsuarioAct().getEstadisticas().getCursosRealizados());
+	}
 
-	/*
-	 * 
-	 * @Test public void testEmpezarCursoYValidarSesion() { Curso primerCurso =
-	 * controlador.getCursosDisponibles().get(0); EstrategiaAprendizaje e =
-	 * controlador.getEstrategia(controlador.getEstrategias().iterator().next());
-	 * 
-	 * controlador.empezarCurso(primerCurso, e);
-	 * assertNotNull(controlador.getSesionCursoAct(),
-	 * "La sesión del curso debería haberse inicializado"); }
-	 * 
-	 * @Test public void testQuedanPistasDisponibles() { Curso primerCurso =
-	 * controlador.getCursosDisponibles().get(0); EstrategiaAprendizaje e =
-	 * controlador.getEstrategia(controlador.getEstrategias().iterator().next());
-	 * controlador.empezarCurso(primerCurso, e);
-	 * 
-	 * assertTrue(controlador.quedanPistasDisponibles(),
-	 * "Debería haber pistas inicialmente (depende de la configuración de la sesión)"
-	 * ); }
-	 * 
-	 * @Test public void testValidarRespuesta() { Curso primerCurso =
-	 * controlador.getCursosDisponibles().get(0); EstrategiaAprendizaje e =
-	 * controlador.getEstrategia(controlador.getEstrategias().iterator().next());
-	 * controlador.empezarCurso(primerCurso, e);
-	 * 
-	 * Pregunta preguntaActual =
-	 * controlador.getSesionCursoAct().getPreguntaActual();
-	 * assertNotNull(preguntaActual,
-	 * "Debe existir al menos una pregunta en el curso de prueba");
-	 * 
-	 * if (preguntaActual instanceof PreguntaTest) { String respuestaCorrecta =
-	 * ((PreguntaTest) preguntaActual).getRespuestaCorrecta(); boolean resultado =
-	 * controlador.validarRespuesta(preguntaActual, respuestaCorrecta);
-	 * assertTrue(resultado, "La respuesta correcta debería validarse como true"); }
-	 * }
-	 * 
-	 * @Test public void testPasarASiguientePregunta() { Curso primerCurso =
-	 * controlador.getCursosDisponibles().get(0); EstrategiaAprendizaje e =
-	 * controlador.getEstrategia(controlador.getEstrategias().iterator().next());
-	 * controlador.empezarCurso(primerCurso, e);
-	 * 
-	 * Pregunta pregunta1 = controlador.getSesionCursoAct().getPreguntaActual();
-	 * assertNotNull(pregunta1, "Debería haber una pregunta inicial");
-	 * 
-	 * Pregunta pregunta2 = controlador.pasarASiguientePregunta(); if (pregunta2 ==
-	 * null) { assertNull(pregunta2, "No hay más preguntas, vuelve null"); } else {
-	 * assertNotEquals(pregunta1, pregunta2,
-	 * "La siguiente pregunta debería ser distinta a la anterior"); } }
-	 * 
-	 * @Test public void testActualizarEstadisticasUsuario() { Usuario auth =
-	 * controlador.autenticar("john", "123"); assertNotNull(auth,
-	 * "Necesitamos un usuario válido para actualizar estadísticas");
-	 * 
-	 * Curso primerCurso = controlador.getCursosDisponibles().get(0);
-	 * EstrategiaAprendizaje e =
-	 * controlador.getEstrategia(controlador.getEstrategias().iterator().next());
-	 * controlador.empezarCurso(primerCurso, e);
-	 * 
-	 * controlador.actualizarEstadisticasUsuario(true); assertTrue(true,
-	 * "Proceso de actualización de estadísticas completado (no generó excepciones)"
-	 * ); }
-	 * 
-	 */
 }

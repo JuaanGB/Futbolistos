@@ -21,7 +21,7 @@ public class SesionCurso {
 		this.puntuacion = 0;
 		this.pistasRestantes = 3;
 		this.numeroPreguntasRespondidas = 0;
-		this.numTotalPreguntas = preguntasRestantes.size();
+		this.numTotalPreguntas = preguntasRestantes.size(); // Por si la estrategia hace repetir preguntas
 	}
 	
 	// Getters y setters
@@ -32,8 +32,12 @@ public class SesionCurso {
 	public int getPuntuacion() { return puntuacion; }  
 	public void setPuntuacion(int puntuacion) { this.puntuacion = puntuacion; }  
 	public int getPistasRestantes() { return pistasRestantes; }
+	public void setPistasRestantes(int num) { this.pistasRestantes = num; } // Necesario para test
 	public int getNumeroPreguntasRespondidas() { return numeroPreguntasRespondidas; }
 	public int getNumTotalPreguntas() { return numTotalPreguntas; }
+	public void setEstadisticas(int puntuacion, int numPreguntasResp, int pistasDisponibles) {
+		this.pistasRestantes = pistasDisponibles; this.puntuacion = puntuacion; this.numeroPreguntasRespondidas = numPreguntasResp;
+	}
 	
 	// Funcionalidad
 	public void incrementarPuntuacion(int i) { this.puntuacion += i; }

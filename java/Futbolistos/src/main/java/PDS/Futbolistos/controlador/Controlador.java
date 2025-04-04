@@ -48,8 +48,10 @@ public class Controlador {
         return instancia;
     }
     
+    public void setUsuarioAct(Usuario u) { this.usuarioAct = u; }
     public Usuario getUsuarioAct() { return usuarioAct; }
     public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
+    public void setSesionCursoAct(SesionCurso sc) { this.sesionCursoAct = sc; }
 
     // CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
     public Usuario autenticar(String nombreUsuario, String contraseña) {
