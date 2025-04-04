@@ -11,6 +11,7 @@ import PDS.Futbolistos.modelado.Pregunta;
 import PDS.Futbolistos.modelado.SesionCurso;
 import PDS.Futbolistos.modelado.Usuario;
 import PDS.Futbolistos.modelado.estrategias.EstrategiaAprendizaje;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
 
 /**
  * Pruebas unitarias para la clase Usuario usando JUnit 5.
@@ -46,16 +47,7 @@ public class UsuarioTest {
     @Test
     public void testEmpezarCurso() {
         Curso cursoTest = new Curso("Prueba", "Descripción", "URLimagen");
-        EstrategiaAprendizaje estrategiaFalsa = new EstrategiaAprendizaje() {
-            public String getNombre() {
-                return "Estrategia Falsa";
-            }
-
-            @Override
-            public List<Pregunta> calcularOrden(Curso c) {
-                return null;
-            }
-        };
+        EstrategiaAprendizaje estrategiaFalsa = new EstrategiaSecuencial();
 
         SesionCurso sesion = usuario.empezarCurso(cursoTest, estrategiaFalsa);
         assertNotNull(sesion, "La sesión creada no debe ser nula.");
@@ -65,17 +57,8 @@ public class UsuarioTest {
 
     @Test
     public void testProcesoCompletoUsuario() {
-        Curso cursoTest = new Curso("Prueba de Sistema", "Curso para Test", "URLSistema");
-        EstrategiaAprendizaje estrategiaFalsa = new EstrategiaAprendizaje() {
-            public String getNombre() {
-                return "EstrategiaSistema";
-            }
-
-            @Override
-            public List<Pregunta> calcularOrden(Curso c) {
-                return null;
-            }
-        };
+    	Curso cursoTest = new Curso("Prueba", "Descripción", "URLimagen");
+        EstrategiaAprendizaje estrategiaFalsa = new EstrategiaSecuencial();
 
         SesionCurso sesion = usuario.empezarCurso(cursoTest, estrategiaFalsa);
         assertNotNull(sesion, "La sesión no debe ser nula al iniciar el curso.");

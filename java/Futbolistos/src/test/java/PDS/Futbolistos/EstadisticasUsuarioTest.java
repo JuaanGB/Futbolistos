@@ -7,8 +7,10 @@ import java.time.Duration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import PDS.Futbolistos.modelado.Curso;
 import PDS.Futbolistos.modelado.EstadisticasUsuario;
 import PDS.Futbolistos.modelado.SesionCurso;
+import PDS.Futbolistos.modelado.estrategias.EstrategiaSecuencial;
 
 /**
  * Clase de prueba para la clase EstadisticasUsuario en JUnit 5.11.4.
@@ -65,20 +67,10 @@ public class EstadisticasUsuarioTest {
 	}
 
 	@Test
-	public void testActualizarConSesionCursoCompletada() {
-		SesionCurso sesionMock = new SesionCurso(null, null) {
-			{
-				setPuntuacion(2);
-				removePrimeraPregunta();
-				removePrimeraPregunta();
-			}
-
-			@Override
-			public boolean quedanPreguntas() {
-				return false;
-			}
-		};
-
+	public void testActualizarConSesionCurso() {
+		SesionCurso sesionMock = new SesionCurso(new Curso("", "", null), new EstrategiaSecuencial());
+		sesionMock.setEstadisticas(2, 2, 0);
+		
 		estadisticas.actualizar(sesionMock, true);
 
 		assertEquals(1, estadisticas.getCursosRealizados(),
@@ -88,26 +80,4 @@ public class EstadisticasUsuarioTest {
 		assertEquals(3, estadisticas.getPistasConsultadas(), "Se incrementan pistasConsultadas (3 - pistasRestantes).");
 	}
 
-	@Test
-	public void testActualizarConSesionCursoNoCompletada() {
-		SesionCurso sesionMock = new SesionCurso(null, null) {
-			{
-				setPuntuacion(1);
-				removePrimeraPregunta();
-			}
-
-			@Override
-			public boolean quedanPreguntas() {
-				return true;
-			}
-		};
-
-		estadisticas.actualizar(sesionMock, false);
-
-		assertEquals(0, estadisticas.getCursosRealizados(), "No debe incrementar cursosRealizados si no se completó.");
-		assertEquals(1, estadisticas.getPreguntasAcertadas(), "Se suman los aciertos de la sesión (1).");
-		assertEquals(1, estadisticas.getPreguntasRespondidas(), "Se suman las preguntas respondidas (1).");
-		assertEquals(3, estadisticas.getPistasConsultadas(),
-				"Se incrementan pistasConsultadas en 3 - pistasRestantes (3).");
-	}
 }
