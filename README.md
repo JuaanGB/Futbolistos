@@ -4,8 +4,6 @@
 
 ## Proyecto desarrollado por:
 - Juan Alejandro González Ballesta
-- Josué Marín González
-- Rodrigo Martínez Jiménez
 
 ## Profesor responsable:
 - Jesús Sánchez Cuadrado
