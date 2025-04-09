@@ -19,15 +19,30 @@ public abstract class Pregunta {
 	}
 	
 	// Getters y setters
-	public String getEnunciado() { return enunciado; }  
-	public String getRespuestaCorrecta() { return respuestaCorrecta; }  
-	public String getPista() { return pista; }  
-	public int getSegundos() { return segundos; }
-	
+	public String getEnunciado() {
+		return enunciado;
+	}
+
+	public String getRespuestaCorrecta() {
+		return respuestaCorrecta;
+	}
+
+	public String getPista() {
+		return pista;
+	}
+
+	public int getSegundos() {
+		return segundos;
+	}
+
 	// Funcionalidad
 	public abstract boolean isRespuestaValida(String respuesta);
+
 	public abstract JPanel getPanel();
-	public boolean hasPista() {	return pista != null; }
+
+	public boolean hasPista() {
+		return pista != null;
+	}
 
 
 }

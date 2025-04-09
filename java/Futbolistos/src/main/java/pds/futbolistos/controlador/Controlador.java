@@ -1,5 +1,6 @@
 package pds.futbolistos.controlador;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -48,10 +49,21 @@ public class Controlador {
         return instancia;
     }
     
-    public void setUsuarioAct(Usuario u) { this.usuarioAct = u; }
-    public Usuario getUsuarioAct() { return usuarioAct; }
-    public SesionCurso getSesionCursoAct() { return sesionCursoAct; }
-    public void setSesionCursoAct(SesionCurso sc) { this.sesionCursoAct = sc; }
+	public void setUsuarioAct(Usuario u) {
+		this.usuarioAct = u;
+	}
+
+	public Usuario getUsuarioAct() {
+		return usuarioAct;
+	}
+
+	public SesionCurso getSesionCursoAct() {
+		return sesionCursoAct;
+	}
+
+	public void setSesionCursoAct(SesionCurso sc) {
+		this.sesionCursoAct = sc;
+	}
 
     // CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
     public Usuario autenticar(String nombreUsuario, String contraseña) {
@@ -73,12 +85,17 @@ public class Controlador {
         return true;
     }
     
-    // CASO DE USO: CARGAR CURSOS DISPONIBLES
-    public List<Curso> getCursosDisponibles() { return catalogoCursos.obtenerCursos(); }
-    
-    // CASO DE USO: SELECCIONAR CURSO
-    public Set<String> getEstrategias() { return factoriaEstrategias.getEstrategias(); }
-    public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
+	// CASO DE USO: CARGAR CURSOS DISPONIBLES
+	public List<Curso> getCursosDisponibles() {
+		return catalogoCursos.obtenerCursos();
+	}
+
+	// CASO DE USO: SELECCIONAR CURSO
+	public Set<String> getEstrategias() {
+		return factoriaEstrategias.getEstrategias();
+	}
+
+	public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
 		return factoriaEstrategias.obtenerEstrategia(estrategiaSeleccionada);
 	}
     
@@ -86,9 +103,14 @@ public class Controlador {
         sesionCursoAct = usuarioAct.iniciarCurso(c, e);
     }
     
-    // CASO DE USO: REALIZAR CURSO
-    public boolean quedanPistasDisponibles() { return sesionCursoAct.quedanPistasDisponibles(); }
-    public void disminuirPistasDisponibles() { sesionCursoAct.disminuirPistasDisponibles(); }
+	// CASO DE USO: REALIZAR CURSO
+	public boolean quedanPistasDisponibles() {
+		return sesionCursoAct.quedanPistasDisponibles();
+	}
+
+	public void disminuirPistasDisponibles() {
+		sesionCursoAct.disminuirPistasDisponibles();
+	}
     
     public boolean validarRespuesta(Pregunta p, String text) {
         boolean correcta = p.isRespuestaValida(text);
@@ -97,24 +119,16 @@ public class Controlador {
     }
     
     public Pregunta pasarASiguientePregunta() {
-        sesionCursoAct.removePrimeraPregunta();
-        if (sesionCursoAct.quedanPreguntas()) {
-            return sesionCursoAct.getPreguntaActual();
-        }
-        return null;
+        return sesionCursoAct.pasarASiguientePregunta();
     }
     
-    // CASO DE USO: GUARDAR PROGRESO DEL CURSO
-    // TODO
+    // TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
     
-    // CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
-    // TODO
+    // TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
     
-    // CASO DE USO: CREAR CURSO
-    // TODO
+    // TODO: CASO DE USO: CREAR CURSO
     
-    // CASO DE USO: COMPARTIR CURSO
-    // TODO
+    // TODO: CASO DE USO: COMPARTIR CURSO
     
     // CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar curso)
     public void actualizarEstadisticasUsuario(boolean completado) {
@@ -125,7 +139,7 @@ public class Controlador {
 
     // Métodos de prueba para añadir cursos de ejemplo
     private void anadirCursos() {
-        List<Curso> cursos = new LinkedList<>();
+        List<Curso> cursos = new ArrayList<>();
 
         // Crear curso
         Curso curso = new Curso(
@@ -152,7 +166,7 @@ public class Controlador {
         bloque.addPregunta(new PreguntaTest(
                 "¿Qué parte del cuerpo no pueden usar los jugadores de campo, excepto el portero?",
                 "Las manos",
-                "Es la principal diferencia entre el portero y el resto.",
+                null,
                 10,
                 "Las manos",
                 "Los pies",

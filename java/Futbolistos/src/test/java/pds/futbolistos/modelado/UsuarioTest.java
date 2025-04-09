@@ -1,4 +1,4 @@
-package pds.futbolistos;
+package pds.futbolistos.modelado;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,12 +69,4 @@ public class UsuarioTest {
                    "La estadística de cursos realizados debe ser >= 1");
     }
 
-    @Test
-    public void testRegistrarRespuesta() {
-        int totalesAntes = usuario.getEstadisticas().getPreguntasRespondidas();
-        usuario.registrarRespuesta(true);
-        int totalesDespues = usuario.getEstadisticas().getPreguntasRespondidas();
-
-        assertEquals(totalesAntes + 1, totalesDespues, "Debería incrementarse el total de preguntas en 1");
-    }
 }

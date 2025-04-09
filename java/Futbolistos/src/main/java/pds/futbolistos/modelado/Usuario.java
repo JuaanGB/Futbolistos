@@ -27,21 +27,33 @@ public class Usuario {
 	
 
 	// Getters y setters
-    public String getNombreUsuario() { return nombreUsuario; }
-    public String getContraseña() { return contraseña; }
-    public EstadisticasUsuario getEstadisticas() { return estadisticas; }
-    
-    // Actualización de estadísticas (evitamos que el Controlador conozca por completo las estadísticas haciendo
-    // .getEstadististicas().metodoDeModificacionDeEstadistica(...)
-    public void registrarRespuesta(boolean correcta) { estadisticas.registrarRespuesta(correcta); }
-    public void incrementarCursosRealizados() { estadisticas.incrementarCursosRealizados(); }
-    public void incrementarCursosCreados() { estadisticas.incrementarCursosCreados(); }
-    public void actualizarMejorRacha(int racha) { estadisticas.actualizarMejorRacha(racha); }
-    public void sumarTiempoDeUso(int segundos) { estadisticas.sumarTiempo(segundos); }
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
 
-    
-    // Funcionalidad
-    public boolean checkContraseña(String otra) { return this.contraseña.equals(otra); }
+	public String getContraseña() {
+		return contraseña;
+	}
+
+	public EstadisticasUsuario getEstadisticas() {
+		return estadisticas;
+	}
+
+	// Actualización de estadísticas (evitamos que el Controlador conozca por
+	// completo las estadísticas haciendo
+	// .getEstadististicas().metodoDeModificacionDeEstadistica(...)
+	public void actualizarMejorRacha(int racha) {
+		estadisticas.actualizarMejorRacha(racha);
+	}
+
+	public void sumarTiempoDeUso(int segundos) {
+		estadisticas.sumarTiempo(segundos);
+	}
+
+	// Funcionalidad
+	public boolean checkContraseña(String otra) {
+		return this.contraseña.equals(otra);
+	}
     
     public SesionCurso empezarCurso(Curso c, EstrategiaAprendizaje a) { 
     	SesionCurso sc = new SesionCurso(c, a);

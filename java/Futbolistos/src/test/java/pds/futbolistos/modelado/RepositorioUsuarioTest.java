@@ -1,4 +1,4 @@
-package pds.futbolistos;
+package pds.futbolistos.modelado;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,4 +1,4 @@
-package pds.futbolistos;
+package pds.futbolistos.controlador;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

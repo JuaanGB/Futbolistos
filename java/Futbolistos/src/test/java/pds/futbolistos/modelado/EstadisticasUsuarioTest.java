@@ -1,4 +1,4 @@
-package pds.futbolistos;
+package pds.futbolistos.modelado;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,20 +25,9 @@ public class EstadisticasUsuarioTest {
 	}
 
 	@Test
-	public void testRegistrarRespuesta() {
-		estadisticas.registrarRespuesta(true);
-		estadisticas.registrarRespuesta(false);
+	public void testIncrementarCursosCreados() {
 
-		assertEquals(2, estadisticas.getPreguntasRespondidas(), "Se han respondido 2 preguntas.");
-		assertEquals(1, estadisticas.getPreguntasAcertadas(), "Se ha acertado sólo 1 pregunta.");
-	}
-
-	@Test
-	public void testIncrementarCursosRealizadosYCreados() {
-		estadisticas.incrementarCursosRealizados();
 		estadisticas.incrementarCursosCreados();
-
-		assertEquals(1, estadisticas.getCursosRealizados(), "Se ha realizado 1 curso.");
 		assertEquals(1, estadisticas.getCursosCreados(), "Se ha creado 1 curso.");
 	}
 

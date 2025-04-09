@@ -1,5 +1,6 @@
 package pds.futbolistos.modelado;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -13,7 +14,7 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	
 	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String ...respuestas) {
 		super(enunciado, respuestaCorrecta, pista, segundos);
-		this.respuestas = new LinkedList<>();
+		this.respuestas = new ArrayList<>();
 		for (String r : respuestas) this.respuestas.add(r);
 	}
 

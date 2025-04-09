@@ -1,5 +1,6 @@
 package pds.futbolistos.modelado;
 
+import java.util.Collections;
 import java.util.List;
 
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
@@ -25,26 +26,77 @@ public class SesionCurso {
 	}
 	
 	// Getters y setters
-	public Curso getCurso() { return curso; }  
-	public EstrategiaAprendizaje getEstrategia() { return estrategia; }
-	public Pregunta getPreguntaActual() { return preguntasRestantes.get(0); }
-	public List<Pregunta> getPreguntasRestantes() { return preguntasRestantes; }  
-	public int getPuntuacion() { return puntuacion; }  
-	public void setPuntuacion(int puntuacion) { this.puntuacion = puntuacion; }  
-	public int getPistasRestantes() { return pistasRestantes; }
-	public void setPistasRestantes(int num) { this.pistasRestantes = num; } // Necesario para test
-	public int getNumeroPreguntasRespondidas() { return numeroPreguntasRespondidas; }
-	public int getNumTotalPreguntas() { return numTotalPreguntas; }
+	public Curso getCurso() {
+		return curso;
+	}
+
+	public EstrategiaAprendizaje getEstrategia() {
+		return estrategia;
+	}
+
+	public Pregunta getPreguntaActual() {
+		return preguntasRestantes.get(0);
+	}
+
+	public List<Pregunta> getPreguntasRestantes() {
+		return Collections.unmodifiableList(preguntasRestantes);
+	}
+
+	public int getPuntuacion() {
+		return puntuacion;
+	}
+
+	public int getPistasRestantes() {
+		return pistasRestantes;
+	}
+
+	public void setPistasRestantes(int num) {
+		this.pistasRestantes = num;
+	} // Necesario para test
+
+	public int getNumeroPreguntasRespondidas() {
+		return numeroPreguntasRespondidas;
+	}
+
+	public int getNumTotalPreguntas() {
+		return numTotalPreguntas;
+	}
+
 	public void setEstadisticas(int puntuacion, int numPreguntasResp, int pistasDisponibles) {
-		this.pistasRestantes = pistasDisponibles; this.puntuacion = puntuacion; this.numeroPreguntasRespondidas = numPreguntasResp;
+		this.pistasRestantes = pistasDisponibles;
+		this.puntuacion = puntuacion;
+		this.numeroPreguntasRespondidas = numPreguntasResp;
+	}
+
+	// Funcionalidad
+	public Pregunta pasarASiguientePregunta() {
+		removePrimeraPregunta();
+		if (quedanPreguntas()) {
+			return getPreguntaActual();
+		}
+		return null;	
 	}
 	
-	// Funcionalidad
-	public void incrementarPuntuacion(int i) { this.puntuacion += i; }
-	public void removePrimeraPregunta() { preguntasRestantes.remove(0); numeroPreguntasRespondidas++; }
-	public boolean quedanPreguntas() { return preguntasRestantes.size() > 0; }
-	public boolean quedanPistasDisponibles() { return pistasRestantes > 0; }
-	public void disminuirPistasDisponibles() { pistasRestantes--; }
+	public void incrementarPuntuacion(int i) {
+		this.puntuacion += i;
+	}
+
+	public void removePrimeraPregunta() {
+		preguntasRestantes.remove(0);
+		numeroPreguntasRespondidas++;
+	}
+
+	public boolean quedanPreguntas() {
+		return preguntasRestantes.size() > 0;
+	}
+
+	public boolean quedanPistasDisponibles() {
+		return pistasRestantes > 0;
+	}
+
+	public void disminuirPistasDisponibles() {
+		pistasRestantes--;
+	}
 	
 
 	
