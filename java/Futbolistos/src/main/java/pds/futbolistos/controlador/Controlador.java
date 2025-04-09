@@ -10,6 +10,7 @@ import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.CatalogoCursos;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
+import pds.futbolistos.modelado.PreguntaCompletar;
 import pds.futbolistos.modelado.PreguntaTest;
 import pds.futbolistos.modelado.RepositorioUsuario;
 import pds.futbolistos.modelado.SesionCurso;
@@ -195,6 +196,18 @@ public class Controlador {
                 "Penalti",
                 "Saque de banda"
             ));
+        
+			bloque.addPregunta(new PreguntaCompletar("¿Quién ganó la Copa del Mundo de la FIFA 2018?", // Enunciado
+					"Francia", // Respuesta correcta
+					"Es un país europeo con una rica historia futbolística", // Pista
+					10 // Tiempo límite en segundos
+			));
+			
+			bloque.addPregunta(new PreguntaCompletar("¿Quién es el mejor jugador de todos los tiempos?", // Enunciado
+					"Lionel Messi", // Respuesta correcta
+					"Es un jugador argentino", // Pista
+					10 // Tiempo límite en segundos
+			));
 
         // Agregar bloque al curso
         curso.addBloqueDeContenido(bloque);
