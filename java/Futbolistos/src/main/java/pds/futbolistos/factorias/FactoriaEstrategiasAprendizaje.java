@@ -6,6 +6,7 @@ import java.util.Set;
 
 import pds.futbolistos.modelado.estrategias.EstrategiaAleatoria;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
+import pds.futbolistos.modelado.estrategias.EstrategiaEjecucionEspaciada;
 import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
 
 public class FactoriaEstrategiasAprendizaje {
@@ -29,6 +30,7 @@ public class FactoriaEstrategiasAprendizaje {
 
 		estrategias.put("Orden secuencial", new EstrategiaSecuencial());
 		estrategias.put("Orden aleatorio", new EstrategiaAleatoria());
+		estrategias.put("Ejecución espaciada", new EstrategiaEjecucionEspaciada());
 	}
 
 	public EstrategiaAprendizaje obtenerEstrategia(String nombre) {

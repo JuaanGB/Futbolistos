@@ -27,10 +27,10 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 	private JTextField entradaTexto;
 	private PreguntaCompletar pc;
 
-	public PanelPreguntaCompletar(Pregunta p) {
+	public PanelPreguntaCompletar(PreguntaCompletar p) {
 		super(p);
+		pc = p;
 		anadirAcciones();
-		pc = (PreguntaCompletar) p;
 	}
 
 	@Override
@@ -62,7 +62,6 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 	@Override
 	protected void personalizarDisplay(Pregunta p) {
 		super.personalizarDisplay(p);
-		this.lblCadenaOculta.setText(((PreguntaCompletar) p).getCadenaOculta());
 	}
 
 	@Override
@@ -75,6 +74,7 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 	}
 	
 	private void anadirAcciones() {
+		this.lblCadenaOculta.setText(pc.getCadenaOculta());
 		botonValidar.addActionListener(e -> {
             detenerTemporizador(true);
             if (Controlador.getInstancia().validarRespuesta(pc, entradaTexto.getText())) {

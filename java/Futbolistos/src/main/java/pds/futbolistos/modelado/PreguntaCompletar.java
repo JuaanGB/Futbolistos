@@ -11,9 +11,15 @@ import pds.futbolistos.vistas.componentes.PanelPreguntaCompletar;
 public class PreguntaCompletar extends Pregunta {
 
 	private static final float PORCENTAJE_REVELADO = 0.25f;
+	private String respuestaCorrecta;
 	
 	public PreguntaCompletar(String enunciado, String respuestaCorrecta, String pista, int segundos) {
-		super(enunciado, respuestaCorrecta, pista, segundos);
+		super(enunciado, pista, segundos);
+		this.respuestaCorrecta = respuestaCorrecta;
+	}
+	
+	public String getRespuestaCorrecta() {
+		return respuestaCorrecta;
 	}
 
 	@Override

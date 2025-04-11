@@ -11,6 +11,7 @@ import pds.futbolistos.modelado.CatalogoCursos;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.PreguntaCompletar;
+import pds.futbolistos.modelado.PreguntaFlashcard;
 import pds.futbolistos.modelado.PreguntaTest;
 import pds.futbolistos.modelado.RepositorioUsuario;
 import pds.futbolistos.modelado.SesionCurso;
@@ -19,37 +20,38 @@ import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
 public class Controlador {
 
-    private static Controlador instancia;
-    
-    // Variable global para el repositorio de usuarios
-    private final RepositorioUsuario repositorio;
-    private final CatalogoCursos catalogoCursos;
-    private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
-    
-    private Usuario usuarioAct;
-    private SesionCurso sesionCursoAct;
-    
-    private Controlador() {
-        // Se inicializa el repositorio una sola vez, evitando su definición en cada método
-        repositorio = RepositorioUsuario.getUnicainstancia();
-        factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
-        catalogoCursos = CatalogoCursos.getInstancia();
-        anadirCursos();
-    }
-    
-    public Controlador(RepositorioUsuario repoUsuarios, CatalogoCursos repoCursos) {
-    	this.repositorio = repoUsuarios;
-    	this.catalogoCursos = repoCursos;
-    	this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
-    }
+	private static Controlador instancia;
 
-    // Getters y setters
-    public static Controlador getInstancia() {
-        if (instancia == null)
-            instancia = new Controlador();
-        return instancia;
-    }
-    
+	// Variable global para el repositorio de usuarios
+	private final RepositorioUsuario repositorio;
+	private final CatalogoCursos catalogoCursos;
+	private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
+
+	private Usuario usuarioAct;
+	private SesionCurso sesionCursoAct;
+
+	private Controlador() {
+		// Se inicializa el repositorio una sola vez, evitando su definición en cada
+		// método
+		repositorio = RepositorioUsuario.getUnicainstancia();
+		factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+		catalogoCursos = CatalogoCursos.getInstancia();
+		anadirCursos();
+	}
+
+	public Controlador(RepositorioUsuario repoUsuarios, CatalogoCursos repoCursos) {
+		this.repositorio = repoUsuarios;
+		this.catalogoCursos = repoCursos;
+		this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+	}
+
+	// Getters y setters
+	public static Controlador getInstancia() {
+		if (instancia == null)
+			instancia = new Controlador();
+		return instancia;
+	}
+
 	public void setUsuarioAct(Usuario u) {
 		this.usuarioAct = u;
 	}
@@ -66,26 +68,26 @@ public class Controlador {
 		this.sesionCursoAct = sc;
 	}
 
-    // CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
-    public Usuario autenticar(String nombreUsuario, String contraseña) {
-        // Se usa el repositorio global en lugar de crear uno nuevo cada vez
-        Usuario u = repositorio.getUsuario(nombreUsuario);
-        if (u != null && u.checkContraseña(contraseña)) {
-            this.usuarioAct = u;
-            return u;
-        }
-        return null;
-    }
-    
-    // CASO DE USO: REGISTRARSE EN EL SISTEMA
-    public boolean registrar(String usuario, String contraseña) {
-        if (repositorio.existeNombre(usuario)) {
-            return false;
-        }
-        usuarioAct = repositorio.añadirUsuario(usuario, contraseña);
-        return true;
-    }
-    
+	// CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
+	public Usuario autenticar(String nombreUsuario, String contraseña) {
+		// Se usa el repositorio global en lugar de crear uno nuevo cada vez
+		Usuario u = repositorio.getUsuario(nombreUsuario);
+		if (u != null && u.checkContraseña(contraseña)) {
+			this.usuarioAct = u;
+			return u;
+		}
+		return null;
+	}
+
+	// CASO DE USO: REGISTRARSE EN EL SISTEMA
+	public boolean registrar(String usuario, String contraseña) {
+		if (repositorio.existeNombre(usuario)) {
+			return false;
+		}
+		usuarioAct = repositorio.añadirUsuario(usuario, contraseña);
+		return true;
+	}
+
 	// CASO DE USO: CARGAR CURSOS DISPONIBLES
 	public List<Curso> getCursosDisponibles() {
 		return catalogoCursos.obtenerCursos();
@@ -99,11 +101,11 @@ public class Controlador {
 	public EstrategiaAprendizaje getEstrategia(String estrategiaSeleccionada) {
 		return factoriaEstrategias.obtenerEstrategia(estrategiaSeleccionada);
 	}
-    
-    public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
-        sesionCursoAct = usuarioAct.iniciarCurso(c, e);
-    }
-    
+
+	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
+		sesionCursoAct = usuarioAct.iniciarCurso(c, e);
+	}
+
 	// CASO DE USO: REALIZAR CURSO
 	public boolean quedanPistasDisponibles() {
 		return sesionCursoAct.quedanPistasDisponibles();
@@ -112,34 +114,36 @@ public class Controlador {
 	public void disminuirPistasDisponibles() {
 		sesionCursoAct.disminuirPistasDisponibles();
 	}
-    
-    public boolean validarRespuesta(Pregunta p, String text) {
-        boolean correcta = p.isRespuestaValida(text);
-        if (correcta) sesionCursoAct.incrementarPuntuacion(1);
-        return correcta;
-    }
-    
-    public Pregunta pasarASiguientePregunta() {
-        return sesionCursoAct.pasarASiguientePregunta();
-    }
-    
-    // TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
-    
-    // TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
-    
-    // TODO: CASO DE USO: CREAR CURSO
-    
-    // TODO: CASO DE USO: COMPARTIR CURSO
-    
-    // CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar curso)
-    public void actualizarEstadisticasUsuario(boolean completado) {
-    	usuarioAct.actualizarEstadisticas(sesionCursoAct, completado);
-    	// sesionCursoAct.reiniciarEstadisticas(); // Necesario por si se guarda el progreso, para no sumar muchas veces a la estad globales
-    }
-    
 
-    // Métodos de prueba para añadir cursos de ejemplo
-    private void anadirCursos() {
+	public boolean validarRespuesta(Pregunta p, String text) {
+		boolean correcta = p.isRespuestaValida(text);
+		if (correcta)
+			sesionCursoAct.incrementarPuntuacion(1);
+		return correcta;
+	}
+
+	public Pregunta pasarASiguientePregunta() {
+		return sesionCursoAct.pasarASiguientePregunta();
+	}
+
+	// TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
+
+	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
+
+	// TODO: CASO DE USO: CREAR CURSO
+
+	// TODO: CASO DE USO: COMPARTIR CURSO
+
+	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar
+	// curso)
+	public void actualizarEstadisticasUsuario(boolean completado) {
+		usuarioAct.actualizarEstadisticas(sesionCursoAct, completado);
+		// sesionCursoAct.reiniciarEstadisticas(); // Necesario por si se guarda el
+		// progreso, para no sumar muchas veces a la estad globales
+	}
+
+	// Métodos de prueba para añadir cursos de ejemplo
+	private void anadirCursos() {
         List<Curso> cursos = new ArrayList<>();
 
         // Crear curso
@@ -152,6 +156,9 @@ public class Controlador {
         // Crear bloque de contenido
         BloqueDeContenido bloque = new BloqueDeContenido();
 
+		bloque.addPregunta(new PreguntaFlashcard(15, "¿Qué número de camiseta lleva Lionel Messi en el PSG?",
+				"Lionel Messi lleva el número 30 en el PSG."));
+        
         // Agregar preguntas al bloque
         bloque.addPregunta(new PreguntaTest(
                 "¿Cuántos jugadores tiene un equipo de fútbol en el campo al inicio del partido?",
@@ -231,5 +238,4 @@ public class Controlador {
         }
     }
 
-	
 }

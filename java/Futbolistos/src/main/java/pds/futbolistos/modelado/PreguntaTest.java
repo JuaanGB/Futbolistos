@@ -11,9 +11,11 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 
 	// Atributos
 	private List<String> respuestas;
+	private String respuestaCorrecta;
 	
 	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String ...respuestas) {
-		super(enunciado, respuestaCorrecta, pista, segundos);
+		super(enunciado, pista, segundos);
+		this.respuestaCorrecta = respuestaCorrecta;
 		this.respuestas = new ArrayList<>();
 		for (String r : respuestas) this.respuestas.add(r);
 	}
@@ -21,6 +23,10 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	// Nuevos métodos get
 	public String getRespuesta(int i) {
 		return respuestas.get(i);
+	}
+	
+	public String getRespuestaCorrecta() {
+		return respuestaCorrecta;
 	}
 	
 	@Override

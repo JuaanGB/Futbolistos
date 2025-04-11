@@ -28,14 +28,17 @@ public class PanelPreguntaTest extends PanelPregunta {
     private List<JButton> botones;
     private PreguntaTest pt;
 
-    public PanelPreguntaTest(Pregunta p) {
+    public PanelPreguntaTest(PreguntaTest p) {
         super(p);
         setBackground(new Color(30, 30, 30)); // Fondo oscuro
+        this.pt = p;
         añadirAcciones();
-        this.pt = (PreguntaTest)p;
     }
 
     private void añadirAcciones() {
+    	for (int i = 0; i < NUM_RESPUESTAS; i++) {
+            botones.get(i).setText(pt.getRespuesta(i));
+        }
         for (JButton boton : botones) {
             boton.addActionListener(e -> {
                 detenerTemporizador(true);
@@ -54,10 +57,6 @@ public class PanelPreguntaTest extends PanelPregunta {
     @Override
     protected void personalizarDisplay(Pregunta p) {
         super.personalizarDisplay(p);
-        PreguntaTest pt = (PreguntaTest) p;
-        for (int i = 0; i < NUM_RESPUESTAS; i++) {
-            botones.get(i).setText(pt.getRespuesta(i));
-        }
     }
 
     @Override
