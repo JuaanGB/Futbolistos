@@ -18,7 +18,7 @@ public class PreguntaCompletar extends Pregunta {
 
 	@Override
 	public boolean isRespuestaValida(String respuesta) {
-		return respuesta.trim().equalsIgnoreCase(this.getRespuestaCorrecta().trim());
+		return respuesta.trim().replaceAll("\\s+", " ").equalsIgnoreCase(this.getRespuestaCorrecta().trim());
 	}
 
 	@Override
