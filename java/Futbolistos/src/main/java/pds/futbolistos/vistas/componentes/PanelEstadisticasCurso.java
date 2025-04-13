@@ -50,13 +50,13 @@ public class PanelEstadisticasCurso extends JPanel {
 		});
 
 		// Añadir componentes al panel
-		add(crearLabel("Puntuación:"));
+		add(crearLabel("<html>Puntuación:<br></html>"));
 		add(lblPuntuacion);
-		add(crearLabel("Preguntas restantes:"));
+		add(crearLabel("<html>Preguntas<br>restantes:</html>"));
 		add(lblPreguntasRestantes);
-		add(crearLabel("Pistas disponibles:"));
+		add(crearLabel("<html>Pistas<br>disponibles:</html>"));
 		add(lblPistasRestantes);
-		add(crearLabel("Preguntas respondidas:"));
+		add(crearLabel("<html>Preguntas<br>respondidas:</html>"));
 		add(lblPreguntasRespondidas);
 		add(new JLabel()); // Espacio vacío para la alineación
 		add(btnRegresar);

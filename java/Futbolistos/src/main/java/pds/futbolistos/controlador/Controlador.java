@@ -103,7 +103,7 @@ public class Controlador {
 	}
 
 	public void empezarCurso(Curso c, EstrategiaAprendizaje e) {
-		sesionCursoAct = usuarioAct.iniciarCurso(c, e);
+		sesionCursoAct = usuarioAct.empezarCurso(c, e);
 	}
 
 	// CASO DE USO: REALIZAR CURSO
@@ -127,12 +127,17 @@ public class Controlador {
 	}
 
 	// TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
-
+	public void guardarProgresoCurso(SesionCurso sc) {
+		// EntityManager con persist de sc (imagino que el usuario ya estaría en seguimiento).
+	}
+	
+	public boolean usuarioHasSesion(Curso c) {
+		return usuarioAct.hasSesion(c);
+	}
+	
 	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
-
+	
 	// TODO: CASO DE USO: CREAR CURSO
-
-	// TODO: CASO DE USO: COMPARTIR CURSO
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar
 	// curso)

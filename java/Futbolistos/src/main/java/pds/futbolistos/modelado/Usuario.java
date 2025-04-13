@@ -65,9 +65,16 @@ public class Usuario {
     	estadisticas.actualizar(s, completado); 
     }
 
-
-	public SesionCurso iniciarCurso(Curso c, EstrategiaAprendizaje e) {
-		return new SesionCurso(c, e);
+	public boolean hasSesion(Curso c) {
+		return sesionesCurso.stream()
+				.anyMatch( sc -> sc.hasCurso(c) );
+	}
+	
+	public SesionCurso getSesionComenzada(Curso c) {
+		return sesionesCurso.stream()
+				.filter( sc -> sc.hasCurso(c))
+				.findFirst()
+				.orElse(null);
 	}
 	
 	

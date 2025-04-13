@@ -97,6 +97,10 @@ public class SesionCurso {
 	public void disminuirPistasDisponibles() {
 		pistasRestantes--;
 	}
+
+	public boolean hasCurso(Curso c) {
+		return this.curso.equals(c);
+	}
 	
 
 	

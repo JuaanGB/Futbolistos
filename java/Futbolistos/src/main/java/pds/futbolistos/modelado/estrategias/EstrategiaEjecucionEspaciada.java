@@ -13,7 +13,25 @@ public class EstrategiaEjecucionEspaciada implements EstrategiaAprendizaje {
 
 	@Override
 	public List<Pregunta> calcularOrden(Curso c) {
-		// TODO
-		return null;
+		List<Pregunta> originales = c.getBloquesDeContenido().stream()
+				.flatMap(b -> b.getPreguntas().stream())
+				.collect(Collectors.toList());
+
+		int tamaño = originales.size() * 2;
+		List<Pregunta> espaciadas = new ArrayList<>(tamaño);
+
+		espaciadas.addAll(originales);
+
+		for (int i = 0; i < originales.size(); i++) {
+			int nuevaPos = i + 3;
+
+			if (nuevaPos > espaciadas.size()) {
+				espaciadas.add(originales.get(i));
+			} else {
+				espaciadas.add(nuevaPos, originales.get(i));
+			}
+		}
+
+		return espaciadas;
 	}
 }

@@ -3,6 +3,7 @@ package pds.futbolistos.modelado;
 import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Curso {
@@ -44,6 +45,23 @@ public class Curso {
 
 	public boolean addBloqueDeContenido(BloqueDeContenido c) {
 		return bloquesDeContenido.add(c);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(descripcion, nombre);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Curso other = (Curso) obj;
+		return Objects.equals(descripcion, other.descripcion) && Objects.equals(nombre, other.nombre);
 	}
 
 }

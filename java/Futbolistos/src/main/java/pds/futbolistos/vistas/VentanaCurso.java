@@ -2,6 +2,7 @@ package pds.futbolistos.vistas;
 
 import javax.swing.*;
 
+import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.vistas.componentes.PanelEstadisticasCurso;
@@ -81,6 +82,7 @@ public class VentanaCurso extends JFrame {
         gbc_btnGuardar.insets = new Insets(0, 0, 0, 5);
         gbc_btnGuardar.gridx = 1;
         gbc_btnGuardar.gridy = 0;
+        btnGuardar.addActionListener( e -> {guardarCurso(); });
         panelInferior.add(btnGuardar, gbc_btnGuardar);
 
         // Etiqueta de progreso
@@ -132,4 +134,20 @@ public class VentanaCurso extends JFrame {
     public void actualizarPistasRestantes() {
     	lblPistasRestantes.setText("Pistas restantes: " + sesionCurso.getPistasRestantes());
     }
+    
+	private void guardarCurso() {
+		int opcion = JOptionPane.showConfirmDialog(this,
+				"¿Quieres guardar el estado actual?\nLas estadísticas sólo están disponibles\nal terminar el curso.",
+				"Guardar progreso", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+		if (opcion == JOptionPane.YES_OPTION) {
+			((PanelPregunta) panelPregunta).detenerTemporizador(true);
+			Controlador.getInstancia().guardarProgresoCurso(sesionCurso);
+			this.remove(panelPregunta); // Para finalizar el tiempo
+			panelPregunta = null;
+			this.dispose();
+			new VentanaPrincipal().setVisible(true);
+		}
+	}
+
 }

@@ -5,6 +5,7 @@ import javax.swing.*;
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import pds.futbolistos.modelado.Curso;
+import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
 import pds.futbolistos.vistas.VentanaCurso;
@@ -42,26 +43,47 @@ public class PanelCurso extends JPanel {
 		// Botón "Comenzar" con estilo estandarizado y de mayor tamaño
 		JButton comenzarButton = FactoriaComponentes.crearBoton("Comenzar");
 		comenzarButton.setPreferredSize(new Dimension(150, 50));
-		comenzarButton.addActionListener(e -> iniciarCurso(curso));
-
-		// Botón "Compartir" con estilo similar
-		JButton shareButton = new JButton("");
-		shareButton.setIcon(new ImageIcon(PanelCurso.class.getResource("/pds/futbolistos/imagenes/share.png")));
-		shareButton.setContentAreaFilled(false);
-		shareButton.setBorderPainted(false);
-		shareButton.addActionListener(e -> compartirCurso());
+		comenzarButton.addActionListener(e -> comprobarCursoGuardadoOIniciar(curso) );
 
 		// Panel para los botones con fondo acorde
 		JPanel botonesPanel = new JPanel();
 		botonesPanel.setBackground(new Color(30, 30, 30));
 		botonesPanel.add(infoButton);
 		botonesPanel.add(comenzarButton);
-		botonesPanel.add(shareButton);
 
 		// Agregar componentes al panel
 		add(imagenLabel, BorderLayout.WEST);
 		add(nombreLabel, BorderLayout.CENTER);
 		add(botonesPanel, BorderLayout.SOUTH);
+	}
+	
+	private void comprobarCursoGuardadoOIniciar(Curso c) {
+		
+		if (Controlador.getInstancia().usuarioHasSesion(c)) {
+			SesionCurso sc = Controlador.getInstancia().getUsuarioAct().getSesionComenzada(c);
+			reanudarSesionCurso(sc);
+		} else {
+			iniciarCurso(c);
+		}
+	}
+	
+	private void reanudarSesionCurso(SesionCurso sc) {
+		
+		JOptionPane.showMessageDialog(
+			    this,
+			    "Se reanudará la sesión del curso previamente guardada.",
+			    "Reanudando sesión",
+			    JOptionPane.INFORMATION_MESSAGE
+			);
+
+			VentanaCurso vc = new VentanaCurso(sc);
+			vc.setVisible(true);
+
+			JFrame ventana = (JFrame) SwingUtilities.getWindowAncestor(PanelCurso.this);
+			if (ventana != null) {
+			    ventana.dispose();
+			}
+
 	}
 
 	private void iniciarCurso(Curso c) {
@@ -99,18 +121,4 @@ public class PanelCurso extends JPanel {
 		JOptionPane.showMessageDialog(this, c.getDescripcion());
 	}
 
-	private void compartirCurso() {
-		String usuario = JOptionPane.showInputDialog(this, "¿Con quién quieres compartir el curso?", "Compartir Curso",
-				JOptionPane.QUESTION_MESSAGE);
-
-		if (usuario != null && !usuario.trim().isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Curso compartido con " + usuario + " exitosamente.", "Compartir Curso",
-					JOptionPane.INFORMATION_MESSAGE);
-			// Aquí se puede agregar la lógica para compartir el curso con el usuario
-			// ingresado
-		} else {
-			JOptionPane.showMessageDialog(this, "No ingresaste un nombre de usuario válido.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-	}
 }
