@@ -3,14 +3,27 @@ package pds.futbolistos.modelado;
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
 public class SesionCurso {
 
 	// Atributos
-	private final Curso curso;
-	private final EstrategiaAprendizaje estrategia;
-	private final List<Pregunta> preguntasRestantes; // Inicializada al orden concreto de la estrategia. Conforme respondemos las eliminamos.
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;	
+	private Curso curso;
+	@Transient // No es necesario porque la estrategia ya va implícita en el orden de las preguntas
+	private EstrategiaAprendizaje estrategia;
+	@ManyToMany
+	@JoinTable(name = "SESIONES_CURSO_PREUNGTAS_RESTANTES")
+	private List<Pregunta> preguntasRestantes; // Inicializada al orden concreto de la estrategia. Conforme respondemos las eliminamos.
 	private int puntuacion; // 0 mal, 1 bien
 	private int pistasRestantes, numeroPreguntasRespondidas, numTotalPreguntas;
 	

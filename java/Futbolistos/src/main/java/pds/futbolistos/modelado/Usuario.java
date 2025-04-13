@@ -5,15 +5,24 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
 public class Usuario {
 
 	// Atributos
-	private final String nombreUsuario, contraseña;
-	
-	private final List<SesionCurso> sesionesCurso;
-	private final EstadisticasUsuario estadisticas;
+	@Id
+	@Lob
+	private String nombreUsuario;
+	@Lob
+	private String contraseña;
+	@OneToMany
+	@JoinColumn(name = "nombre_usuario")
+	private List<SesionCurso> sesionesCurso;
+	private EstadisticasUsuario estadisticas;
 
 	// Constructor
 	public Usuario(String nombreUsuario, String contraseña) {

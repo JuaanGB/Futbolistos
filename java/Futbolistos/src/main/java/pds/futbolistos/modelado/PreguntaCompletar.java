@@ -6,11 +6,17 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import pds.futbolistos.vistas.componentes.PanelPreguntaCompletar;
 
+@Entity
+@Table(name="PREGUNTAS_COMPLETAR")
 public class PreguntaCompletar extends Pregunta {
 
 	private static final float PORCENTAJE_REVELADO = 0.25f;
+	@Lob
 	private String respuestaCorrecta;
 	
 	public PreguntaCompletar(String enunciado, String respuestaCorrecta, String pista, int segundos) {

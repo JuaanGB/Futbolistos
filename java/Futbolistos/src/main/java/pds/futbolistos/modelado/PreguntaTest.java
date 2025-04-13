@@ -5,12 +5,26 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import pds.futbolistos.vistas.componentes.PanelPreguntaTest;
 
+@Entity
+@Table(name="PREGUNTAS_TEST")
 public class PreguntaTest extends Pregunta /* implements Visitable */ {
 
 	// Atributos
+	@OneToMany
+	@CollectionTable(name = "RESPUESTAS_PREGUNTA_TEST", joinColumns = @JoinColumn(name = "pregunta_id"))
+	@Column(name = "respuesta")
 	private List<String> respuestas;
+	@Lob
 	private String respuestaCorrecta;
 	
 	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String ...respuestas) {

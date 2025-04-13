@@ -6,12 +6,34 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "CURSOS")
 public class Curso {
 
 	// Atributos
-	private final String nombre, descripcion, imagenURL;
-	private final BufferedImage imagen;
-	private final Set<BloqueDeContenido> bloquesDeContenido;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
+	@Lob
+	private String nombre;
+	@Lob
+	private String descripcion;
+	@Lob
+	private String imagenURL;
+	// Ya veremos
+	private BufferedImage imagen;
+	@OneToMany
+	@JoinColumn(name = "bloque_id")
+	private Set<BloqueDeContenido> bloquesDeContenido;
 
 	// Constructor
 	public Curso(String nombre, String descripcion, String imagenURL) {

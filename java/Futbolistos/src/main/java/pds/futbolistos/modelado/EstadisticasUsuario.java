@@ -2,12 +2,17 @@ package pds.futbolistos.modelado;
 
 import java.time.Duration;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+
+@Entity
+@Embeddable
 public class EstadisticasUsuario {
 
 	// Atributos
 	private int preguntasRespondidas, preguntasAcertadas, cursosRealizados, cursosCreados, mejorRachaDias,
 			pistasConsultadas;
-	private Duration tiempoTotalDeUso;
+	private int tiempoTotalDeUso; // en minutos
 
 	// Constructor
 	public EstadisticasUsuario() {
@@ -17,7 +22,7 @@ public class EstadisticasUsuario {
 		this.cursosCreados = 0;
 		this.mejorRachaDias = 0;
 		this.pistasConsultadas = 0;
-		this.tiempoTotalDeUso = Duration.ZERO;
+		this.tiempoTotalDeUso = 0;
 	}
 
 	// Getters
@@ -41,7 +46,7 @@ public class EstadisticasUsuario {
 		return mejorRachaDias;
 	}
 
-	public Duration getTiempoTotalDeUso() {
+	public int getTiempoTotalDeUso() {
 		return tiempoTotalDeUso;
 	}
 
@@ -59,8 +64,8 @@ public class EstadisticasUsuario {
 			mejorRachaDias = rachaActual;
 	}
 
-	public void sumarTiempo(int segundos) {
-		tiempoTotalDeUso = tiempoTotalDeUso.plusSeconds(segundos);
+	public void sumarTiempo(int minutos) {
+		tiempoTotalDeUso += minutos;
 	}
 
 	@Override
