@@ -5,6 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.CatalogoCursos;
@@ -26,6 +30,8 @@ public class Controlador {
 	private final RepositorioUsuario repositorio;
 	private final CatalogoCursos catalogoCursos;
 	private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
+	private final EntityManagerFactory emf;
+	private final EntityManager em;
 
 	private Usuario usuarioAct;
 	private SesionCurso sesionCursoAct;
@@ -33,7 +39,10 @@ public class Controlador {
 	private Controlador() {
 		// Se inicializa el repositorio una sola vez, evitando su definición en cada
 		// método
+		emf = Persistence.createEntityManagerFactory("ejemplo");
+		em = emf.createEntityManager();
 		repositorio = RepositorioUsuario.getUnicainstancia();
+		repositorio.setEmf(emf);
 		factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
 		catalogoCursos = CatalogoCursos.getInstancia();
 		anadirCursos();
@@ -43,6 +52,8 @@ public class Controlador {
 		this.repositorio = repoUsuarios;
 		this.catalogoCursos = repoCursos;
 		this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+		this.emf = Persistence.createEntityManagerFactory("ejemplo");
+		this.em = emf.createEntityManager();
 	}
 
 	// Getters y setters
@@ -70,10 +81,21 @@ public class Controlador {
 
 	// CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
 	public Usuario autenticar(String nombreUsuario, String contraseña) {
-		// Se usa el repositorio global en lugar de crear uno nuevo cada vez
 		Usuario u = repositorio.getUsuario(nombreUsuario);
 		if (u != null && u.checkContraseña(contraseña)) {
 			this.usuarioAct = u;
+			EntityTransaction tx = em.getTransaction();
+			try {
+				tx.begin();
+				em.find(Usuario.class, usuarioAct.getNombreUsuario());
+				tx.commit();
+			} catch (Exception e) {
+				if (tx.isActive()) {
+					tx.rollback();
+				}
+				System.err.println("Error al autenticar.");
+				e.printStackTrace();
+			}
 			return u;
 		}
 		return null;
@@ -128,7 +150,19 @@ public class Controlador {
 
 	// TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
 	public void guardarProgresoCurso(SesionCurso sc) {
-		// EntityManager con persist de sc (imagino que el usuario ya estaría en seguimiento).
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			em.persist(sc); // persisto
+			em.detach(sc); // pero no quiero actualización auto (solo cuando se clique "guardar")
+			tx.commit();
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			System.err.println("Error al guardar progreso del curso");
+			e.printStackTrace();
+		}
+		// No se cierra el EntityManager global
 	}
 	
 	public boolean usuarioHasSesion(Curso c) {
@@ -139,12 +173,21 @@ public class Controlador {
 	
 	// TODO: CASO DE USO: CREAR CURSO
 
-	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al guardar estado o acabar
-	// curso)
+	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
 	public void actualizarEstadisticasUsuario(boolean completado) {
-		usuarioAct.actualizarEstadisticas(sesionCursoAct, completado);
-		// sesionCursoAct.reiniciarEstadisticas(); // Necesario por si se guarda el
-		// progreso, para no sumar muchas veces a la estad globales
+		EntityTransaction tx = em.getTransaction();
+		try {
+			tx.begin();
+			usuarioAct.actualizarEstadisticas(sesionCursoAct, completado); // Al ya estar el usuario en el contexto del em, no hace falta persist.
+			usuarioAct.removeSesion(sesionCursoAct);
+			tx.commit(); // Pero sí confirmamos los cambios
+		} catch (Exception e) {
+			if (tx.isActive())
+				tx.rollback();
+			System.err.println("Error al terminar curso (actualizando estadísticas de usuario)");
+			e.printStackTrace();
+		}
+		// No se cierra el EntityManager global
 	}
 
 	// Métodos de prueba para añadir cursos de ejemplo

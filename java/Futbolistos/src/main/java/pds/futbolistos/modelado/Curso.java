@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import pds.futbolistos.modelado.convertidores.ConversorBufferedImage;
 
 @Entity
 @Table(name = "CURSOS")
@@ -29,19 +31,23 @@ public class Curso {
 	private String descripcion;
 	@Lob
 	private String imagenURL;
-	// Ya veremos
+	@Convert(converter = ConversorBufferedImage.class)
 	private BufferedImage imagen;
 	@OneToMany
-	@JoinColumn(name = "bloque_id")
-	private Set<BloqueDeContenido> bloquesDeContenido;
+	@JoinColumn(name = "curso_id")
+	private final Set<BloqueDeContenido> bloquesDeContenido;
 
 	// Constructor
+	public Curso() {
+		this.bloquesDeContenido = new HashSet<>();
+	}
+	
 	public Curso(String nombre, String descripcion, String imagenURL) {
+		this();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.imagenURL = imagenURL;
 		this.imagen = null; // Cargar imagen
-		this.bloquesDeContenido = new HashSet<>();
 	}
 
 	// Getters y setters

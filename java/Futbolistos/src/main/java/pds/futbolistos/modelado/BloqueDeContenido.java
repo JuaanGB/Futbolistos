@@ -22,8 +22,8 @@ public class BloqueDeContenido {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToMany
-	@JoinColumn(name="pregunta_id")
+	@OneToMany // Para ser ManyToMany tendría que haber aliasing entre preguntas de diferentes cursos. Complejo porque los cursos se cargan de un fichero
+	@JoinColumn(name = "bloque_id")
 	private final List<Pregunta> preguntas;
 
 	// Constructor

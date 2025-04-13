@@ -27,7 +27,12 @@ public abstract class Pregunta {
 	private int segundos;
 	
 	// Constructor
+	public Pregunta() {
+		
+	}
+	
 	public Pregunta(String enunciado, String pista, int segundos) {
+		this();
 		this.enunciado = enunciado;
 		this.pista = pista;
 		this.segundos = segundos;

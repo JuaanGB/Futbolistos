@@ -5,12 +5,18 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
+@Entity
+@Table(name = "USUARIOS")
 public class Usuario {
 
 	// Atributos
@@ -22,16 +28,19 @@ public class Usuario {
 	@OneToMany
 	@JoinColumn(name = "nombre_usuario")
 	private List<SesionCurso> sesionesCurso;
+	@Embedded
 	private EstadisticasUsuario estadisticas;
 
 	// Constructor
-	public Usuario(String nombreUsuario, String contraseña) {
-		this.nombreUsuario = nombreUsuario;
-		this.contraseña = contraseña;
-
-		// Cargar imagen
+	public Usuario() {
 		this.estadisticas = new EstadisticasUsuario();
 		this.sesionesCurso = new LinkedList<>();
+	}
+	
+	public Usuario(String nombreUsuario, String contraseña) {
+		this();
+		this.nombreUsuario = nombreUsuario;
+		this.contraseña = contraseña;		
 	}
 	
 
@@ -79,14 +88,19 @@ public class Usuario {
 				.anyMatch( sc -> sc.hasCurso(c) );
 	}
 	
+	public void removeSesion(SesionCurso sesionCursoAct) {
+		SesionCurso aBorrar = sesionesCurso.stream()
+			.filter( sc -> sc.equals(sesionCursoAct))
+			.findFirst()
+			.orElse(null); // Se realiza esta búsqueda por si tuviesen OID diferentes
+		sesionesCurso.remove(aBorrar);
+	}
+	
 	public SesionCurso getSesionComenzada(Curso c) {
 		return sesionesCurso.stream()
 				.filter( sc -> sc.hasCurso(c))
 				.findFirst()
 				.orElse(null);
 	}
-	
-	
-	
 
 }

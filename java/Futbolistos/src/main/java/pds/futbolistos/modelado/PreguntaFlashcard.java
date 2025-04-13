@@ -16,6 +16,10 @@ public class PreguntaFlashcard extends Pregunta {
 	@Lob
 	private String reverso;
 	
+	public PreguntaFlashcard() {
+		
+	}
+	
 	public PreguntaFlashcard(int segundos, String anverso, String reverso) {
 		super(" ", null, segundos);
 		this.anverso = anverso;

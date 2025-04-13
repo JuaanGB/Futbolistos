@@ -5,7 +5,6 @@ import java.time.Duration;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 
-@Entity
 @Embeddable
 public class EstadisticasUsuario {
 

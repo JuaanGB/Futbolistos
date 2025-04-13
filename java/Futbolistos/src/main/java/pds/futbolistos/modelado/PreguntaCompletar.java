@@ -19,6 +19,10 @@ public class PreguntaCompletar extends Pregunta {
 	@Lob
 	private String respuestaCorrecta;
 	
+	public PreguntaCompletar() {
+		
+	}
+	
 	public PreguntaCompletar(String enunciado, String respuestaCorrecta, String pista, int segundos) {
 		super(enunciado, pista, segundos);
 		this.respuestaCorrecta = respuestaCorrecta;
