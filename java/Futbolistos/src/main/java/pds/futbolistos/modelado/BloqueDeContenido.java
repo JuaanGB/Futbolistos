@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.LongAccumulator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,10 +24,12 @@ public class BloqueDeContenido {
 	// Atributos
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 	
 	@OneToMany // Para ser ManyToMany tendría que haber aliasing entre preguntas de diferentes cursos. Complejo porque los cursos se cargan de un fichero
 	@JoinColumn(name = "bloque_id")
+	@JsonProperty
 	private final List<Pregunta> preguntas;
 
 	// Constructor

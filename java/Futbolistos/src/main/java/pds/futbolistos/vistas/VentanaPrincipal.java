@@ -132,8 +132,15 @@ public class VentanaPrincipal extends JFrame {
             System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
             System.out.println("Extensión: " + extension);
 
-            // TODO: Delegar en el controlador para parsear según la extensión, crear el objeto Curso,
-            // añadirlo a la lista del usuario y actualizar la ventana
+			if (Controlador.getInstancia().importarCurso(archivoSeleccionado)) {
+				JOptionPane.showMessageDialog(null, "¡Curso importado correctamente!", "Importación exitosa",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Ocurrió un error al importar el curso.\nVerifica que el archivo sea válido.",
+						"Error de importación", JOptionPane.ERROR_MESSAGE);
+			}
+            	
         }
     }
 

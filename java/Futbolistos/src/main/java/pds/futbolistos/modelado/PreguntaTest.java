@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JPanel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -25,8 +27,10 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	// Atributos
 	@Column(name = "respuestas")
 	@Convert(converter = ConversorListaDeCadenas.class)
+	@JsonProperty
 	private List<String> respuestas;
 	@Lob
+	@JsonProperty("respuesta_correcta")
 	private String respuestaCorrecta;
 	
 	public PreguntaTest() {

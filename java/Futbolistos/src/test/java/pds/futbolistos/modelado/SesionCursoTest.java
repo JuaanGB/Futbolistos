@@ -61,7 +61,7 @@ public class SesionCursoTest {
 
 		estrategiaFalsa = new EstrategiaSecuencial();
 
-		sesion = new SesionCurso(curso, estrategiaFalsa);
+		sesion = new SesionCurso(curso, estrategiaFalsa, Mockito.mock(Usuario.class));
 	}
 
 	@Test

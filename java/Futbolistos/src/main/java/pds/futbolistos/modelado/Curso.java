@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,17 +27,23 @@ public class Curso {
 	// Atributos
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 	@Lob
+	@JsonProperty
 	private String nombre;
 	@Lob
+	@JsonProperty
 	private String descripcion;
 	@Lob
+	@JsonProperty("imagen_url")
 	private String imagenURL;
 	@Convert(converter = ConversorBufferedImage.class)
+	@JsonIgnore
 	private BufferedImage imagen;
 	@OneToMany
 	@JoinColumn(name = "curso_id")
+	@JsonProperty("bloques_de_contenido")
 	private final Set<BloqueDeContenido> bloquesDeContenido;
 
 	// Constructor
@@ -91,5 +100,7 @@ public class Curso {
 		Curso other = (Curso) obj;
 		return Objects.equals(descripcion, other.descripcion) && Objects.equals(nombre, other.nombre);
 	}
+	
+	
 
 }

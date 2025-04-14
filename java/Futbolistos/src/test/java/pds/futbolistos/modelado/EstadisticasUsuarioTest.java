@@ -1,11 +1,14 @@
 package pds.futbolistos.modelado;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.time.Duration;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.EstadisticasUsuario;
@@ -47,17 +50,15 @@ public class EstadisticasUsuarioTest {
 	@Test
 	public void testSumarTiempo() {
 		estadisticas.sumarTiempo(30);
-		assertEquals(Duration.ofSeconds(30), estadisticas.getTiempoTotalDeUso(),
-				"Debería añadirse 30 segundos al tiempo total de uso.");
+		assertEquals(30, estadisticas.getTiempoTotalDeUso());
 
 		estadisticas.sumarTiempo(90);
-		assertEquals(Duration.ofSeconds(120), estadisticas.getTiempoTotalDeUso(),
-				"Ahora deberían ser 120 segundos (2 minutos).");
+		assertEquals(120, estadisticas.getTiempoTotalDeUso());
 	}
 
 	@Test
 	public void testActualizarConSesionCurso() {
-		SesionCurso sesionMock = new SesionCurso(new Curso("", "", null), new EstrategiaSecuencial());
+		SesionCurso sesionMock = new SesionCurso(new Curso("", "", null), new EstrategiaSecuencial(), Mockito.mock(Usuario.class));
 		sesionMock.setEstadisticas(2, 2, 0);
 		
 		estadisticas.actualizar(sesionMock, true);

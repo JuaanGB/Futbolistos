@@ -35,13 +35,16 @@ public class SesionCurso {
 	private List<Pregunta> preguntasRestantes; // Inicializada al orden concreto de la estrategia. Conforme respondemos las eliminamos.
 	private int puntuacion; // 0 mal, 1 bien
 	private int pistasRestantes, numeroPreguntasRespondidas, numTotalPreguntas;
+	@ManyToOne
+	@JoinColumn(name = "nombre_usuario")
+	private Usuario usuario;
 	
 	// Constructor
 	public SesionCurso() {
 		this.preguntasRestantes = new ArrayList<>();
 	}
 	
-	public SesionCurso(Curso c, EstrategiaAprendizaje e) {
+	public SesionCurso(Curso c, EstrategiaAprendizaje e, Usuario u) {
 		this.curso = c;
 		this.estrategia = e;
 		this.preguntasRestantes = this.estrategia.calcularOrden(c);
@@ -49,6 +52,7 @@ public class SesionCurso {
 		this.pistasRestantes = 3;
 		this.numeroPreguntasRespondidas = 0;
 		this.numTotalPreguntas = preguntasRestantes.size(); // Por si la estrategia hace repetir preguntas
+		this.usuario = u;
 	}
 	
 	// Getters y setters

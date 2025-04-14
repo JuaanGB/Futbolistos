@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.swing.JPanel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
@@ -17,6 +19,7 @@ public class PreguntaCompletar extends Pregunta {
 
 	private static final float PORCENTAJE_REVELADO = 0.25f;
 	@Lob
+	@JsonProperty("respuesta_correcta")
 	private String respuestaCorrecta;
 	
 	public PreguntaCompletar() {

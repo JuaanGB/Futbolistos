@@ -2,11 +2,15 @@ package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
+
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -25,8 +29,7 @@ public class Usuario {
 	private String nombreUsuario;
 	@Lob
 	private String contraseña;
-	@OneToMany
-	@JoinColumn(name = "nombre_usuario")
+	@OneToMany(mappedBy = "usuario")
 	private List<SesionCurso> sesionesCurso;
 	@Embedded
 	private EstadisticasUsuario estadisticas;
@@ -56,6 +59,10 @@ public class Usuario {
 	public EstadisticasUsuario getEstadisticas() {
 		return estadisticas;
 	}
+	
+	public List<SesionCurso> getSesionesCurso() {
+		return Collections.unmodifiableList(sesionesCurso);
+	}
 
 	// Actualización de estadísticas (evitamos que el Controlador conozca por
 	// completo las estadísticas haciendo
@@ -74,7 +81,7 @@ public class Usuario {
 	}
     
     public SesionCurso empezarCurso(Curso c, EstrategiaAprendizaje a) { 
-    	SesionCurso sc = new SesionCurso(c, a);
+    	SesionCurso sc = new SesionCurso(c, a, this);
     	sesionesCurso.add(sc); 
     	return sc;
     }
@@ -83,10 +90,16 @@ public class Usuario {
     	estadisticas.actualizar(s, completado); 
     }
 
-	public boolean hasSesion(Curso c) {
-		return sesionesCurso.stream()
-				.anyMatch( sc -> sc.hasCurso(c) );
-	}
+	public boolean hasSesion(Curso c, EntityManager em) {
+
+		em.getTransaction().begin();
+		sesionesCurso = em.createQuery("SELECT sc FROM SesionCurso sc WHERE sc.usuario.nombreUsuario = :usuarioNombre",
+				SesionCurso.class).setParameter("usuarioNombre", this.nombreUsuario).getResultList();
+		em.getTransaction().commit();
+
+		return sesionesCurso.stream().anyMatch(sc -> sc.hasCurso(c));
+    }
+
 	
 	public void removeSesion(SesionCurso sesionCursoAct) {
 		SesionCurso aBorrar = sesionesCurso.stream()

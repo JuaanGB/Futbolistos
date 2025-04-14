@@ -1,9 +1,15 @@
 package pds.futbolistos.controlador;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+
+import org.hibernate.Hibernate;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -78,21 +84,42 @@ public class Controlador {
 	public void setSesionCursoAct(SesionCurso sc) {
 		this.sesionCursoAct = sc;
 	}
+	
+	public void iniciarTransaccion() {
+		if (!em.getTransaction().isActive()) {
+			em.getTransaction().begin();
+		}
+	}
+
+	public void cerrarTransaccion() {
+		if (em.getTransaction().isActive()) {
+			em.getTransaction().commit();
+		}
+	}
+
+	public void manejarError() {
+		if (em.getTransaction().isActive()) {
+			em.getTransaction().rollback();
+		}
+	}
+
+	public void cerrarEntityManager() {
+		if (em.isOpen()) {
+			em.close();
+		}
+	}
 
 	// CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
 	public Usuario autenticar(String nombreUsuario, String contraseña) {
 		Usuario u = repositorio.getUsuario(nombreUsuario);
 		if (u != null && u.checkContraseña(contraseña)) {
 			this.usuarioAct = u;
-			EntityTransaction tx = em.getTransaction();
 			try {
-				tx.begin();
+				iniciarTransaccion();
 				em.find(Usuario.class, usuarioAct.getNombreUsuario());
-				tx.commit();
+				cerrarTransaccion();
 			} catch (Exception e) {
-				if (tx.isActive()) {
-					tx.rollback();
-				}
+				manejarError();
 				System.err.println("Error al autenticar.");
 				e.printStackTrace();
 			}
@@ -150,44 +177,49 @@ public class Controlador {
 
 	// TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
 	public void guardarProgresoCurso(SesionCurso sc) {
-		EntityTransaction tx = em.getTransaction();
 		try {
-			tx.begin();
-			em.persist(sc); // persisto
-			em.detach(sc); // pero no quiero actualización auto (solo cuando se clique "guardar")
-			tx.commit();
+			iniciarTransaccion();
+			em.persist(sc); // Persistimos la sesión
+			em.detach(sc); // Desacoplamos para que no se persista automáticamente en el futuro
+			cerrarTransaccion();
 		} catch (Exception e) {
-			if (tx.isActive())
-				tx.rollback();
+			manejarError();
 			System.err.println("Error al guardar progreso del curso");
 			e.printStackTrace();
 		}
-		// No se cierra el EntityManager global
 	}
 	
 	public boolean usuarioHasSesion(Curso c) {
-		return usuarioAct.hasSesion(c);
+		return usuarioAct.hasSesion(c, em);
 	}
 	
 	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
 	
-	// TODO: CASO DE USO: CREAR CURSO
+	// TODO: CASO DE USO: IMPORTAR CURSO
+	public boolean importarCurso(File f) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			Curso c = objectMapper.readValue(f, Curso.class);
+			// Persistir el curso al completo
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
 	public void actualizarEstadisticasUsuario(boolean completado) {
-		EntityTransaction tx = em.getTransaction();
 		try {
-			tx.begin();
-			usuarioAct.actualizarEstadisticas(sesionCursoAct, completado); // Al ya estar el usuario en el contexto del em, no hace falta persist.
+			iniciarTransaccion();
+			usuarioAct.actualizarEstadisticas(sesionCursoAct, completado); // El usuario ya formaba parte del contexto al autenticar
 			usuarioAct.removeSesion(sesionCursoAct);
-			tx.commit(); // Pero sí confirmamos los cambios
+			cerrarTransaccion();
 		} catch (Exception e) {
-			if (tx.isActive())
-				tx.rollback();
+			manejarError();
 			System.err.println("Error al terminar curso (actualizando estadísticas de usuario)");
 			e.printStackTrace();
 		}
-		// No se cierra el EntityManager global
 	}
 
 	// Métodos de prueba para añadir cursos de ejemplo

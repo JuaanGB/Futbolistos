@@ -164,7 +164,7 @@ public class ControladorTest {
 	})
 	public void testQuedanPistasDisponibles(int num, boolean esperado) {
 		
-		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		sesionCursoFalsa.setPistasRestantes(num);
 		
 		controlador.setSesionCursoAct(sesionCursoFalsa);
@@ -177,7 +177,7 @@ public class ControladorTest {
 	@Test
 	public void testDisminuirPistasDisponibles() {
 		
-		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		sesionCursoFalsa.setPistasRestantes(1);
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		
@@ -198,7 +198,7 @@ public class ControladorTest {
 	@MethodSource("proveedorPreguntas")
 	public void testValidarRespuesta(Pregunta p, String respuesta, boolean esperado) {
 		
-		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		
 		boolean res = controlador.validarRespuesta(p, respuesta);
@@ -213,7 +213,7 @@ public class ControladorTest {
 		b.addPregunta(new PreguntaTest("pregunta1", "correcta", "", 100, "1", "2", "3", "correcta"));
 		b.addPregunta(new PreguntaTest("pregunta2", "correcta", "", 100, "1", "2", "3", "correcta"));
 		
-		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		
 		controlador.pasarASiguientePregunta();
@@ -232,7 +232,7 @@ public class ControladorTest {
 	})
 	public void testActualizarEstadisticasUsuario(boolean completado) {
 		
-		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa);
+		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		sesionCursoFalsa.setEstadisticas(3, 4, 2);
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		controlador.setUsuarioAct(usuarioFalso);
