@@ -16,6 +16,8 @@ public class VentanaPrincipal extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
+    private JPanel panelCursos;
+    
     public VentanaPrincipal() {
         
     	FactoriaComponentes.utilizarNimbusLookAndFeel();
@@ -87,7 +89,7 @@ public class VentanaPrincipal extends JFrame {
         panelBotonesUsuario.add(btnCargarCurso);
         panelUsuarioYCursos.add(panelBotonesUsuario, BorderLayout.NORTH);
 
-        JPanel panelCursos = new JPanel(new GridLayout(0, 2, 10, 10));
+        panelCursos = new JPanel(new GridLayout(0, 2, 10, 10));
         panelCursos.setBackground(new Color(30, 30, 30));
         List<Curso> cursos = ctrl.getCursosDisponibles();
         for (Curso c : cursos) {
@@ -135,6 +137,7 @@ public class VentanaPrincipal extends JFrame {
 			if (Controlador.getInstancia().importarCurso(archivoSeleccionado)) {
 				JOptionPane.showMessageDialog(null, "¡Curso importado correctamente!", "Importación exitosa",
 						JOptionPane.INFORMATION_MESSAGE);
+				actualizarCursosDisponibles();
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"Ocurrió un error al importar el curso.\nVerifica que el archivo sea válido.",
@@ -148,6 +151,18 @@ public class VentanaPrincipal extends JFrame {
         String nombre = archivo.getName();
         int lastIndex = nombre.lastIndexOf(".");
         return (lastIndex == -1) ? "" : nombre.substring(lastIndex + 1).toLowerCase();
+    }
+    
+    private void actualizarCursosDisponibles() {
+    	
+    	panelCursos.removeAll();
+    	List<Curso> cursos = Controlador.getInstancia().getCursosDisponibles();
+        for (Curso c : cursos) {
+            panelCursos.add(new PanelCurso(c));
+        }
+        
+        panelCursos.revalidate();
+        panelCursos.repaint();
     }
     
 }

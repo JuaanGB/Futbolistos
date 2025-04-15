@@ -9,6 +9,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +42,7 @@ public class Curso {
 	@Convert(converter = ConversorBufferedImage.class)
 	@JsonIgnore
 	private BufferedImage imagen;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "curso_id")
 	@JsonProperty("bloques_de_contenido")
 	private final Set<BloqueDeContenido> bloquesDeContenido;
@@ -60,6 +61,10 @@ public class Curso {
 	}
 
 	// Getters y setters
+	public Long getId() {
+		return id;
+	}
+	
 	public String getNombre() {
 		return nombre;
 	}

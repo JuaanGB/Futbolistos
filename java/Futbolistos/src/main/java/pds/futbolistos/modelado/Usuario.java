@@ -2,12 +2,14 @@ package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.hibernate.Hibernate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
@@ -29,15 +31,18 @@ public class Usuario {
 	private String nombreUsuario;
 	@Lob
 	private String contraseña;
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
 	private List<SesionCurso> sesionesCurso;
 	@Embedded
 	private EstadisticasUsuario estadisticas;
+	@OneToMany(cascade = CascadeType.ALL) // Realmente sería un ManyToMany pero requeriría comprobar si el curso ya está en base de datos y es idéntico a uno que ya exista
+	private List<Curso> cursosImportados;
 
 	// Constructor
 	public Usuario() {
 		this.estadisticas = new EstadisticasUsuario();
-		this.sesionesCurso = new LinkedList<>();
+		this.sesionesCurso = new ArrayList<>();
+		this.cursosImportados = new ArrayList<>();
 	}
 	
 	public Usuario(String nombreUsuario, String contraseña) {
@@ -62,6 +67,14 @@ public class Usuario {
 	
 	public List<SesionCurso> getSesionesCurso() {
 		return Collections.unmodifiableList(sesionesCurso);
+	}
+	
+	public List<Curso> getCursosImportados() {
+		return Collections.unmodifiableList(cursosImportados);
+	}
+	
+	public boolean addCursoImportado(Curso c) {
+		return this.cursosImportados.add(c);
 	}
 
 	// Actualización de estadísticas (evitamos que el Controlador conozca por

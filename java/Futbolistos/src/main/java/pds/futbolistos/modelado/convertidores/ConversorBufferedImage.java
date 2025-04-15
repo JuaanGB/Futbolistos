@@ -11,34 +11,32 @@ import javax.imageio.ImageIO;
 
 import jakarta.persistence.AttributeConverter;
 
-public class ConversorBufferedImage implements AttributeConverter<BufferedImage, Blob> {
+public class ConversorBufferedImage implements AttributeConverter<BufferedImage, byte[]> {
 
 	@Override
-	public Blob convertToDatabaseColumn(BufferedImage bufferedImage) {
+	public byte[] convertToDatabaseColumn(BufferedImage bufferedImage) {
 		if (bufferedImage == null) {
 			return null;
 		}
 
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		try {
-			ImageIO.write(bufferedImage, "png", byteArrayOutputStream);
-			byte[] imageBytes = byteArrayOutputStream.toByteArray();
-			return new javax.sql.rowset.serial.SerialBlob(imageBytes);
-		} catch (IOException | SQLException e) {
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			ImageIO.write(bufferedImage, "png", baos);
+			return baos.toByteArray();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	public BufferedImage convertToEntityAttribute(Blob dbData) {
+	public BufferedImage convertToEntityAttribute(byte[] dbData) {
 		if (dbData == null) {
 			return null;
 		}
 
-		try (InputStream inputStream = dbData.getBinaryStream()) {
-			return ImageIO.read(inputStream);
-		} catch (SQLException | IOException e) {
+		try (InputStream in = new java.io.ByteArrayInputStream(dbData)) {
+			return ImageIO.read(in);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

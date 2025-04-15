@@ -60,7 +60,8 @@ public class PanelCurso extends JPanel {
 	private void comprobarCursoGuardadoOIniciar(Curso c) {
 		
 		if (Controlador.getInstancia().usuarioHasSesion(c)) {
-			SesionCurso sc = Controlador.getInstancia().getUsuarioAct().getSesionComenzada(c);
+			System.out.println("ID del curso: " + c.getId());
+			SesionCurso sc = Controlador.getInstancia().reanudarCurso(c);
 			reanudarSesionCurso(sc);
 		} else {
 			iniciarCurso(c);

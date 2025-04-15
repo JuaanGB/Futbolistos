@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.LongAccumulator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,7 +28,7 @@ public class BloqueDeContenido {
 	@JsonIgnore
 	private Long id;
 	
-	@OneToMany // Para ser ManyToMany tendría que haber aliasing entre preguntas de diferentes cursos. Complejo porque los cursos se cargan de un fichero
+	@OneToMany(cascade = CascadeType.ALL) // Para ser ManyToMany tendría que haber aliasing entre preguntas de diferentes cursos. Complejo porque los cursos se cargan de un fichero
 	@JoinColumn(name = "bloque_id")
 	@JsonProperty
 	private final List<Pregunta> preguntas;
