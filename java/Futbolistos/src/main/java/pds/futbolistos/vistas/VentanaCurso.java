@@ -9,6 +9,8 @@ import pds.futbolistos.vistas.componentes.PanelEstadisticasCurso;
 import pds.futbolistos.vistas.componentes.PanelPregunta;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaCurso extends JFrame {
 
@@ -33,6 +35,12 @@ public class VentanaCurso extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(345, 500);
         setLocationRelativeTo(null);
+        
+        addWindowListener( new WindowAdapter() {
+        	public void windowClosing(WindowEvent e) {
+        		Controlador.getInstancia().actualizarEstadisticaDeTiempo();
+        	};
+		} );
         
         getContentPane().setLayout(new BorderLayout());
         

@@ -1,7 +1,9 @@
 package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -103,16 +105,6 @@ public class Usuario {
     	estadisticas.actualizar(s, completado); 
     }
 
-	public boolean hasSesion(Curso c, EntityManager em) {
-
-		em.getTransaction().begin();
-		sesionesCurso = em.createQuery("SELECT sc FROM SesionCurso sc WHERE sc.usuario.nombreUsuario = :usuarioNombre",
-				SesionCurso.class).setParameter("usuarioNombre", this.nombreUsuario).getResultList();
-		em.getTransaction().commit();
-
-		return sesionesCurso.stream().anyMatch(sc -> sc.hasCurso(c));
-    }
-
 	
 	public void removeSesion(SesionCurso sesionCursoAct) {
 		SesionCurso aBorrar = sesionesCurso.stream()
@@ -128,5 +120,20 @@ public class Usuario {
 				.findFirst()
 				.orElse(null);
 	}
+	
+	// Llamado al iniciar sesión
+	public void actualizarRachaDeDias() {
+		estadisticas.registrarAcceso();
+	}
+	
+	// Llamado al cerrar la aplicación (realmente solo es en dos ventanas: la principal y la del curso)
+	public void actualizarEstadisticasDeTiempo() {
+		estadisticas.registrarCierre();
+	}
+	
+	public void reiniciarFechaUltimoAcceso() {
+		estadisticas.reiniciarFechaDeUltimoAcceso();
+	}
+
 
 }

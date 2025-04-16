@@ -168,5 +168,14 @@ public class Controlador {
 			e.printStackTrace();
 		}
 	}
+	
+	public void actualizarEstadisticaDeTiempo() {
+		try {
+			bbdd.actualizarEstadisticasDeTiempo(usuarioAct);
+		} catch (Exception e) {
+			System.err.println("Error al actualizar estadísticas al cerrar aplicación)");
+			e.printStackTrace();
+		}
+	}
 
 }

@@ -68,5 +68,33 @@ public class UsuarioTest {
         assertTrue(usuario.getEstadisticas().getCursosRealizados() >= 1,
                    "La estadística de cursos realizados debe ser >= 1");
     }
+    
+	@Test
+	public void testGetSesionComenzada() {
+		Curso cursoTest = new Curso("Curso A", "Descripción A", "URL_A");
+		EstrategiaAprendizaje estrategia = new EstrategiaSecuencial();
+
+		SesionCurso sesion = usuario.empezarCurso(cursoTest, estrategia);
+
+		SesionCurso encontrada = usuario.getSesionComenzada(cursoTest);
+
+		assertNotNull(encontrada, "La sesión debería encontrarse.");
+		assertEquals(sesion, encontrada, "La sesión encontrada debe ser la misma que la iniciada.");
+	}
+
+	@Test
+	public void testRemoveSesion() {
+		Curso cursoTest = new Curso("Curso B", "Descripción B", "URL_B");
+		EstrategiaAprendizaje estrategia = new EstrategiaSecuencial();
+
+		SesionCurso sesion = usuario.empezarCurso(cursoTest, estrategia);
+
+		assertTrue(usuario.getSesionesCurso().contains(sesion), "La sesión debe estar antes de ser eliminada.");
+
+		usuario.removeSesion(sesion);
+
+		assertFalse(usuario.getSesionesCurso().contains(sesion), "La sesión no debe estar después de ser eliminada.");
+	}
+
 
 }

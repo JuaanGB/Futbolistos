@@ -75,6 +75,8 @@ public class BaseDeDatos {
 	public Usuario getUsuario(String nombre) {
 		iniciarTransaccion();
 		Usuario u = em.find(Usuario.class, nombre);
+		u.actualizarRachaDeDias();
+		u.reiniciarFechaUltimoAcceso();
 		Hibernate.initialize(u.getCursosImportados());
 		cerrarTransaccion();
 		return u;
@@ -112,8 +114,16 @@ public class BaseDeDatos {
 
 	public void actualizarEstadisticasDeUsuario(Usuario u, SesionCurso sc) {
 		iniciarTransaccion();
+		em.persist(u);
 		u.actualizarEstadisticas(sc, true);
 		u.removeSesion(sc);
+		cerrarTransaccion();
+	}
+
+	public void actualizarEstadisticasDeTiempo(Usuario u) {
+		iniciarTransaccion();
+		em.persist(u);
+		u.actualizarEstadisticasDeTiempo();
 		cerrarTransaccion();
 	}
 

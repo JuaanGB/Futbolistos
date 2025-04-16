@@ -9,6 +9,8 @@ import pds.futbolistos.vistas.componentes.FactoriaComponentes;
 import pds.futbolistos.vistas.componentes.PanelCurso;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 
@@ -25,11 +27,18 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void initialize() {
+    	
         setBounds(100, 100, 700, 773);
         setMinimumSize(new Dimension(700, 773));
         setTitle("FUTBOLISTOS");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        
+        addWindowListener( new WindowAdapter() {
+        	public void windowClosing(WindowEvent e) {
+        		Controlador.getInstancia().actualizarEstadisticaDeTiempo();
+        	};
+		} );
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(30, 30, 30));
