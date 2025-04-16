@@ -17,15 +17,14 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import pds.futbolistos.bd.BaseDeDatos;
 import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import pds.futbolistos.modelado.BloqueDeContenido;
-import pds.futbolistos.modelado.CatalogoCursos;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.PreguntaCompletar;
 import pds.futbolistos.modelado.PreguntaFlashcard;
 import pds.futbolistos.modelado.PreguntaTest;
-import pds.futbolistos.modelado.RepositorioUsuario;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.Usuario;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
@@ -34,39 +33,21 @@ public class Controlador {
 
 	private static Controlador instancia;
 
-	// Variable global para el repositorio de usuarios
-	private final RepositorioUsuario repositorio;
-	private final CatalogoCursos catalogoCursos;
 	private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
-	
-	private String ficheroBd = "prueba-1.db";
-	private Map<String, String> properties = new HashMap<>();
-	
-	private final EntityManagerFactory emf;
-	private final EntityManager em;
+	private final BaseDeDatos bbdd;
 
 	private Usuario usuarioAct;
 	private SesionCurso sesionCursoAct;
 
 	private Controlador() {
-		// Se inicializa el repositorio una sola vez, evitando su definición en cada
-		// método
-		properties.put("hibernate.connection.url", "jdbc:sqlite:" + ficheroBd);
-		emf = Persistence.createEntityManagerFactory("ejemplo", properties);
-		em = emf.createEntityManager();
-		repositorio = RepositorioUsuario.getUnicainstancia();
-		repositorio.setEmf(emf);
+		bbdd = new BaseDeDatos();
 		factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
-		catalogoCursos = CatalogoCursos.getInstancia();
 	}
 
-	public Controlador(RepositorioUsuario repoUsuarios, CatalogoCursos repoCursos) {
-		this.repositorio = repoUsuarios;
-		this.catalogoCursos = repoCursos;
+	public Controlador(BaseDeDatos bbdd) {
+	
 		this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
-		this.emf = Persistence.createEntityManagerFactory("ejemplo");
-		this.em = emf.createEntityManager();
-		properties.put("hibernate.connection.url", "jdbc:sqlite:" + ficheroBd);
+		this.bbdd = bbdd;
 	}
 
 	// Getters y setters
@@ -91,46 +72,12 @@ public class Controlador {
 	public void setSesionCursoAct(SesionCurso sc) {
 		this.sesionCursoAct = sc;
 	}
-	
-	public void iniciarTransaccion() {
-		if (!em.getTransaction().isActive()) {
-			em.getTransaction().begin();
-		}
-	}
-
-	public void cerrarTransaccion() {
-		if (em.getTransaction().isActive()) {
-			em.getTransaction().commit();
-		}
-	}
-
-	public void manejarError() {
-		if (em.getTransaction().isActive()) {
-			em.getTransaction().rollback();
-		}
-	}
-
-	public void cerrarEntityManager() {
-		if (em.isOpen()) {
-			em.close();
-		}
-	}
 
 	// CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
 	public Usuario autenticar(String nombreUsuario, String contraseña) {
-		Usuario u = repositorio.getUsuario(nombreUsuario);
+		Usuario u = bbdd.getUsuario(nombreUsuario);
 		if (u != null && u.checkContraseña(contraseña)) {
 			this.usuarioAct = u;
-			try {
-				iniciarTransaccion();
-				usuarioAct = em.find(Usuario.class, usuarioAct.getNombreUsuario());
-				Hibernate.initialize(usuarioAct.getCursosImportados());
-				cerrarTransaccion();
-			} catch (Exception e) {
-				manejarError();
-				System.err.println("Error al autenticar.");
-				e.printStackTrace();
-			}
 			return u;
 		}
 		return null;
@@ -138,10 +85,10 @@ public class Controlador {
 
 	// CASO DE USO: REGISTRARSE EN EL SISTEMA
 	public boolean registrar(String usuario, String contraseña) {
-		if (repositorio.existeNombre(usuario)) {
+		if (bbdd.existeUsuario(usuario)) {
 			return false;
 		}
-		usuarioAct = repositorio.añadirUsuario(usuario, contraseña);
+		usuarioAct = bbdd.addUsuario(usuario, contraseña);
 		return true;
 	}
 
@@ -185,17 +132,7 @@ public class Controlador {
 
 	// TODO: CASO DE USO: GUARDAR PROGRESO DEL CURSO
 	public void guardarProgresoCurso(SesionCurso sc) {
-		try {
-			iniciarTransaccion();
-			em.persist(usuarioAct);
-			em.persist(sc); // Persistimos la sesión
-			cerrarTransaccion();
-			
-		} catch (Exception e) {
-			manejarError();
-			System.err.println("Error al guardar progreso del curso");
-			e.printStackTrace();
-		}
+		bbdd.guardarProgresoCurso(usuarioAct, sc);
 	}
 	
 	public SesionCurso reanudarCurso(Curso c) {
@@ -204,7 +141,7 @@ public class Controlador {
 	}
 	
 	public boolean usuarioHasSesion(Curso c) {
-		return usuarioAct.hasSesion(c, em);
+		return bbdd.usuarioHasSesion(usuarioAct, c);
 	}
 	
 	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
@@ -214,11 +151,7 @@ public class Controlador {
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			Curso c = objectMapper.readValue(f, Curso.class);
-			// Persistir el curso al completo
-			em.getTransaction().begin();
-			em.persist(usuarioAct);
-			usuarioAct.addCursoImportado(c); // Persiste el curso por el CascadeType.ALL en Usuario
-			em.getTransaction().commit();
+			bbdd.usuarioImportaCurso(usuarioAct, c);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -229,12 +162,8 @@ public class Controlador {
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
 	public void actualizarEstadisticasUsuario(boolean completado) {
 		try {
-			iniciarTransaccion();
-			usuarioAct.actualizarEstadisticas(sesionCursoAct, completado); // El usuario ya formaba parte del contexto al autenticar
-			usuarioAct.removeSesion(sesionCursoAct);
-			cerrarTransaccion();
+			bbdd.actualizarEstadisticasDeUsuario(usuarioAct, sesionCursoAct);
 		} catch (Exception e) {
-			manejarError();
 			System.err.println("Error al terminar curso (actualizando estadísticas de usuario)");
 			e.printStackTrace();
 		}

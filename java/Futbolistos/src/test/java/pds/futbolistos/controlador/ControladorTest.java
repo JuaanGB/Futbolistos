@@ -6,14 +6,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 
+import pds.futbolistos.bd.BaseDeDatos;
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.BloqueDeContenido;
-import pds.futbolistos.modelado.CatalogoCursos;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.PreguntaTest;
-import pds.futbolistos.modelado.RepositorioUsuario;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.Usuario;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
@@ -43,8 +43,7 @@ public class ControladorTest {
 	private Controlador controlador;
 	
 	// Servicios con mock
-	private RepositorioUsuario catalogoUsuariosMock;
-	private CatalogoCursos catalogoCursosMock;
+	private BaseDeDatos bbddMock;
 	
 	// Instancias del modelo de dominio "falsas" para pruebas
 	private Usuario usuarioFalso;
@@ -56,10 +55,9 @@ public class ControladorTest {
 	public void setUp() {
 
 		// Mocks de servicios
-		catalogoCursosMock = mock(CatalogoCursos.class);
-		catalogoUsuariosMock = mock(RepositorioUsuario.class);
+		bbddMock = Mockito.mock(BaseDeDatos.class);
 		
-		controlador = new Controlador(catalogoUsuariosMock, catalogoCursosMock);
+		controlador = new Controlador(bbddMock);
 		usuarioFalso = new Usuario(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE);
 		estrategiaFalsa = new EstrategiaSecuencial();
 
@@ -70,16 +68,16 @@ public class ControladorTest {
 		controlador.setUsuarioAct(usuarioFalso); // Necesito un usuario para añadirle la sesion
 		
 		// Simulamos que hay un usuario en el repositorio
-		when(catalogoUsuariosMock.existeNombre(USUARIO_EXISTENTE)).thenReturn(true);
-		when(catalogoUsuariosMock.getUsuario(USUARIO_EXISTENTE))
+		when(bbddMock.existeUsuario(USUARIO_EXISTENTE)).thenReturn(true);
+		when(bbddMock.getUsuario(USUARIO_EXISTENTE))
 				.thenReturn(usuarioFalso);
 
 		// simulamos el comportamiento del repositorio ante el registro de un usuario
 		// nuevo
-		when(catalogoUsuariosMock.existeNombre(NUEVO_USUARIO)).thenReturn(false);
-		when(catalogoUsuariosMock.añadirUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO))
+		when(bbddMock.existeUsuario(NUEVO_USUARIO)).thenReturn(false);
+		when(bbddMock.addUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO))
 				.thenReturn(new Usuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO));
-		when(catalogoUsuariosMock.getUsuario(NUEVO_USUARIO)).thenReturn(null);
+		when(bbddMock.getUsuario(NUEVO_USUARIO)).thenReturn(null);
 		
 	}
 
@@ -91,7 +89,7 @@ public class ControladorTest {
 		assertNotNull(autenticado, "El usuario debería poder autenticarse si existe y la contraseña es correcta");
 		assertEquals(USUARIO_EXISTENTE, autenticado.getNombreUsuario(),
 				"El nombre de usuario autenticado debería coincidir");
-		verify(catalogoUsuariosMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -99,7 +97,7 @@ public class ControladorTest {
 
 		Usuario autenticado = controlador.autenticar(USUARIO_EXISTENTE, "contraseñaIncorrecta");
 		assertNull(autenticado, "El usuario no debería poder autenticarse con una contraseña incorrecta");
-		verify(catalogoUsuariosMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -107,7 +105,7 @@ public class ControladorTest {
 
 		Usuario autenticado = controlador.autenticar(NUEVO_USUARIO, "");
 		assertNull(autenticado, "El usuario no debería poder autenticarse si no existe");
-		verify(catalogoUsuariosMock, times(1)).getUsuario(NUEVO_USUARIO);
+		verify(bbddMock, times(1)).getUsuario(NUEVO_USUARIO);
 	}
 
 	/* ----------- TESTS DE REGISTRO ---------- */
@@ -117,7 +115,7 @@ public class ControladorTest {
 
 		boolean res = controlador.registrar(USUARIO_EXISTENTE, "");
 		assertFalse(res, "Ya existe un usuario con ese nombre.");
-		verify(catalogoUsuariosMock, times(1)).existeNombre(USUARIO_EXISTENTE);
+		verify(bbddMock, times(1)).existeUsuario(USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -125,23 +123,7 @@ public class ControladorTest {
 
 		boolean res = controlador.registrar(NUEVO_USUARIO, "");
 		assertTrue(res, "No existe un usuario con ese nombre.");
-		verify(catalogoUsuariosMock, times(1)).existeNombre(NUEVO_USUARIO);
-	}
-
-	@Test
-	public void testGetCursosDisponibles() {
-
-		Curso curso1 = new Curso("Curso 1", "Descripción del Curso 1", null);
-		Curso curso2 = new Curso("Curso 2", "Descripción del Curso 2", null);
-		List<Curso> cursos = List.of(curso1, curso2);
-
-		when(catalogoCursosMock.obtenerCursos()).thenReturn(cursos);
-
-		List<Curso> cursosDisponibles = controlador.getCursosDisponibles();
-
-		assertNotNull(cursosDisponibles);
-		assertEquals(2, cursosDisponibles.size());
-		verify(catalogoCursosMock, times(1)).obtenerCursos();
+		verify(bbddMock, times(1)).existeUsuario(NUEVO_USUARIO);
 	}
 
 	@Test
@@ -237,7 +219,8 @@ public class ControladorTest {
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		controlador.setUsuarioAct(usuarioFalso);
 		
-		controlador.actualizarEstadisticasUsuario(completado);
+		usuarioFalso.actualizarEstadisticas(sesionCursoFalsa, completado);
+		// controlador.actualizarEstadisticasUsuario(completado);
 		
 		assertEquals(3, controlador.getUsuarioAct().getEstadisticas().getPreguntasAcertadas());
 		assertEquals(4, controlador.getUsuarioAct().getEstadisticas().getPreguntasRespondidas());

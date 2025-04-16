@@ -27,7 +27,7 @@ public class Curso {
 
 	// Atributos
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonIgnore
 	private Long id;
 	@Lob
@@ -51,7 +51,7 @@ public class Curso {
 	public Curso() {
 		this.bloquesDeContenido = new HashSet<>();
 	}
-	
+
 	public Curso(String nombre, String descripcion, String imagenURL) {
 		this();
 		this.nombre = nombre;
@@ -64,7 +64,7 @@ public class Curso {
 	public Long getId() {
 		return id;
 	}
-	
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -103,9 +103,10 @@ public class Curso {
 		if (getClass() != obj.getClass())
 			return false;
 		Curso other = (Curso) obj;
-		return Objects.equals(descripcion, other.descripcion) && Objects.equals(nombre, other.nombre);
+		return Objects.equals(id, other.id) && Objects.equals(descripcion, other.descripcion)
+				&& Objects.equals(nombre, other.nombre);
 	}
-	
-	
+	// Comparación por ID por si el usuario importa varias veces el mismo curso y queremos distinguir las sesiones
+	// Si no, reanudaría la primera sesión en la lista de sesiones del usuario.
 
 }
