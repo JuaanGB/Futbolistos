@@ -206,26 +206,20 @@ public class ControladorTest {
 		
 	}
 	
-	// 
-	@ParameterizedTest
-	@CsvSource({
-	    "true",
-	    "false"
-	})
-	public void testActualizarEstadisticasUsuario(boolean completado) {
+	public void testActualizarEstadisticasUsuario() {
 		
 		sesionCursoFalsa = new SesionCurso(cursoFalso, estrategiaFalsa, usuarioFalso);
 		sesionCursoFalsa.setEstadisticas(3, 4, 2);
 		controlador.setSesionCursoAct(sesionCursoFalsa);
 		controlador.setUsuarioAct(usuarioFalso);
 		
-		usuarioFalso.actualizarEstadisticas(sesionCursoFalsa, completado);
+		usuarioFalso.actualizarEstadisticas(sesionCursoFalsa);
 		// controlador.actualizarEstadisticasUsuario(completado);
 		
 		assertEquals(3, controlador.getUsuarioAct().getEstadisticas().getPreguntasAcertadas());
 		assertEquals(4, controlador.getUsuarioAct().getEstadisticas().getPreguntasRespondidas());
 		assertEquals(3-2, controlador.getUsuarioAct().getEstadisticas().getPistasConsultadas());
-		assertEquals(completado ? 1 : 0, controlador.getUsuarioAct().getEstadisticas().getCursosRealizados());
+		assertEquals(1, controlador.getUsuarioAct().getEstadisticas().getCursosRealizados());
 	}
 
 }

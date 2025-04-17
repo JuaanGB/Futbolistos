@@ -63,7 +63,7 @@ public class UsuarioTest {
         SesionCurso sesion = usuario.empezarCurso(cursoTest, estrategiaFalsa);
         assertNotNull(sesion, "La sesión no debe ser nula al iniciar el curso.");
 
-        usuario.actualizarEstadisticas(sesion, true);
+        usuario.actualizarEstadisticas(sesion);
 
         assertTrue(usuario.getEstadisticas().getCursosRealizados() >= 1,
                    "La estadística de cursos realizados debe ser >= 1");

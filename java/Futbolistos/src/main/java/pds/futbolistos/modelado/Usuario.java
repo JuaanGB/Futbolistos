@@ -79,17 +79,6 @@ public class Usuario {
 		return this.cursosImportados.add(c);
 	}
 
-	// Actualización de estadísticas (evitamos que el Controlador conozca por
-	// completo las estadísticas haciendo
-	// .getEstadististicas().metodoDeModificacionDeEstadistica(...)
-	public void actualizarMejorRacha(int racha) {
-		estadisticas.actualizarMejorRacha(racha);
-	}
-
-	public void sumarTiempoDeUso(int segundos) {
-		estadisticas.sumarTiempo(segundos);
-	}
-
 	// Funcionalidad
 	public boolean checkContraseña(String otra) {
 		return this.contraseña.equals(otra);
@@ -101,8 +90,8 @@ public class Usuario {
     	return sc;
     }
     
-    public void actualizarEstadisticas(SesionCurso s, boolean completado) { 
-    	estadisticas.actualizar(s, completado); 
+    public void actualizarEstadisticas(SesionCurso s) { 
+    	estadisticas.actualizarTrasAcabarSesion(s); 
     }
 
 	

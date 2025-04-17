@@ -115,7 +115,7 @@ public class BaseDeDatos {
 	public void actualizarEstadisticasDeUsuario(Usuario u, SesionCurso sc) {
 		iniciarTransaccion();
 		em.persist(u);
-		u.actualizarEstadisticas(sc, true);
+		u.actualizarEstadisticas(sc);
 		u.removeSesion(sc);
 		cerrarTransaccion();
 	}

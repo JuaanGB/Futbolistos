@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ public class EstadisticasUsuarioTest {
 		SesionCurso sesionMock = new SesionCurso(new Curso("", "", null), new EstrategiaSecuencial(), Mockito.mock(Usuario.class));
 		sesionMock.setEstadisticas(2, 2, 0);
 		
-		estadisticas.actualizar(sesionMock, true);
+		estadisticas.actualizarTrasAcabarSesion(sesionMock);
 
 		assertEquals(1, estadisticas.getCursosRealizados(),
 				"Debe incrementar en 1 los cursos realizados si completado.");
@@ -69,5 +70,47 @@ public class EstadisticasUsuarioTest {
 		assertEquals(2, estadisticas.getPreguntasRespondidas(), "Se suman las preguntas respondidas de la sesión.");
 		assertEquals(3, estadisticas.getPistasConsultadas(), "Se incrementan pistasConsultadas (3 - pistasRestantes).");
 	}
+	
+	@Test
+	public void testRegistrarAccesoPrimeraVez() {
+		LocalDateTime fecha = LocalDateTime.of(2024, 4, 15, 10, 0);
+		estadisticas.registrarAcceso(fecha);
+
+		assertEquals(1, estadisticas.getMejorRachaDias());
+	}
+
+	@Test
+	public void testRegistrarAccesoDiaSiguiente() {
+		LocalDateTime dia1 = LocalDateTime.of(2024, 4, 14, 10, 0);
+		LocalDateTime dia2 = LocalDateTime.of(2024, 4, 15, 9, 0); // dia consecutivo
+
+		estadisticas.registrarAcceso(dia1);
+		estadisticas.registrarAcceso(dia2);
+
+		assertEquals(2, estadisticas.getMejorRachaDias());
+	}
+
+	@Test
+	public void testRegistrarAccesoSaltoDeDias() {
+		LocalDateTime dia1 = LocalDateTime.of(2024, 4, 10, 10, 0);
+		LocalDateTime dia3 = LocalDateTime.of(2024, 4, 12, 9, 0); // no consecutivo
+
+		estadisticas.registrarAcceso(dia1);
+		estadisticas.registrarAcceso(dia3);
+
+		assertEquals(1, estadisticas.getMejorRachaDias());
+	}
+
+	@Test
+	public void testRegistrarCierreSumaTiempo() {
+		LocalDateTime inicio = LocalDateTime.of(2024, 4, 15, 10, 0);
+		LocalDateTime cierre = LocalDateTime.of(2024, 4, 15, 10, 30); // 1800 segundos de sesión
+
+		estadisticas.registrarAcceso(inicio);
+		estadisticas.registrarCierre(cierre);
+
+		assertEquals(1800, estadisticas.getTiempoTotalDeUso());
+	}
+
 
 }

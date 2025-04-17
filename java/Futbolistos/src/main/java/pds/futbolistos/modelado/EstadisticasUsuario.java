@@ -13,7 +13,7 @@ public class EstadisticasUsuario {
 	// Atributos
 	private int preguntasRespondidas, preguntasAcertadas, cursosRealizados, cursosCreados, mejorRachaDias,
 			pistasConsultadas;
-	private int tiempoTotalDeUso; // en minutos
+	private int tiempoTotalDeUso; // en segundos
 	private LocalDateTime fechaUltimoAcceso;
 	private LocalDateTime fechaAlCerrarAplicacion;
 	private int rachaDiasActual;
@@ -81,16 +81,20 @@ public class EstadisticasUsuario {
 				+ ", tiempoTotalDeUso=" + tiempoTotalDeUso + "]";
 	}
 
-	public void actualizar(SesionCurso s, boolean completado) {
-		if (completado)
-			this.cursosRealizados++;
+	public void actualizarTrasAcabarSesion(SesionCurso s) {
+		this.cursosRealizados++;
 		this.preguntasAcertadas += s.getPuntuacion();
 		this.preguntasRespondidas += s.getNumeroPreguntasRespondidas();
 		this.pistasConsultadas += 3 - s.getPistasRestantes();
 	}
 
 	public void registrarAcceso() {
-		LocalDate hoy = LocalDate.now();
+		registrarAcceso(LocalDateTime.now());
+	}
+	
+	// Con parámetro para realizar tests
+	public void registrarAcceso(LocalDateTime fechaActual) {
+		LocalDate hoy = fechaActual.toLocalDate();
 		if (fechaUltimoAcceso != null) {
 			LocalDate ultimo = fechaUltimoAcceso.toLocalDate();
 			if (ultimo.plusDays(1).isEqual(hoy)) {
@@ -101,12 +105,17 @@ public class EstadisticasUsuario {
 		} else { // Primer dia despues del primer login
 			rachaDiasActual = 1;
 		}
-		fechaUltimoAcceso = LocalDateTime.now();
+		fechaUltimoAcceso = fechaActual;
 		actualizarMejorRacha(rachaDiasActual);
 	}
 
 	public void registrarCierre() {
-		this.fechaAlCerrarAplicacion = LocalDateTime.now();
+		registrarCierre(LocalDateTime.now());
+	}
+	
+	// Con parámetro para realizar tests
+	public void registrarCierre(LocalDateTime fechaCierre) {
+		this.fechaAlCerrarAplicacion = fechaCierre;
 		if (fechaUltimoAcceso != null && fechaAlCerrarAplicacion.isAfter(fechaUltimoAcceso)) {
 			long segundos = Duration.between(fechaUltimoAcceso, fechaAlCerrarAplicacion).getSeconds();
 			sumarTiempo(segundos);
