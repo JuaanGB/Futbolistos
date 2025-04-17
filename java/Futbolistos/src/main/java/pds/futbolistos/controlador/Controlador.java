@@ -19,8 +19,10 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import pds.futbolistos.bd.BaseDeDatos;
 import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
+import pds.futbolistos.factorias.FactoriaObjectMapper;
 import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.Curso;
+import pds.futbolistos.modelado.EstadisticasUsuario;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.PreguntaCompletar;
 import pds.futbolistos.modelado.PreguntaFlashcard;
@@ -34,6 +36,7 @@ public class Controlador {
 	private static Controlador instancia;
 
 	private final FactoriaEstrategiasAprendizaje factoriaEstrategias;
+	private final FactoriaObjectMapper factoriaMapper;
 	private final BaseDeDatos bbdd;
 
 	private Usuario usuarioAct;
@@ -42,11 +45,13 @@ public class Controlador {
 	private Controlador() {
 		bbdd = new BaseDeDatos();
 		factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+		this.factoriaMapper = FactoriaObjectMapper.getInstancia();
 	}
 
 	public Controlador(BaseDeDatos bbdd) {
 	
 		this.factoriaEstrategias = FactoriaEstrategiasAprendizaje.getInstancia();
+		this.factoriaMapper = FactoriaObjectMapper.getInstancia();
 		this.bbdd = bbdd;
 	}
 
@@ -145,10 +150,13 @@ public class Controlador {
 	}
 	
 	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
+	public EstadisticasUsuario getEstadisticasDeUsuarioAct() {
+		return usuarioAct.getEstadisticas();
+	}
 	
 	// TODO: CASO DE USO: IMPORTAR CURSO
-	public boolean importarCurso(File f) {
-		ObjectMapper objectMapper = new ObjectMapper();
+	public boolean importarCurso(File f, String formato) {
+		ObjectMapper objectMapper = factoriaMapper.getMapper(formato);
 		try {
 			Curso c = objectMapper.readValue(f, Curso.class);
 			bbdd.usuarioImportaCurso(usuarioAct, c);

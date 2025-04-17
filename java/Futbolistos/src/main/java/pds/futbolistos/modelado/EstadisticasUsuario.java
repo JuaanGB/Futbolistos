@@ -3,9 +3,20 @@ package pds.futbolistos.modelado;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapKeyColumn;
 
 @Embeddable
 public class EstadisticasUsuario {
@@ -18,6 +29,11 @@ public class EstadisticasUsuario {
 	private LocalDateTime fechaAlCerrarAplicacion;
 	private int rachaDiasActual;
 
+	@ElementCollection
+	@MapKeyColumn(name = "fecha") // La clave es la fecha localdate
+	@Column(name = "racha") // Columna que almacena el valor de la racha para ese dia
+	@CollectionTable(name = "HISTORIAL_RACHA", joinColumns = @JoinColumn(name = "nombre_usuario"))
+	private Map<LocalDate, Integer> historialRachas;
 
 	// Constructor
 	public EstadisticasUsuario() {
@@ -28,6 +44,7 @@ public class EstadisticasUsuario {
 		this.mejorRachaDias = 0;
 		this.pistasConsultadas = 0;
 		this.tiempoTotalDeUso = 0;
+		this.historialRachas = new LinkedHashMap<>();
 	}
 
 	// Getters
@@ -55,9 +72,42 @@ public class EstadisticasUsuario {
 		return tiempoTotalDeUso;
 	}
 
+	public String getTiempoTotalDeUsoFormateado() {
+		int horas = tiempoTotalDeUso / 3600;
+		int minutos = (tiempoTotalDeUso % 3600) / 60;
+		return horas + "h " + minutos + "min";
+	}
+
 	public int getPistasConsultadas() {
 		return pistasConsultadas;
 	}
+
+	public int getRachaDiasActual() {
+		return rachaDiasActual;
+	}
+
+	// Devolvemos las 10 últimas entradas para no saturar el gráfico de la vista
+	public Map<LocalDate, Integer> getHistorialRachas(int numDias) {
+		List<Map.Entry<LocalDate, Integer>> entradas = new ArrayList<>(historialRachas.entrySet());
+
+		int total = entradas.size();
+		int desde = Math.max(0, total - numDias);
+
+		List<Map.Entry<LocalDate, Integer>> ultimasEntradas = entradas.subList(desde, total);
+
+		// Ahora las invertimos porque el orden es el de inserción
+		List<Map.Entry<LocalDate, Integer>> ordenCronologico = new ArrayList<>(ultimasEntradas);
+		Collections.reverse(ordenCronologico);
+
+		// Las pasamos a un LinkedHashMap para mantener ese orden
+		Map<LocalDate, Integer> resultado = new LinkedHashMap<>();
+		for (Map.Entry<LocalDate, Integer> entry : ordenCronologico) {
+			resultado.put(entry.getKey(), entry.getValue());
+		}
+
+		return resultado;
+	}
+
 
 	// Funcionalidad
 	public void incrementarCursosCreados() {
@@ -91,7 +141,7 @@ public class EstadisticasUsuario {
 	public void registrarAcceso() {
 		registrarAcceso(LocalDateTime.now());
 	}
-	
+
 	// Con parámetro para realizar tests
 	public void registrarAcceso(LocalDateTime fechaActual) {
 		LocalDate hoy = fechaActual.toLocalDate();
@@ -107,12 +157,13 @@ public class EstadisticasUsuario {
 		}
 		fechaUltimoAcceso = fechaActual;
 		actualizarMejorRacha(rachaDiasActual);
+		historialRachas.put(hoy, rachaDiasActual);
 	}
 
 	public void registrarCierre() {
 		registrarCierre(LocalDateTime.now());
 	}
-	
+
 	// Con parámetro para realizar tests
 	public void registrarCierre(LocalDateTime fechaCierre) {
 		this.fechaAlCerrarAplicacion = fechaCierre;
@@ -125,6 +176,5 @@ public class EstadisticasUsuario {
 	public void reiniciarFechaDeUltimoAcceso() {
 		this.fechaUltimoAcceso = LocalDateTime.now();
 	}
-
 
 }

@@ -76,6 +76,7 @@ public class Usuario {
 	}
 	
 	public boolean addCursoImportado(Curso c) {
+		estadisticas.incrementarCursosCreados();
 		return this.cursosImportados.add(c);
 	}
 

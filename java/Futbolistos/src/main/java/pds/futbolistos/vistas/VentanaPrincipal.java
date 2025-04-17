@@ -84,7 +84,7 @@ public class VentanaPrincipal extends JFrame {
         JButton btnEstadsticas = FactoriaComponentes.crearBoton("Estadísticas");
         btnEstadsticas.setPreferredSize(new Dimension(200, 50));
         btnEstadsticas.setIcon(loadScaledImage("/pds/futbolistos/imagenes/tendencia.png", 32, 32));
-        btnEstadsticas.addActionListener( e -> System.out.println(Controlador.getInstancia().getUsuarioAct().getEstadisticas()));
+        btnEstadsticas.addActionListener( e -> new VentanaEstadisticasUsuario().setVisible(true));
 
         // Botón "Cargar Curso"
         JButton btnCargarCurso = FactoriaComponentes.crearBoton("Cargar curso");
@@ -143,7 +143,7 @@ public class VentanaPrincipal extends JFrame {
             System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
             System.out.println("Extensión: " + extension);
 
-			if (Controlador.getInstancia().importarCurso(archivoSeleccionado)) {
+			if (Controlador.getInstancia().importarCurso(archivoSeleccionado, extension)) {
 				JOptionPane.showMessageDialog(null, "¡Curso importado correctamente!", "Importación exitosa",
 						JOptionPane.INFORMATION_MESSAGE);
 				actualizarCursosDisponibles();
