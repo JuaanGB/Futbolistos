@@ -1,5 +1,6 @@
 package pds.futbolistos.bd;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,8 @@ public class BaseDeDatos {
 		Usuario u = em.find(Usuario.class, nombre);
 		u.actualizarRachaDeDias();
 		u.reiniciarFechaUltimoAcceso();
-		Hibernate.initialize(u.getCursosImportados());
+		//Hibernate.initialize(u.getCursosImportados());
+		// u.getCursosImportados().forEach(em::detach); // Los desvinculo del contexto porque no se modifican dentro de la app.
 		cerrarTransaccion();
 		return u;
 	}
@@ -107,8 +109,8 @@ public class BaseDeDatos {
 
 	public void usuarioImportaCurso(Usuario u, Curso c) {
 		iniciarTransaccion();
-		em.persist(u);
 		u.addCursoImportado(c); // Lo mismo, no sé si por aliasing el usuarioAct de Controlador tendrá el curso.
+		em.persist(c);
 		cerrarTransaccion();
 	}
 

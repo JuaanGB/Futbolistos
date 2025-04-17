@@ -1,0 +1,61 @@
+nombre: "Técnicas Básicas de Fútbol"
+descripcion: "Aprende las técnicas esenciales para jugar al fútbol, \ncomo el pase, el regate y el disparo."
+imagen_url: "https://example.com/images/futbol_basico.jpg"
+bloques_de_contenido:
+  - preguntas:
+      - tipo_pregunta: "flashcard"
+        segundos: 15
+        anverso: "¿Qué número de camiseta lleva Lionel Messi en el PSG?"
+        reverso: "Lionel Messi lleva el número 30 en el PSG."
+      - tipo_pregunta: "test"
+        enunciado: "¿Cuántos jugadores tiene un equipo de fútbol en el campo al inicio del partido?"
+        pista: "Piensa en los titulares sin contar suplentes."
+        segundos: 10
+        respuestas:
+          - "10"
+          - "11"
+          - "12"
+          - "9"
+        respuesta_correcta: "11"
+      - tipo_pregunta: "completar"
+        enunciado: "¿Quién ganó la Copa del Mundo de la FIFA 2018?"
+        pista: "Es un país europeo con una rica historia futbolística"
+        segundos: 10
+        respuesta_correcta: "Francia"
+  - preguntas:
+      - tipo_pregunta: "test"
+        enunciado: "¿Qué parte del cuerpo no pueden usar los jugadores de campo, excepto el portero?"
+        pista: null
+        segundos: 10
+        respuestas:
+          - "Las manos"
+          - "Los pies"
+          - "La cabeza"
+          - "El pecho"
+        respuesta_correcta: "Las manos"
+      - tipo_pregunta: "test"
+        enunciado: "¿Cuántos minutos dura un partido de fútbol profesional sin contar el tiempo añadido?"
+        pista: "Se divide en dos mitades iguales."
+        segundos: 10
+        respuestas:
+          - "80"
+          - "90"
+          - "100"
+          - "120"
+        respuesta_correcta: "90"
+      - tipo_pregunta: "test"
+        enunciado: "¿Cómo se llama el tiro libre directo desde los once metros en el área rival?"
+        pista: "Se concede por una falta grave dentro del área."
+        segundos: 10
+        respuestas:
+          - "Falta"
+          - "Córner"
+          - "Penalti"
+          - "Saque de banda"
+        respuesta_correcta: "Penalti"
+      - tipo_pregunta: "completar"
+        enunciado: "¿Quién es el mejor jugador de todos los tiempos?"
+        pista: "Es un jugador argentino"
+        segundos: 10
+        respuesta_correcta: "Lionel Messi"
+

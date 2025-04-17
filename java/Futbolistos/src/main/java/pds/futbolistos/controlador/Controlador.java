@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
+
 import org.hibernate.Hibernate;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
@@ -158,14 +161,43 @@ public class Controlador {
 	public boolean importarCurso(File f, String formato) {
 		ObjectMapper objectMapper = factoriaMapper.getMapper(formato);
 		try {
-			Curso c = objectMapper.readValue(f, Curso.class);
+			JsonNode rootNode = objectMapper.readTree(f);
+			String urlImagenCurso = rootNode.get("imagen_url").asText();
+			File imagenCursoFile = new File(f.getParentFile(), urlImagenCurso);
+
+			Curso c = objectMapper.treeToValue(rootNode, Curso.class);
+
+			try {
+				c.setImagen(ImageIO.read(imagenCursoFile));
+			} catch (IOException e) {
+				System.err.println("No se pudo leer la imagen del curso: " + imagenCursoFile.getAbsolutePath());
+			}
+
+			for (BloqueDeContenido bloque : c.getBloquesDeContenido()) {
+				for (Pregunta pregunta : bloque.getPreguntas()) {
+					String urlPregunta = pregunta.getImagenURL();
+					if (urlPregunta != null && !urlPregunta.isBlank()) {
+						File imgPreguntaFile = new File(f.getParentFile(), urlPregunta);
+						try {
+							pregunta.setImagen(ImageIO.read(imgPreguntaFile));
+						} catch (IOException e) {
+							System.err.println(
+									"No se pudo cargar la imagen de la pregunta: " + imgPreguntaFile.getAbsolutePath());
+						}
+					}
+				}
+			}
+
+			// Guardamos el curso
 			bbdd.usuarioImportaCurso(usuarioAct, c);
 			return true;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
 	public void actualizarEstadisticasUsuario(boolean completado) {

@@ -28,6 +28,9 @@ public class PanelCurso extends JPanel {
 
 		// Panel para la imagen (si existe)
 		JLabel imagenLabel = new JLabel();
+		if (curso.hasImagen()) {
+			imagenLabel.setIcon(new ImageIcon(curso.getImagen()));
+		}
 
 		// Nombre del curso con estilo acorde a la estética
 		JLabel nombreLabel = FactoriaComponentes.crearLabel(curso.getNombre());
@@ -48,13 +51,13 @@ public class PanelCurso extends JPanel {
 		// Panel para los botones con fondo acorde
 		JPanel botonesPanel = new JPanel();
 		botonesPanel.setBackground(new Color(30, 30, 30));
-		botonesPanel.add(infoButton);
 		botonesPanel.add(comenzarButton);
+		botonesPanel.add(infoButton);
 
 		// Agregar componentes al panel
 		add(imagenLabel, BorderLayout.WEST);
-		add(nombreLabel, BorderLayout.CENTER);
-		add(botonesPanel, BorderLayout.SOUTH);
+		add(nombreLabel, BorderLayout.NORTH);
+		add(botonesPanel, BorderLayout.CENTER);
 	}
 	
 	private void comprobarCursoGuardadoOIniciar(Curso c) {
