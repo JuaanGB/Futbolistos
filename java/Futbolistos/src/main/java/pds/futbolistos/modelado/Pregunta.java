@@ -1,11 +1,15 @@
 package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -18,6 +22,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import pds.futbolistos.modelado.convertidores.ConversorBufferedImage;
 
 @Entity
@@ -44,7 +49,7 @@ public abstract class Pregunta {
 	private String pista;
 	@JsonProperty
 	private int segundos;
-	@Lob
+	@Transient
 	@JsonProperty("imagen_url")
 	private String imagenURL;
 	@Convert(converter = ConversorBufferedImage.class)
@@ -86,6 +91,10 @@ public abstract class Pregunta {
 	
 	public void setImagen(BufferedImage imagen) {
 		this.imagen = imagen;
+	}
+	
+	public boolean hasImagen() {
+		return this.imagen != null;
 	}
 
 	// Funcionalidad

@@ -30,6 +30,8 @@ public abstract class PanelPregunta extends JPanel {
 	
 	// VentanaCurso
 	protected VentanaCurso ventanaCurso;
+	
+	private Pregunta p;
 
 	public PanelPregunta(Pregunta p) {
 
@@ -42,6 +44,7 @@ public abstract class PanelPregunta extends JPanel {
 				ventanaCurso = (VentanaCurso)SwingUtilities.getWindowAncestor(PanelPregunta.this);
             }
 		});
+		this.p = p;
 		inicializarComponentes();
 		personalizarDisplay(p);
 		empezarTemporizador();
@@ -133,10 +136,12 @@ public abstract class PanelPregunta extends JPanel {
 		add(Box.createVerticalGlue());
 
 		// Se carga la imagen escalada (se utiliza el mismo recurso que en VentanaPrincipal)
-		lblFoto = new JLabel("");
-		lblFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
-		lblFoto.setIcon(new ImageIcon(PanelPregunta.class.getResource("/pds/futbolistos/imagenes/flag-football.png")));
-		add(lblFoto);
+		if (p.hasImagen()) {
+			lblFoto = new JLabel("");
+			lblFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+			lblFoto.setIcon(new ImageIcon(p.getImagen()));
+			add(lblFoto);
+		}
 
 		add(Box.createVerticalGlue());
 

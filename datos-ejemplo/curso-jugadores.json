@@ -1,0 +1,171 @@
+{
+  "nombre": "Jugadores de Fútbol Legendarios",
+  "descripcion": "Conoce a los jugadores más icónicos de la historia del fútbol: sus logros, equipos y curiosidades.",
+  "imagen_url": "curso-jugadores/curso.png",
+  "bloques_de_contenido": [
+    {
+      "preguntas": [
+        {
+          "tipo_pregunta": "flashcard",
+          "segundos": 15,
+          "imagen_url": "curso-jugadores/1.png",
+          "anverso": "¿Qué número utilizó Diego Maradona en el Mundial de 1986?",
+          "reverso": "El número 10."
+        },
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Con qué selección ganó Cristiano Ronaldo la Eurocopa en 2016?",
+          "pista": "Es su país de origen.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/2.png",
+          "respuestas": [
+            "España",
+            "Portugal",
+            "Francia",
+            "Italia"
+          ],
+          "respuesta_correcta": "Portugal"
+        },
+        {
+          "tipo_pregunta": "completar",
+          "enunciado": "¿Quién es el máximo goleador de la historia del FC Barcelona?",
+          "pista": "Es argentino y ha ganado 7 Balones de Oro.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/3.png",
+          "respuesta_correcta": "Lionel Messi"
+        },
+        {
+          "tipo_pregunta": "flashcard",
+          "segundos": 15,
+          "imagen_url": "curso-jugadores/4.png",
+          "anverso": "¿Qué jugador brasileño es famoso por su apodo 'O Rei'?",
+          "reverso": "Pelé"
+        },
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Qué equipo europeo fichó a Erling Haaland en 2022?",
+          "pista": "Es de la Premier League y juega de celeste.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/5.png",
+          "respuestas": [
+            "Chelsea",
+            "Real Madrid",
+            "Manchester City",
+            "Bayern Múnich"
+          ],
+          "respuesta_correcta": "Manchester City"
+        }
+      ]
+    },
+    {
+      "preguntas": [
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Qué jugador argentino marcó un gol con 'la mano de Dios'?",
+          "pista": "Fue en el Mundial de 1986.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/6.png",
+          "respuestas": [
+            "Carlos Tévez",
+            "Lionel Messi",
+            "Diego Maradona",
+            "Javier Zanetti"
+          ],
+          "respuesta_correcta": "Diego Maradona"
+        },
+        {
+          "tipo_pregunta": "completar",
+          "enunciado": "¿Qué jugador francés ganó el Balón de Oro en 2022?",
+          "pista": "Del Real Madrid, delantero.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/7.png",
+          "respuesta_correcta": "Karim Benzema"
+        },
+        {
+          "tipo_pregunta": "flashcard",
+          "segundos": 15,
+          "imagen_url": "curso-jugadores/8.png",
+          "anverso": "¿Qué jugador sueco es conocido por su ego y carisma?",
+          "reverso": "Zlatan Ibrahimović"
+        },
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Qué dorsal usaba Ronaldinho en el FC Barcelona?",
+          "pista": "El clásico número de los creativos.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/9.png",
+          "respuestas": [
+            "7",
+            "8",
+            "10",
+            "11"
+          ],
+          "respuesta_correcta": "10"
+        },
+        {
+          "tipo_pregunta": "completar",
+          "enunciado": "¿Quién es el portero español que ganó el Mundial 2010 y fue capitán?",
+          "pista": "Jugó en el Real Madrid y el Porto.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/10.png",
+          "respuesta_correcta": "Iker Casillas"
+        }
+      ]
+    },
+    {
+      "preguntas": [
+        {
+          "tipo_pregunta": "flashcard",
+          "segundos": 15,
+          "imagen_url": "curso-jugadores/11.png",
+          "anverso": "¿Qué jugador alemán marcó 16 goles en Mundiales, siendo el máximo goleador histórico?",
+          "reverso": "Miroslav Klose"
+        },
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Qué jugador fue apodado 'La Pulga'?",
+          "pista": "Es argentino.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/12.png",
+          "respuestas": [
+            "Sergio Agüero",
+            "Carlos Tévez",
+            "Ángel Di María",
+            "Lionel Messi"
+          ],
+          "respuesta_correcta": "Lionel Messi"
+        },
+        {
+          "tipo_pregunta": "test",
+          "enunciado": "¿Qué delantero uruguayo jugó en el PSG y el Manchester United?",
+          "pista": "Es conocido por su entrega y garra charrúa.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/13.png",
+          "respuestas": [
+            "Luis Suárez",
+            "Edinson Cavani",
+            "Diego Forlán",
+            "Darwin Núñez"
+          ],
+          "respuesta_correcta": "Edinson Cavani"
+        },
+        {
+          "tipo_pregunta": "completar",
+          "enunciado": "¿Quién fue el capitán de Italia cuando ganaron el Mundial 2006?",
+          "pista": "Defensor central, jugó en la Juventus.",
+          "segundos": 10,
+          "imagen_url": "curso-jugadores/14.png",
+          "respuesta_correcta": "Fabio Cannavaro"
+        },
+        {
+          "tipo_pregunta": "flashcard",
+          "segundos": 15,
+          "imagen_url": "curso-jugadores/15.png",
+          "anverso": "¿Qué jugador portugués es conocido por su celebración con el grito 'Siuuu'?",
+          "reverso": "Cristiano Ronaldo"
+        }
+      ]
+    }
+  ]
+}
+

@@ -42,7 +42,7 @@ public class Curso {
 	@Lob
 	@JsonProperty
 	private String descripcion;
-	@Lob
+	@Transient // No me hace falta. Quiero persistir la imagen en sí.
 	@JsonProperty("imagen_url")
 	private String imagenURL;
 	@Convert(converter = ConversorBufferedImage.class)
@@ -78,20 +78,6 @@ public class Curso {
 	public String getDescripcion() {
 		return descripcion;
 	}
-	
-	@JsonSetter("imagen_url")
-	public void setImagenURL(String imagenURL) {
-		this.imagenURL = imagenURL;
-		try {
-			// Intenta cargar la imagen desde la URL proporcionada
-			File imageFile = new File(imagenURL);
-			this.imagen = ImageIO.read(imageFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-			this.imagen = null; // Si no se puede cargar la imagen, la dejamos como null
-		}
-	}
-
 
 	public String getImagenURL() {
 		return imagenURL;
