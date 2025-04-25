@@ -100,6 +100,9 @@ public class BaseDeDatos {
 		return sesionesCurso.stream().anyMatch(sc -> sc.hasCurso(c));
 	}
 
+	// Hay un bug:
+	// Inicio una sesión y la guardo. La vuelvo a abrir sin cerrar la aplicación. Respondo una pregunta. Cierro la ventana (con la X).
+	// El curso se persistía porque al hacer em.persist(sc) se guardaba en el contexto.
 	public void guardarProgresoCurso(Usuario u, SesionCurso sc) {
 		iniciarTransaccion();
 		em.persist(u);
