@@ -7,6 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -23,9 +25,10 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import pds.futbolistos.modelado.convertidores.ConversorBufferedImage;
+import pds.futbolistos.modelado.convertidores.ConversorImagenJPA;
 
 @Entity
+@DynamicUpdate
 @Table(name = "PREGUNTAS")
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "tipo_pregunta")
@@ -52,13 +55,13 @@ public abstract class Pregunta {
 	@Transient
 	@JsonProperty("imagen_url")
 	private String imagenURL;
-	@Convert(converter = ConversorBufferedImage.class)
+	@Convert(converter = ConversorImagenJPA.class)
 	@JsonIgnore
-	private BufferedImage imagen;
+	private ImagenJPA imagen;
 	
 	// Constructor
 	public Pregunta() {
-		
+		this.imagen = new ImagenJPA();
 	}
 	
 	public Pregunta(String enunciado, String pista, int segundos) {
@@ -82,7 +85,7 @@ public abstract class Pregunta {
 	}
 	
 	public BufferedImage getImagen() {
-		return imagen;
+		return imagen.getImagen();
 	}
 	
 	public String getImagenURL() {
@@ -90,7 +93,7 @@ public abstract class Pregunta {
 	}
 	
 	public void setImagen(BufferedImage imagen) {
-		this.imagen = imagen;
+		this.imagen.setImagen(imagen);
 	}
 	
 	public boolean hasImagen() {

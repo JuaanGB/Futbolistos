@@ -33,7 +33,7 @@ public class Usuario {
 	private String nombreUsuario;
 	@Lob
 	private String contraseña;
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "usuario")
 	private List<SesionCurso> sesionesCurso;
 	@Embedded
 	private EstadisticasUsuario estadisticas;

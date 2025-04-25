@@ -10,6 +10,8 @@ import java.util.Set;
 
 import javax.imageio.ImageIO;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -25,9 +27,10 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import pds.futbolistos.modelado.convertidores.ConversorBufferedImage;
+import pds.futbolistos.modelado.convertidores.ConversorImagenJPA;
 
 @Entity
+@DynamicUpdate
 @Table(name = "CURSOS")
 public class Curso {
 
@@ -45,9 +48,9 @@ public class Curso {
 	@Transient // No me hace falta. Quiero persistir la imagen en sí.
 	@JsonProperty("imagen_url")
 	private String imagenURL;
-	@Convert(converter = ConversorBufferedImage.class)
+	@Convert(converter = ConversorImagenJPA.class)
 	@JsonIgnore
-	private BufferedImage imagen;
+	private ImagenJPA imagen;
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "curso_id")
 	@JsonProperty("bloques_de_contenido")
@@ -56,6 +59,7 @@ public class Curso {
 	// Constructor
 	public Curso() {
 		this.bloquesDeContenido = new HashSet<>();
+		this.imagen = new ImagenJPA(); // Cargar imagen
 	}
 
 	public Curso(String nombre, String descripcion, String imagenURL) {
@@ -63,7 +67,6 @@ public class Curso {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.imagenURL = imagenURL;
-		this.imagen = null; // Cargar imagen
 	}
 
 	// Getters y setters
@@ -84,7 +87,7 @@ public class Curso {
 	}
 	
 	public void setImagen(BufferedImage imagen) {
-		this.imagen = imagen;
+		this.imagen.setImagen(imagen);
 	}
 	
 	public boolean hasImagen() {
@@ -92,7 +95,7 @@ public class Curso {
 	}
 
 	public BufferedImage getImagen() {
-		return imagen;
+		return imagen.getImagen();
 	}
 
 	public Set<BloqueDeContenido> getBloquesDeContenido() {
