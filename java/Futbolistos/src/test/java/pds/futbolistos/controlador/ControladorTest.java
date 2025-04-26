@@ -69,7 +69,7 @@ public class ControladorTest {
 		
 		// Simulamos que hay un usuario en el repositorio
 		when(bbddMock.existeUsuario(USUARIO_EXISTENTE)).thenReturn(true);
-		when(bbddMock.getUsuario(USUARIO_EXISTENTE))
+		when(bbddMock.getUsuario(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE))
 				.thenReturn(usuarioFalso);
 
 		// simulamos el comportamiento del repositorio ante el registro de un usuario
@@ -77,7 +77,7 @@ public class ControladorTest {
 		when(bbddMock.existeUsuario(NUEVO_USUARIO)).thenReturn(false);
 		when(bbddMock.addUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO))
 				.thenReturn(new Usuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO));
-		when(bbddMock.getUsuario(NUEVO_USUARIO)).thenReturn(null);
+		when(bbddMock.getUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO)).thenReturn(null);
 		
 	}
 
@@ -89,7 +89,7 @@ public class ControladorTest {
 		assertNotNull(autenticado, "El usuario debería poder autenticarse si existe y la contraseña es correcta");
 		assertEquals(USUARIO_EXISTENTE, autenticado.getNombreUsuario(),
 				"El nombre de usuario autenticado debería coincidir");
-		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE, CONTRASEÑA_USUARIO_EXISTENTE);
 	}
 
 	@Test
@@ -97,15 +97,15 @@ public class ControladorTest {
 
 		Usuario autenticado = controlador.autenticar(USUARIO_EXISTENTE, "contraseñaIncorrecta");
 		assertNull(autenticado, "El usuario no debería poder autenticarse con una contraseña incorrecta");
-		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE);
+		verify(bbddMock, times(1)).getUsuario(USUARIO_EXISTENTE, "contraseñaIncorrecta");
 	}
 
 	@Test
 	public void testAutenticar_UsuarioNoExistente() {
 
-		Usuario autenticado = controlador.autenticar(NUEVO_USUARIO, "");
+		Usuario autenticado = controlador.autenticar(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO);
 		assertNull(autenticado, "El usuario no debería poder autenticarse si no existe");
-		verify(bbddMock, times(1)).getUsuario(NUEVO_USUARIO);
+		verify(bbddMock, times(1)).getUsuario(NUEVO_USUARIO, CONTRASEÑA_NUEVO_USUARIO);
 	}
 
 	/* ----------- TESTS DE REGISTRO ---------- */

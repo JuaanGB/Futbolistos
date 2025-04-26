@@ -83,7 +83,7 @@ public class Controlador {
 
 	// CASO DE USO: INICIAR SESIÓN EN EL SISTEMA
 	public Usuario autenticar(String nombreUsuario, String contraseña) {
-		Usuario u = bbdd.getUsuario(nombreUsuario);
+		Usuario u = bbdd.getUsuario(nombreUsuario, contraseña);
 		if (u != null && u.checkContraseña(contraseña)) {
 			this.usuarioAct = u;
 			return u;

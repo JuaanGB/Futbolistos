@@ -73,11 +73,13 @@ public class BaseDeDatos {
 		return u != null;
 	}
 
-	public Usuario getUsuario(String nombre) {
+	public Usuario getUsuario(String nombre, String contraseña) {
 		iniciarTransaccion();
 		Usuario u = em.find(Usuario.class, nombre);
-		u.actualizarRachaDeDias();
-		u.reiniciarFechaUltimoAcceso();
+		if (u != null && u.checkContraseña(contraseña)) {
+			u.actualizarRachaDeDias();
+			u.reiniciarFechaUltimoAcceso();
+		}
 		//Hibernate.initialize(u.getCursosImportados());
 		// u.getCursosImportados().forEach(em::detach); // Los desvinculo del contexto porque no se modifican dentro de la app.
 		cerrarTransaccion();
