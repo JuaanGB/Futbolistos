@@ -33,7 +33,7 @@ public class Usuario {
 	private String nombreUsuario;
 	@Lob
 	private String contraseña;
-	@OneToMany(mappedBy = "usuario")
+	@OneToMany(mappedBy = "usuario", cascade = {})
 	private List<SesionCurso> sesionesCurso;
 	@Embedded
 	private EstadisticasUsuario estadisticas;
@@ -109,6 +109,16 @@ public class Usuario {
 				.filter( sc -> sc.hasCurso(c))
 				.findFirst()
 				.orElse(null);
+	}
+	
+	public boolean hasSesion(Curso c) {
+		return sesionesCurso.stream()
+				.anyMatch( sc -> sc.hasCurso(c));
+	}
+	
+	public void sustituirSesionEvadirContextoPersistencia(SesionCurso aEliminar, SesionCurso nueva) {
+		removeSesion(aEliminar);
+		sesionesCurso.add(nueva);
 	}
 	
 	// Llamado al iniciar sesión

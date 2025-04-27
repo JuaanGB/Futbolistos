@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,18 +22,19 @@ import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 
 @Entity
 @Table(name = "SESIONES_CURSO")
+@DynamicUpdate
 public class SesionCurso {
 
 	// Atributos
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne//(cascade = CascadeType.ALL)
 	@JoinColumn(name = "curso_id")
 	private Curso curso;
 	@Transient // No es necesario porque la estrategia ya va implícita en el orden de las preguntas
 	private EstrategiaAprendizaje estrategia;
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = {CascadeType.PERSIST})
 	@JoinTable(name = "SESIONES_CURSO_PREGUNTAS_RESTANTES")
 	private List<Pregunta> preguntasRestantes; // Inicializada al orden concreto de la estrategia. Conforme respondemos las eliminamos.
 	private int puntuacion; // 0 mal, 1 bien
@@ -133,6 +136,19 @@ public class SesionCurso {
 		return this.curso.equals(c);
 	}
 	
+	public SesionCurso clonarParaEvadirContextoPersistencia() {
+		SesionCurso nueva = new SesionCurso();
+		nueva.curso = this.curso;
+		//nueva.id = this.id;
+		nueva.numeroPreguntasRespondidas = this.numeroPreguntasRespondidas;
+		nueva.numTotalPreguntas = this.numTotalPreguntas;
+		nueva.pistasRestantes = this.pistasRestantes;
+		nueva.preguntasRestantes = this.preguntasRestantes;
+		nueva.puntuacion = this.puntuacion;
+		nueva.usuario = this.usuario;	
+		return nueva;
+		
+	}
 
 	
 }

@@ -149,15 +149,18 @@ public class Controlador {
 	}
 	
 	public boolean usuarioHasSesion(Curso c) {
-		return bbdd.usuarioHasSesion(usuarioAct, c);
+		boolean res = usuarioAct.hasSesion(c);
+		//bbdd.detachSesiones(usuarioAct);
+		// return bbdd.usuarioHasSesion(usuarioAct, c);
+		return res;
 	}
 	
-	// TODO: CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
+	// CASO DE USO: MOSTRAR ESTADÍSTICAS DE USUARIO
 	public EstadisticasUsuario getEstadisticasDeUsuarioAct() {
 		return usuarioAct.getEstadisticas();
 	}
 	
-	// TODO: CASO DE USO: IMPORTAR CURSO
+	// CASO DE USO: IMPORTAR CURSO
 	public boolean importarCurso(File f, String formato) {
 		ObjectMapper objectMapper = factoriaMapper.getMapper(formato);
 		try {
@@ -210,6 +213,7 @@ public class Controlador {
 	}
 	
 	public void actualizarEstadisticaDeTiempo() {
+		bbdd.detachSesiones(usuarioAct);
 		try {
 			bbdd.actualizarEstadisticasDeTiempo(usuarioAct);
 		} catch (Exception e) {
