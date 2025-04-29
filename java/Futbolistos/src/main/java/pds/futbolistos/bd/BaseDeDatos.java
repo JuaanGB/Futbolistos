@@ -103,7 +103,8 @@ public class BaseDeDatos {
 		iniciarTransaccion();
 		u.actualizarEstadisticas(sc);
 		u.removeSesion(sc);
-		em.remove(sc);
+		if (em.contains(sc))
+			em.remove(sc);
 		em.persist(u);
 		cerrarTransaccion();
 	}

@@ -62,7 +62,7 @@ public class PreguntaCompletar extends Pregunta {
 		for (int i=0; i<longitud; i++) {
 			char c = respuesta.charAt(i);
 			if (Character.isWhitespace(c))
-				cadena.append("_");
+				cadena.append("   ");
 			if (indicesRevelados.contains(i))
 				cadena.append(c);
 			else 

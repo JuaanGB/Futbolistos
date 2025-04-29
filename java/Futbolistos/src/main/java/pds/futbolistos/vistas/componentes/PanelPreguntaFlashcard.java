@@ -38,6 +38,7 @@ public class PanelPreguntaFlashcard extends PanelPregunta {
 
         this.txtFlashcard = FactoriaComponentes.crearTextArea(3, 20);
         txtFlashcard.setFont(new Font("Arial", Font.PLAIN, 20));
+        txtFlashcard.setEditable(false);
         this.panelRespuestas.add(txtFlashcard);
 
         JPanel panelBotones = new JPanel();
@@ -84,6 +85,7 @@ public class PanelPreguntaFlashcard extends PanelPregunta {
 
         botonContinuar.addActionListener(e -> {
             detenerTemporizador(true);
+            Controlador.getInstancia().validarRespuesta(p);
             JOptionPane.showMessageDialog(this, "¡Continuamos con la siguiente pregunta!");
             this.manejarTiempoTerminado(true);
         });

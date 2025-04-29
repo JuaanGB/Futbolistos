@@ -27,22 +27,23 @@ public abstract class PanelPregunta extends JPanel {
 
 	// Actualización del tiempo
 	private int tiempoRestante;
-	
+
 	// VentanaCurso
 	protected VentanaCurso ventanaCurso;
-	
+
 	private Pregunta p;
 
 	public PanelPregunta(Pregunta p) {
 
 		this.tiempoRestante = p.getSegundos();
-		
-		// Necesario para estar seguros de que se llama al método getWindowAncestor después de que se añada
+
+		// Necesario para estar seguros de que se llama al método getWindowAncestor
+		// después de que se añada
 		// el panel a la ventana. Si no, devuelve null.
-		this.addHierarchyListener( e -> {
+		this.addHierarchyListener(e -> {
 			if ((e.getChangeFlags() & HierarchyEvent.PARENT_CHANGED) != 0) {
-				ventanaCurso = (VentanaCurso)SwingUtilities.getWindowAncestor(PanelPregunta.this);
-            }
+				ventanaCurso = (VentanaCurso) SwingUtilities.getWindowAncestor(PanelPregunta.this);
+			}
 		});
 		this.p = p;
 		inicializarComponentes();
@@ -56,7 +57,7 @@ public abstract class PanelPregunta extends JPanel {
 		timer = new Timer(1000, e -> actualizarTiempo());
 		timer.start();
 	}
-	
+
 	private void actualizarTiempo() {
 		if (tiempoRestante > 0) {
 			tiempoRestante--;
@@ -70,34 +71,38 @@ public abstract class PanelPregunta extends JPanel {
 	/**
 	 * Detiene el temporizador.
 	 * 
-	 * @param respondida true si el usuario respondió antes de tiempo, false si el tiempo se agotó
+	 * @param respondida true si el usuario respondió antes de tiempo, false si el
+	 *                   tiempo se agotó
 	 */
 	public void detenerTemporizador(boolean respondida) {
 		timer.stop();
 	}
 
-	// Método que cada tipo de pregunta implementará para manejar cuando se termine el tiempo.
+	// Método que cada tipo de pregunta implementará para manejar cuando se termine
+	// el tiempo.
 	protected final void manejarTiempoTerminado(boolean respondida) {
 		gestionarPreguntaRespondida(respondida);
-		
-		// Siempre se ejecuta el código de pasar a siguiente pregunta, independientemente del tipo de pregunta.
+
+		// Siempre se ejecuta el código de pasar a siguiente pregunta,
+		// independientemente del tipo de pregunta.
 		Pregunta p = Controlador.getInstancia().pasarASiguientePregunta();
-        if (p == null) {
-            JOptionPane.showMessageDialog(this, "¡Curso completado!");
-            this.ventanaCurso.mostrarEstadisticas();
-        } else {
-            this.ventanaCurso.actualizarPregunta(p);
-        }
+		if (p == null) {
+			JOptionPane.showMessageDialog(this, "¡Curso completado!");
+			this.ventanaCurso.mostrarEstadisticas();
+		} else {
+			this.ventanaCurso.actualizarPregunta(p);
+		}
 	}
-	
+
 	protected abstract void gestionarPreguntaRespondida(boolean respondida);
 
 	// Dibujar el panel
 	protected void personalizarDisplay(Pregunta p) {
-		txtrEnunciado.setText(p.getEnunciado());
-		if (!Controlador.getInstancia().quedanPistasDisponibles() || !p.hasPista() ) 
+		if (p.hasEnunciado())
+			txtrEnunciado.setText(p.getEnunciado());
+		if (!Controlador.getInstancia().quedanPistasDisponibles() || !p.hasPista())
 			btnPista.setEnabled(false);
-		btnPista.addActionListener( e -> {
+		btnPista.addActionListener(e -> {
 			JOptionPane.showMessageDialog(this, p.getPista());
 			Controlador.getInstancia().disminuirPistasDisponibles();
 			btnPista.setEnabled(false);
@@ -112,30 +117,34 @@ public abstract class PanelPregunta extends JPanel {
 		setBackground(new Color(30, 30, 30));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		txtrEnunciado = new JTextArea();
-		txtrEnunciado.setRows(4);
-		txtrEnunciado.setWrapStyleWord(true);
-		txtrEnunciado.setLineWrap(true);
-		txtrEnunciado.setEditable(false);
-		txtrEnunciado.setText("Enunciado de la pregunta que puede ser tan grande como se deseé. Es un JTextArea para que se ponga en varias líneas.");
-		txtrEnunciado.setBackground(new Color(30, 30, 30));
-		txtrEnunciado.setForeground(Color.WHITE);
-		txtrEnunciado.setFont(new Font("Arial", Font.PLAIN, 14));
-		// Alineación centrada dentro del JTextArea
-		txtrEnunciado.setAlignmentX(Component.CENTER_ALIGNMENT);
-		txtrEnunciado.setAlignmentY(Component.CENTER_ALIGNMENT);
-		// Eliminar borde por defecto
-		txtrEnunciado.setBorder(null);
+		if (p.hasEnunciado()) {
+			txtrEnunciado = new JTextArea();
+			txtrEnunciado.setRows(4);
+			txtrEnunciado.setWrapStyleWord(true);
+			txtrEnunciado.setLineWrap(true);
+			txtrEnunciado.setEditable(false);
+			txtrEnunciado.setText(
+					"Enunciado de la pregunta que puede ser tan grande como se deseé. Es un JTextArea para que se ponga en varias líneas.");
+			txtrEnunciado.setBackground(new Color(30, 30, 30));
+			txtrEnunciado.setForeground(Color.WHITE);
+			txtrEnunciado.setFont(new Font("Arial", Font.PLAIN, 14));
+			// Alineación centrada dentro del JTextArea
+			txtrEnunciado.setAlignmentX(Component.CENTER_ALIGNMENT);
+			txtrEnunciado.setAlignmentY(Component.CENTER_ALIGNMENT);
+			// Eliminar borde por defecto
+			txtrEnunciado.setBorder(null);
 
-		JScrollPane scrollPane = new JScrollPane(txtrEnunciado);
-		scrollPane.setMaximumSize(new Dimension(400, 100));
-		scrollPane.getViewport().setBackground(new Color(30, 30, 30));
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		add(scrollPane);
+			JScrollPane scrollPane = new JScrollPane(txtrEnunciado);
+			scrollPane.setMaximumSize(new Dimension(400, 100));
+			scrollPane.getViewport().setBackground(new Color(30, 30, 30));
+			scrollPane.setBorder(BorderFactory.createEmptyBorder());
+			add(scrollPane);
+		}
 
 		add(Box.createVerticalGlue());
 
-		// Se carga la imagen escalada (se utiliza el mismo recurso que en VentanaPrincipal)
+		// Se carga la imagen escalada (se utiliza el mismo recurso que en
+		// VentanaPrincipal)
 		if (p.hasImagen()) {
 			lblFoto = new JLabel("");
 			lblFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -175,5 +184,4 @@ public abstract class PanelPregunta extends JPanel {
 		add(lblTiempoRestante);
 	}
 
-	
 }

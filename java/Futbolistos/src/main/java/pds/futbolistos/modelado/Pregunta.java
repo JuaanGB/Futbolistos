@@ -99,6 +99,10 @@ public abstract class Pregunta {
 	public boolean hasImagen() {
 		return this.imagen != null;
 	}
+	
+	public boolean hasEnunciado() {
+		return this.enunciado != null;
+	}
 
 	// Funcionalidad
 	public abstract boolean isRespuestaValida(String respuesta);

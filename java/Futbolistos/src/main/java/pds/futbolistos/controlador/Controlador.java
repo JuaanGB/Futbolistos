@@ -133,6 +133,10 @@ public class Controlador {
 			sesionCursoAct.incrementarPuntuacion(1);
 		return correcta;
 	}
+	
+	public boolean validarRespuesta(Pregunta p) {
+		return validarRespuesta(p, null); // El texto no es necesario (pregunta flashcard)
+	}
 
 	public Pregunta pasarASiguientePregunta() {
 		return sesionCursoAct.pasarASiguientePregunta();
