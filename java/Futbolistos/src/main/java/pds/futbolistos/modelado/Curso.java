@@ -3,8 +3,11 @@ package pds.futbolistos.modelado;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -54,11 +57,11 @@ public class Curso {
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "curso_id")
 	@JsonProperty("bloques_de_contenido")
-	private final Set<BloqueDeContenido> bloquesDeContenido;
+	private final List<BloqueDeContenido> bloquesDeContenido;
 
 	// Constructor
 	public Curso() {
-		this.bloquesDeContenido = new HashSet<>();
+		this.bloquesDeContenido = new ArrayList<>();
 		this.imagen = new ImagenJPA(); // Cargar imagen
 	}
 
@@ -98,8 +101,8 @@ public class Curso {
 		return imagen.getImagen();
 	}
 
-	public Set<BloqueDeContenido> getBloquesDeContenido() {
-		return Collections.unmodifiableSet(bloquesDeContenido);
+	public List<BloqueDeContenido> getBloquesDeContenido() {
+		return Collections.unmodifiableList(bloquesDeContenido);
 	}
 
 	public boolean addBloqueDeContenido(BloqueDeContenido c) {

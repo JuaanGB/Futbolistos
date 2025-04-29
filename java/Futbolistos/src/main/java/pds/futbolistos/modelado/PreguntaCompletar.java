@@ -59,15 +59,15 @@ public class PreguntaCompletar extends Pregunta {
 		}
 		
 		StringBuilder cadena = new StringBuilder();
-		for (int i=0; i<longitud; i++) {
+		for (int i = 0; i < longitud; i++) {
 			char c = respuesta.charAt(i);
-			if (Character.isWhitespace(c))
+			if (Character.isWhitespace(c)) {
 				cadena.append("   ");
-			if (indicesRevelados.contains(i))
-				cadena.append(c);
-			else 
-				cadena.append("_");
-			cadena.append(" ");
+			} else if (indicesRevelados.contains(i)) {
+				cadena.append(Character.toUpperCase(c)).append(" ");
+			} else {
+				cadena.append("_ ");
+			}
 		}
 		
 		return cadena.toString().trim().toUpperCase();
