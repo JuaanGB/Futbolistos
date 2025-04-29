@@ -15,21 +15,36 @@ public class Registro extends JFrame {
 	public Registro() {
 		setTitle("Futbolistos - Registro");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setSize(400, 250); // Ajuste de tamaño
-		setLocationRelativeTo(null); // Centrar la ventana
-		setResizable(false);
+		setMinimumSize(new Dimension(500, 400));
+		setLocationRelativeTo(null);
 
 		FactoriaComponentes.utilizarNimbusLookAndFeel();
 
-		// Panel principal
 		JPanel mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setBackground(new Color(30, 30, 30));
+
+		// Panel superior con logo e información
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.setBackground(new Color(30, 30, 30));
+
+		ImageIcon logo = new ImageIcon(getClass().getResource("/pds/futbolistos/imagenes/logo-futbolistos.png"));
+		JLabel lblLogo = new JLabel(logo);
+		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		topPanel.add(lblLogo, BorderLayout.NORTH);
+
+		JLabel lblSubtitulo = FactoriaComponentes.crearLabel(
+				"<html><div style='text-align:center;'>¡Date de alta y disfruta de<br>cursos interesantes sobre fútbol!</div></html>",
+				SwingConstants.CENTER);
+		lblSubtitulo.setForeground(Color.WHITE);
+		topPanel.add(lblSubtitulo, BorderLayout.CENTER);
+
+		mainPanel.add(topPanel, BorderLayout.NORTH);
 
 		// Panel del formulario
 		JPanel formPanel = new JPanel(new GridBagLayout());
 		formPanel.setBackground(new Color(30, 30, 30));
 		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
+		gbc.insets = new Insets(10, 10, 10, 10);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
 		// Usuario
@@ -46,10 +61,14 @@ public class Registro extends JFrame {
 		JPasswordField txtConfirmPassword = FactoriaComponentes.crearPasswordField();
 		JCheckBox chkMostrarConfirmPassword = FactoriaComponentes.crearCheckBox("👁");
 
-		// Botón Registrar
+		// Botones
 		JButton btnRegistrar = FactoriaComponentes.crearBoton("Registrar");
+		JButton btnRegresar = FactoriaComponentes.crearBoton("Cerrar");
 
-		// Distribución de los componentes
+		btnRegistrar.setPreferredSize(new Dimension(150, 50));
+		btnRegresar.setPreferredSize(new Dimension(150, 50));
+
+		// Distribución del formulario
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 0.3;
@@ -80,16 +99,22 @@ public class Registro extends JFrame {
 		gbc.weightx = 0.1;
 		formPanel.add(chkMostrarConfirmPassword, gbc);
 
+		// Panel de botones
+		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+		panelBotones.setBackground(new Color(30, 30, 30));
+		panelBotones.add(btnRegresar);
+		panelBotones.add(btnRegistrar);
+
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		gbc.gridwidth = 3;
 		gbc.anchor = GridBagConstraints.CENTER;
-		formPanel.add(btnRegistrar, gbc);
+		formPanel.add(panelBotones, gbc);
 
 		mainPanel.add(formPanel, BorderLayout.CENTER);
 		add(mainPanel);
 
-		// Acción para mostrar/ocultar contraseñas
+		// Mostrar/ocultar contraseñas
 		ActionListener togglePasswordVisibility = e -> {
 			JCheckBox source = (JCheckBox) e.getSource();
 			if (source == chkMostrarPassword) {
@@ -102,8 +127,8 @@ public class Registro extends JFrame {
 		chkMostrarPassword.addActionListener(togglePasswordVisibility);
 		chkMostrarConfirmPassword.addActionListener(togglePasswordVisibility);
 
-		// Acción para el botón 'Registrar'
-		btnRegistrar.addActionListener(e -> {
+		// Acción Registrar
+		ActionListener registrar = e -> {
 			String usuario = txtUsuario.getText().trim();
 			String password = new String(txtPassword.getPassword());
 			String confirmPassword = new String(txtConfirmPassword.getPassword());
@@ -120,17 +145,27 @@ public class Registro extends JFrame {
 				return;
 			}
 
-			// Intentar registrar el usuario
 			Controlador controlador = Controlador.getInstancia();
-            if (!controlador.registrar(usuario, password)) {
-                JOptionPane.showMessageDialog(Registro.this, "El usuario ya existe. Elija otro.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(Registro.this, "Registro exitoso para el usuario: " + usuario, "Éxito",
-                        JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-                new Login().setVisible(true);
-            }
+			if (!controlador.registrar(usuario, password)) {
+				JOptionPane.showMessageDialog(Registro.this, "El usuario ya existe. Elija otro.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(Registro.this, "Registro exitoso para el usuario: " + usuario, "Éxito",
+						JOptionPane.INFORMATION_MESSAGE);
+				dispose();
+				new Login().setVisible(true);
+			}
+		};
+		
+		btnRegistrar.addActionListener(registrar);
+		txtUsuario.addActionListener(registrar);
+		txtPassword.addActionListener(registrar);
+		txtConfirmPassword.addActionListener(registrar);
+
+		// Acción Regresar
+		btnRegresar.addActionListener(e -> {
+			dispose();
+			new Login().setVisible(true);
 		});
 	}
 }

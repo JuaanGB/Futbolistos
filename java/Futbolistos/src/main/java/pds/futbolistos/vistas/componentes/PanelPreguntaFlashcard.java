@@ -34,7 +34,7 @@ public class PanelPreguntaFlashcard extends PanelPregunta {
     protected void inicializarComponentes() {
         super.inicializarComponentes();
 
-        this.panelRespuestas.setLayout(new GridLayout(3, 1));
+        this.panelRespuestas.setLayout(new GridLayout(2, 1));
 
         this.txtFlashcard = FactoriaComponentes.crearTextArea(3, 20);
         txtFlashcard.setFont(new Font("Arial", Font.PLAIN, 20));

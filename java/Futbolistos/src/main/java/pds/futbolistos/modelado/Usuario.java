@@ -115,12 +115,7 @@ public class Usuario {
 		return sesionesCurso.stream()
 				.anyMatch( sc -> sc.hasCurso(c));
 	}
-	
-	public void sustituirSesionEvadirContextoPersistencia(SesionCurso aEliminar, SesionCurso nueva) {
-		removeSesion(aEliminar);
-		sesionesCurso.add(nueva);
-	}
-	
+		
 	// Llamado al iniciar sesión
 	public void actualizarRachaDeDias() {
 		estadisticas.registrarAcceso();

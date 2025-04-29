@@ -203,23 +203,13 @@ public class Controlador {
 
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
-	public void actualizarEstadisticasUsuario(boolean completado) {
-		try {
-			bbdd.actualizarEstadisticasDeUsuario(usuarioAct, sesionCursoAct);
-		} catch (Exception e) {
-			System.err.println("Error al terminar curso (actualizando estadísticas de usuario)");
-			e.printStackTrace();
-		}
+	public void actualizarEstadisticasUsuario() {
+		bbdd.actualizarEstadisticasDeUsuario(usuarioAct, sesionCursoAct);
 	}
 	
 	public void actualizarEstadisticaDeTiempo() {
-		bbdd.detachSesiones(usuarioAct);
-		try {
-			bbdd.actualizarEstadisticasDeTiempo(usuarioAct);
-		} catch (Exception e) {
-			System.err.println("Error al actualizar estadísticas al cerrar aplicación)");
-			e.printStackTrace();
-		}
+		bbdd.detachSesion(sesionCursoAct);
+		bbdd.actualizarEstadisticasDeTiempo(usuarioAct);
 	}
 
 }

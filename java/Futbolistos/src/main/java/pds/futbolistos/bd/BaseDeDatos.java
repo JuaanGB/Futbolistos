@@ -81,52 +81,20 @@ public class BaseDeDatos {
 			u.actualizarRachaDeDias();
 			u.reiniciarFechaUltimoAcceso();
 		}
-		//Hibernate.initialize(u.getCursosImportados());
-		// u.getCursosImportados().forEach(em::detach); // Los desvinculo del contexto porque no se modifican dentro de la app.
 		cerrarTransaccion();
 		return u;
 	}
 
-//	public boolean usuarioHasSesion(Usuario u, Curso c) {
-//		iniciarTransaccion();
-//		List<SesionCurso> sesionesCurso = em
-//				.createQuery("SELECT sc FROM SesionCurso sc WHERE sc.usuario.nombreUsuario = :usuarioNombre",
-//						SesionCurso.class)
-//				.setParameter("usuarioNombre", u.getNombreUsuario()).getResultList();
-//		// No estoy seguro de que "usuarioAct" en Controlador tenga las sesiones por
-//		// aliasing.
-//		// Tras testear, sí lo tiene porque "usuarioAct" del Controlador es el obtenido
-//		// a partir del método "getUsuario" y a partir de ese momento, está en el
-//		// contexto del EM
-//		cerrarTransaccion();
-//		
-//		sesionesCurso.stream()
-//			.forEach( sc -> em.detach(sc));
-//
-//		return sesionesCurso.stream().anyMatch(sc -> sc.hasCurso(c));
-//	}
-
-	// Hay un bug:
-	// Inicio una sesión y la guardo. La vuelvo a abrir sin cerrar la aplicación. Respondo una pregunta. Cierro la ventana (con la X).
-	// El curso se persistía porque al hacer em.persist(sc) se guardaba en el contexto.
 	public void guardarProgresoCurso(Usuario u, SesionCurso sc) {
 		iniciarTransaccion();
 		em.persist(u);
 		em.persist(sc);
 		cerrarTransaccion();
-		
-		em.clear();
-		
-		// Y si hago un clone y cambio la instancia de sesion de usuario por una clonada??? Quiero que esté en transient nuevamente
-		// para que no se persista automáticamente
-		//u.sustituirSesionEvadirContextoPersistencia(sc, sc.clonarParaEvadirContextoPersistencia());
-		// Si clono el id, el Entity Manager se piensa que es el mismo objeto así que lo actualiza automáticamente.
-		// Si no clono el id, al hacer el persist coge el primer id libre (coincide con el id de la sesión que sustituí y ocurre lo mismo)
 	}
 
 	public void usuarioImportaCurso(Usuario u, Curso c) {
 		iniciarTransaccion();
-		u.addCursoImportado(c); // Lo mismo, no sé si por aliasing el usuarioAct de Controlador tendrá el curso.
+		u.addCursoImportado(c);
 		em.persist(c);
 		cerrarTransaccion();
 	}
@@ -146,20 +114,19 @@ public class BaseDeDatos {
 		u.actualizarEstadisticasDeTiempo();
 		cerrarTransaccion();
 	}
-	
+
 	// Este método se llama desde Controlador -> Actualizar estadísticas de tiempo.
-	// ¿Por qué? El bug de actualización automática de sesiones al cerrar la aplicación.
-	// Al buscar la sesión en el usuario para sugerir estrategia o reanudar añade al contexto la sesión
+	// ¿Por qué? El bug de actualización automática de sesiones al cerrar la
+	// aplicación.
+	// Al buscar la sesión en el usuario para sugerir estrategia o reanudar añade al
+	// contexto la sesión
 	// Así que vamos a desvincularlas del contexto al cerrar la aplicación.
-	public void detachSesiones(Usuario usuarioAct) {
-		
+	public void detachSesion(SesionCurso sc) {
 		System.out.println("Llamada a detachSesiones()");
-		
 		iniciarTransaccion();
-		usuarioAct.getSesionesCurso().stream()
-			.forEach( sc -> em.detach(sc));
+		if (em.contains(sc)) // Solo desligamos la sesión si estuviese en el contexto
+			em.detach(sc);
 		cerrarTransaccion();
-		
 	}
 
 }

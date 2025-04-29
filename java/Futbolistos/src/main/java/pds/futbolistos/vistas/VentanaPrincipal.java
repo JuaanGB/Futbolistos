@@ -1,6 +1,7 @@
 package pds.futbolistos.vistas;
 
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import pds.futbolistos.controlador.Controlador;
@@ -16,132 +17,105 @@ import java.util.List;
 
 public class VentanaPrincipal extends JFrame {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private JPanel panelCursos;
-    
-    public VentanaPrincipal() {
-        
-    	FactoriaComponentes.utilizarNimbusLookAndFeel();
-        initialize();
-    }
+	private JPanel panelCursos;
 
-    private void initialize() {
-    	
-        setBounds(100, 100, 700, 773);
-        setMinimumSize(new Dimension(700, 773));
-        setTitle("FUTBOLISTOS");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
-        addWindowListener( new WindowAdapter() {
-        	public void windowClosing(WindowEvent e) {
-        		Controlador.getInstancia().actualizarEstadisticaDeTiempo();
-        	};
-		} );
+	public VentanaPrincipal() {
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(30, 30, 30));
-        setContentPane(mainPanel);
+		FactoriaComponentes.utilizarNimbusLookAndFeel();
+		initialize();
+	}
 
-        JPanel panelNombreApp = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        panelNombreApp.setBackground(new Color(30, 30, 30));
-        mainPanel.add(panelNombreApp, BorderLayout.NORTH);
-        
-        // Icono izquierdo (se escala a 64x64)
-        JLabel fotoFutbol = new JLabel("");
-        fotoFutbol.setIcon(loadScaledImage("/pds/futbolistos/imagenes/flag-football.png", 64, 64));
-        panelNombreApp.add(fotoFutbol);
+	private void initialize() {
 
-        // Título de la aplicación
-        JLabel lblFutbolistos = new JLabel("FUTBOLISTOS");
-        lblFutbolistos.setFont(new Font("Arial", Font.BOLD, 32));
-        lblFutbolistos.setForeground(Color.WHITE);
-        panelNombreApp.add(lblFutbolistos);
+		setBounds(100, 100, 700, 773);
+		setMinimumSize(new Dimension(700, 773));
+		setTitle("FUTBOLISTOS");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 
-        // Icono derecho (se escala a 64x64)
-        JLabel fotoFutbol_1 = new JLabel("");
-        fotoFutbol_1.setIcon(loadScaledImage("/pds/futbolistos/imagenes/cerebro.png", 64, 64));
-        panelNombreApp.add(fotoFutbol_1);
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				Controlador.getInstancia().actualizarEstadisticaDeTiempo();
+			};
+		});
 
-        JPanel panelUsuarioYCursos = new JPanel(new BorderLayout());
-        panelUsuarioYCursos.setBackground(new Color(30, 30, 30));
-        mainPanel.add(panelUsuarioYCursos, BorderLayout.CENTER);
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.setBackground(new Color(30, 30, 30));
+		setContentPane(mainPanel);
 
-        JPanel panelBotonesUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        panelBotonesUsuario.setBackground(new Color(30, 30, 30));
+		JPanel panelNombreApp = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelNombreApp.setBackground(new Color(30, 30, 30));
+		mainPanel.add(panelNombreApp, BorderLayout.NORTH);
 
-        Controlador ctrl = Controlador.getInstancia();
-        String currentUserName = (ctrl.getUsuarioAct() != null) ? ctrl.getUsuarioAct().getNombreUsuario() : "Usuario";
-        // Check if the current user has a custom image
-        Icon userIcon = loadScaledImage("/pds/futbolistos/imagenes/usuario.png", 32, 32);
-        JLabel lblImagen = new JLabel(userIcon);
+		JLabel fotoLogo = new JLabel();
+		fotoLogo.setIcon(
+				new ImageIcon(VentanaPrincipal.class.getResource("/pds/futbolistos/imagenes/logo-futbolistos.png")));
+		panelNombreApp.add(fotoLogo);
 
-        // Botón "Usuario" con icono escalado (por ejemplo, 32x32)
-        JLabel lblUsuario = FactoriaComponentes.crearLabel("Usuario");
-        
-        // Botón "Estadísticas"
-        JButton btnEstadsticas = FactoriaComponentes.crearBoton("Estadísticas");
-        btnEstadsticas.setPreferredSize(new Dimension(200, 50));
-        btnEstadsticas.setIcon(loadScaledImage("/pds/futbolistos/imagenes/tendencia.png", 32, 32));
-        btnEstadsticas.addActionListener( e -> new VentanaEstadisticasUsuario().setVisible(true));
+		JPanel panelUsuarioYCursos = new JPanel(new BorderLayout());
+		panelUsuarioYCursos.setBackground(new Color(30, 30, 30));
+		mainPanel.add(panelUsuarioYCursos, BorderLayout.CENTER);
 
-        // Botón "Cargar Curso"
-        JButton btnCargarCurso = FactoriaComponentes.crearBoton("Cargar curso");
-        btnCargarCurso.setPreferredSize(new Dimension(200, 50));
-        btnCargarCurso.setIcon(loadScaledImage("/pds/futbolistos/imagenes/subir.png", 32, 32));
-        btnCargarCurso.addActionListener(e -> cargarCursoDesdeFichero());
+		JPanel panelBotonesUsuario = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		panelBotonesUsuario.setBackground(new Color(30, 30, 30));
 
-        panelBotonesUsuario.add(lblImagen);
-        panelBotonesUsuario.add(lblUsuario);
-        panelBotonesUsuario.add(btnEstadsticas);
-        panelBotonesUsuario.add(btnCargarCurso);
-        panelUsuarioYCursos.add(panelBotonesUsuario, BorderLayout.NORTH);
+		Controlador ctrl = Controlador.getInstancia();
+		String currentUserName = (ctrl.getUsuarioAct() != null) ? ctrl.getUsuarioAct().getNombreUsuario() : "Usuario";
 
-        panelCursos = new JPanel(new GridLayout(0, 2, 10, 10));
-        panelCursos.setBackground(new Color(30, 30, 30));
-        List<Curso> cursos = ctrl.getCursosDisponibles();
-        for (Curso c : cursos) {
-            panelCursos.add(new PanelCurso(c));
-        }
+		// Botón "Usuario" con icono escalado (por ejemplo, 32x32)
+		JLabel lblUsuario = FactoriaComponentes.crearLabel(
+				"<html><div style='text-align: center;'>¡Bienvenido,<br>" + currentUserName + "!</div></html>");
 
-        JPanel panelWrapper = new JPanel(new BorderLayout());
-        panelWrapper.setBackground(new Color(30, 30, 30));
-        panelWrapper.add(panelCursos, BorderLayout.NORTH);
+		lblUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JScrollPane scrollPane = new JScrollPane(panelWrapper);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        panelUsuarioYCursos.add(scrollPane, BorderLayout.CENTER);
-    }
+		// Botón "Estadísticas"
+		JButton btnEstadsticas = FactoriaComponentes.crearBoton("Estadísticas");
+		btnEstadsticas.setPreferredSize(new Dimension(200, 50));
+		btnEstadsticas.setIcon(new ImageIcon(getClass().getResource("/pds/futbolistos/imagenes/tendencia.png")));
+		btnEstadsticas.addActionListener(e -> new VentanaEstadisticasUsuario().setVisible(true));
 
-    /**
-     * Carga una imagen desde el recurso y la escala a las dimensiones indicadas usando un escalado suave.
-     *
-     * @param path La ruta del recurso de la imagen.
-     * @param width El ancho deseado.
-     * @param height La altura deseada.
-     * @return Un ImageIcon escalado.
-     */
-    private ImageIcon loadScaledImage(String path, int width, int height) {
-        ImageIcon originalIcon = new ImageIcon(VentanaPrincipal.class.getResource(path));
-        Image originalImage = originalIcon.getImage();
-        Image scaledImage = originalImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        return new ImageIcon(scaledImage);
-    }
+		// Botón "Cargar Curso"
+		JButton btnCargarCurso = FactoriaComponentes.crearBoton("Cargar curso");
+		btnCargarCurso.setPreferredSize(new Dimension(200, 50));
+		btnCargarCurso.setIcon(new ImageIcon(getClass().getResource("/pds/futbolistos/imagenes/subir.png")));
+		btnCargarCurso.addActionListener(e -> cargarCursoDesdeFichero());
 
-    private void cargarCursoDesdeFichero() {
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON y YAML (*.json, *.yaml, *.yml)",
-                "json", "yaml", "yml");
-        fileChooser.setFileFilter(filtro);
+		panelBotonesUsuario.add(lblUsuario);
+		panelBotonesUsuario.add(btnEstadsticas);
+		panelBotonesUsuario.add(btnCargarCurso);
+		panelUsuarioYCursos.add(panelBotonesUsuario, BorderLayout.NORTH);
 
-        int seleccion = fileChooser.showOpenDialog(this);
-        if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File archivoSeleccionado = fileChooser.getSelectedFile();
-            String extension = obtenerExtension(archivoSeleccionado);
+		panelCursos = new JPanel(new GridLayout(0, 2, 10, 10));
+		panelCursos.setBackground(new Color(30, 30, 30));
+		List<Curso> cursos = ctrl.getCursosDisponibles();
+		for (Curso c : cursos) {
+			panelCursos.add(new PanelCurso(c));
+		}
 
-            System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
-            System.out.println("Extensión: " + extension);
+		JPanel panelWrapper = new JPanel(new BorderLayout());
+		panelWrapper.setBackground(new Color(30, 30, 30));
+		panelWrapper.add(panelCursos, BorderLayout.NORTH);
+
+		JScrollPane scrollPane = new JScrollPane(panelWrapper);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		panelUsuarioYCursos.add(scrollPane, BorderLayout.CENTER);
+	}
+
+	private void cargarCursoDesdeFichero() {
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON y YAML (*.json, *.yaml, *.yml)",
+				"json", "yaml", "yml");
+		fileChooser.setFileFilter(filtro);
+
+		int seleccion = fileChooser.showOpenDialog(this);
+		if (seleccion == JFileChooser.APPROVE_OPTION) {
+			File archivoSeleccionado = fileChooser.getSelectedFile();
+			String extension = obtenerExtension(archivoSeleccionado);
+
+			System.out.println("Archivo seleccionado: " + archivoSeleccionado.getAbsolutePath());
+			System.out.println("Extensión: " + extension);
 
 			if (Controlador.getInstancia().importarCurso(archivoSeleccionado, extension)) {
 				JOptionPane.showMessageDialog(null, "¡Curso importado correctamente!", "Importación exitosa",
@@ -152,26 +126,26 @@ public class VentanaPrincipal extends JFrame {
 						"Ocurrió un error al importar el curso.\nVerifica que el archivo sea válido.",
 						"Error de importación", JOptionPane.ERROR_MESSAGE);
 			}
-            	
-        }
-    }
 
-    private String obtenerExtension(File archivo) {
-        String nombre = archivo.getName();
-        int lastIndex = nombre.lastIndexOf(".");
-        return (lastIndex == -1) ? "" : nombre.substring(lastIndex + 1).toLowerCase();
-    }
-    
-    private void actualizarCursosDisponibles() {
-    	
-    	panelCursos.removeAll();
-    	List<Curso> cursos = Controlador.getInstancia().getCursosDisponibles();
-        for (Curso c : cursos) {
-            panelCursos.add(new PanelCurso(c));
-        }
-        
-        panelCursos.revalidate();
-        panelCursos.repaint();
-    }
-    
+		}
+	}
+
+	private String obtenerExtension(File archivo) {
+		String nombre = archivo.getName();
+		int lastIndex = nombre.lastIndexOf(".");
+		return (lastIndex == -1) ? "" : nombre.substring(lastIndex + 1).toLowerCase();
+	}
+
+	private void actualizarCursosDisponibles() {
+
+		panelCursos.removeAll();
+		List<Curso> cursos = Controlador.getInstancia().getCursosDisponibles();
+		for (Curso c : cursos) {
+			panelCursos.add(new PanelCurso(c));
+		}
+
+		panelCursos.revalidate();
+		panelCursos.repaint();
+	}
+
 }

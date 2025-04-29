@@ -7,6 +7,7 @@ import pds.futbolistos.modelado.Usuario;
 import pds.futbolistos.vistas.componentes.FactoriaComponentes;
 
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class Login extends JFrame {
 
@@ -15,12 +16,12 @@ public class Login extends JFrame {
 	public Login() {
 		setTitle("Futbolistos - Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(700, 450);
-		setLocationRelativeTo(null); // Centrar la ventana en la pantalla
+		setSize(450, 580);
+		setMinimumSize(new Dimension(450, 580));
+		setLocationRelativeTo(null); // Centrar la ventana
 
 		FactoriaComponentes.utilizarNimbusLookAndFeel();
 
-		// Panel principal con GridBagLayout para centrar la interfaz
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		mainPanel.setBackground(new Color(30, 30, 30));
 		GridBagConstraints gbcMain = new GridBagConstraints();
@@ -31,10 +32,10 @@ public class Login extends JFrame {
 		gbcMain.weightx = 1.0;
 		gbcMain.weighty = 1.0;
 
-		// Etiqueta que contiene el logo
-		ImageIcon icon = new ImageIcon(getClass().getResource("/pds/futbolistos/imagenes/futbolistos.png"));
-		Image image = icon.getImage();
-		JLabel lblImage = new ScaledImageLabel(image);
+		// Logo normal
+		ImageIcon icon = new ImageIcon(getClass().getResource("/pds/futbolistos/imagenes/futbolistos-50.png"));
+		JLabel lblImage = new JLabel(icon);
+		lblImage.setHorizontalAlignment(SwingConstants.CENTER);
 		gbcMain.gridy = 0;
 		mainPanel.add(lblImage, gbcMain);
 
@@ -52,37 +53,48 @@ public class Login extends JFrame {
 		gbcForm.gridy = 0;
 		formPanel.add(lblUsuario, gbcForm);
 		gbcForm.gridx = 1;
-		gbcForm.gridy = 0;
 		formPanel.add(txtUsuario, gbcForm);
 
 		// Campo de contraseña
 		JLabel lblPassword = FactoriaComponentes.crearLabel("Contraseña:", SwingConstants.RIGHT);
 		JPasswordField txtPassword = FactoriaComponentes.crearPasswordField();
+		txtPassword.setEchoChar('*');
 		gbcForm.gridx = 0;
 		gbcForm.gridy = 1;
 		formPanel.add(lblPassword, gbcForm);
 		gbcForm.gridx = 1;
-		gbcForm.gridy = 1;
 		formPanel.add(txtPassword, gbcForm);
 
-		// Botón de Ingresar
-		JButton btnLogin = FactoriaComponentes.crearBoton("Ingresar");
-		btnLogin.setPreferredSize(new Dimension(150, 50));
-		gbcForm.gridx = 0;
-		gbcForm.gridy = 2;
-		formPanel.add(btnLogin, gbcForm);
+		// Checkbox para mostrar/ocultar contraseña
+		JCheckBox chkMostrarPassword = FactoriaComponentes.crearCheckBox("👁");
+		gbcForm.gridx = 2;
+		formPanel.add(chkMostrarPassword, gbcForm);
 
-		// Botón de Registrarse
+		chkMostrarPassword.addActionListener(e -> {
+			txtPassword.setEchoChar(chkMostrarPassword.isSelected() ? '\0' : '*');
+		});
+
+		// Botón de Registrarse (izquierda)
 		JButton btnRegister = FactoriaComponentes.crearBoton("Registrarse");
 		btnRegister.setPreferredSize(new Dimension(150, 50));
-		gbcForm.gridx = 1;
+		gbcForm.gridx = 0;
 		gbcForm.gridy = 2;
 		formPanel.add(btnRegister, gbcForm);
 
-		// Acción para abrir la ventana de registro
-		btnRegister.addActionListener(e -> {new Registro().setVisible(true); this.dispose(); });
+		// Botón de Ingresar (derecha)
+		JButton btnLogin = FactoriaComponentes.crearBoton("Ingresar");
+		btnLogin.setPreferredSize(new Dimension(150, 50));
+		gbcForm.gridx = 1;
+		gbcForm.gridy = 2;
+		formPanel.add(btnLogin, gbcForm);
 
-		// Añadir el formulario al panel principal
+		// Acción para abrir ventana de registro
+		btnRegister.addActionListener(e -> {
+			new Registro().setVisible(true);
+			this.dispose();
+		});
+
+		// Añadir formulario al panel principal
 		GridBagConstraints gbcFormContainer = new GridBagConstraints();
 		gbcFormContainer.gridx = 0;
 		gbcFormContainer.gridy = 1;
@@ -93,8 +105,8 @@ public class Login extends JFrame {
 		// Agregar el panel principal a la ventana
 		add(mainPanel);
 
-		// Lógica de login que utiliza el Controlador para acceder al repositorio
-		btnLogin.addActionListener(e -> {
+		// Acción del botón de login
+		ActionListener accionLogin = e -> {
 			String usuario = txtUsuario.getText().trim();
 			String password = new String(txtPassword.getPassword());
 
@@ -105,51 +117,19 @@ public class Login extends JFrame {
 			}
 
 			Controlador controlador = Controlador.getInstancia();
-			// Se asume que el Controlador tiene el método "autenticar" que retorna el
-			// Usuario si las
-			// credenciales son válidas o null en caso contrario.
 			Usuario u = controlador.autenticar(usuario, password);
 			if (u != null) {
 				JOptionPane.showMessageDialog(Login.this, "Inicio de sesión exitoso", "Información",
 						JOptionPane.INFORMATION_MESSAGE);
 				new VentanaPrincipal().setVisible(true);
-				dispose(); // Cerrar ventana de login
+				dispose();
 			} else {
 				JOptionPane.showMessageDialog(Login.this, "Credenciales incorrectas", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
-		});
-	}
-
-	// Clase interna para redimensionar la imagen manteniendo la proporción
-	private static class ScaledImageLabel extends JLabel {
-		private static final long serialVersionUID = 1L;
-		private Image originalImage;
-
-		public ScaledImageLabel(Image originalImage) {
-			this.originalImage = originalImage;
-			setHorizontalAlignment(SwingConstants.CENTER);
-			setVerticalAlignment(SwingConstants.CENTER);
-		}
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			if (originalImage != null) {
-				int compWidth = getWidth();
-				int compHeight = getHeight();
-				int imgWidth = originalImage.getWidth(null);
-				int imgHeight = originalImage.getHeight(null);
-
-				if (imgWidth > 0 && imgHeight > 0) {
-					double scaleFactor = Math.min((double) compWidth / imgWidth, (double) compHeight / imgHeight);
-					int scaledWidth = (int) (imgWidth * scaleFactor);
-					int scaledHeight = (int) (imgHeight * scaleFactor);
-					int x = (compWidth - scaledWidth) / 2;
-					int y = (compHeight - scaledHeight) / 2;
-					g.drawImage(originalImage, x, y, scaledWidth, scaledHeight, this);
-				}
-			}
-		}
+		};
+		btnLogin.addActionListener(accionLogin);
+		txtUsuario.addActionListener(accionLogin);
+		txtPassword.addActionListener(accionLogin);
 	}
 }

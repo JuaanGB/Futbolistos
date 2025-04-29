@@ -136,19 +136,4 @@ public class SesionCurso {
 		return this.curso.equals(c);
 	}
 	
-	public SesionCurso clonarParaEvadirContextoPersistencia() {
-		SesionCurso nueva = new SesionCurso();
-		nueva.curso = this.curso;
-		//nueva.id = this.id;
-		nueva.numeroPreguntasRespondidas = this.numeroPreguntasRespondidas;
-		nueva.numTotalPreguntas = this.numTotalPreguntas;
-		nueva.pistasRestantes = this.pistasRestantes;
-		nueva.preguntasRestantes = this.preguntasRestantes;
-		nueva.puntuacion = this.puntuacion;
-		nueva.usuario = this.usuario;	
-		return nueva;
-		
-	}
-
-	
 }

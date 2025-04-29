@@ -16,6 +16,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -49,7 +50,7 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 
 		this.entradaTexto = FactoriaComponentes.crearTextField();
 		this.entradaTexto.setPreferredSize(new Dimension(200, 40));
-		this.entradaTexto.requestFocus();
+		SwingUtilities.invokeLater( () -> this.entradaTexto.requestFocusInWindow());
 		panelCampoYBoton.add(entradaTexto);
 
 		this.botonValidar = FactoriaComponentes.crearBoton("OK");
@@ -75,7 +76,8 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 	
 	private void anadirAcciones() {
 		this.lblCadenaOculta.setText(pc.getCadenaOculta());
-		botonValidar.addActionListener(e -> {
+		
+		ActionListener accion = e -> {
             detenerTemporizador(true);
             if (Controlador.getInstancia().validarRespuesta(pc, entradaTexto.getText())) {
                 JOptionPane.showMessageDialog(this, "Respuesta correcta", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -85,7 +87,10 @@ public class PanelPreguntaCompletar extends PanelPregunta {
                         "Fallo.", JOptionPane.ERROR_MESSAGE);
             }
             this.manejarTiempoTerminado(true);
-        });
+        };
+		
+		botonValidar.addActionListener(accion);
+		entradaTexto.addActionListener(accion); // Validar al pulsar enter en lugar del clic en el botón
 	}
 
 }

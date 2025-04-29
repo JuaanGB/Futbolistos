@@ -43,7 +43,7 @@ public class PanelEstadisticasCurso extends JPanel {
 
 		// Acción del botón "Regresar"
 		btnRegresar.addActionListener( e -> {
-			Controlador.getInstancia().actualizarEstadisticasUsuario(true);
+			Controlador.getInstancia().actualizarEstadisticasUsuario();
 			JFrame ventanaCurso = (JFrame) SwingUtilities.getWindowAncestor(PanelEstadisticasCurso.this);
             if (ventanaCurso != null) ventanaCurso.dispose();
             new VentanaPrincipal().setVisible(true);
