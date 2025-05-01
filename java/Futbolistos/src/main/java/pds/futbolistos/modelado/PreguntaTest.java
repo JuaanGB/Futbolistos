@@ -21,7 +21,7 @@ import pds.futbolistos.modelado.convertidores.ConversorListaDeCadenas;
 import pds.futbolistos.vistas.componentes.PanelPreguntaTest;
 
 @Entity
-@Table(name="PREGUNTAS_TEST")
+@Table(name = "PREGUNTAS_TEST")
 public class PreguntaTest extends Pregunta /* implements Visitable */ {
 
 	// Atributos
@@ -32,27 +32,28 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	@Lob
 	@JsonProperty("respuesta_correcta")
 	private String respuestaCorrecta;
-	
+
 	public PreguntaTest() {
 		this.respuestas = new ArrayList<>();
 	}
-	
-	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String ...respuestas) {
+
+	public PreguntaTest(String enunciado, String respuestaCorrecta, String pista, int segundos, String... respuestas) {
 		super(enunciado, pista, segundos);
 		this.respuestaCorrecta = respuestaCorrecta;
 		this.respuestas = new ArrayList<>();
-		for (String r : respuestas) this.respuestas.add(r);
+		for (String r : respuestas)
+			this.respuestas.add(r);
 	}
 
 	// Nuevos métodos get
 	public String getRespuesta(int i) {
 		return respuestas.get(i);
 	}
-	
+
 	public String getRespuestaCorrecta() {
 		return respuestaCorrecta;
 	}
-	
+
 	@Override
 	public boolean isRespuestaValida(String respuesta) {
 		return respuesta.equals(this.getRespuestaCorrecta());
@@ -62,11 +63,26 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	public JPanel getPanel() {
 		return new PanelPreguntaTest(this);
 	}
-	/*
-	public void accept(Visitor v) {
-		v.visitPreguntaTest(this);
+
+	@Override
+	public boolean checkParsing() {
+		boolean res = super.checkParsing();
+
+		res = res && hasEnunciado() && getEnunciado() != null && !getEnunciado().isBlank();
+
+		res = res && respuestaCorrecta != null && !respuestaCorrecta.isBlank();
+
+		res = res && respuestas.size() >= 2;
+		res = res && respuestas.stream().allMatch(r -> r != null && !r.isBlank());
+
+		res = res && respuestas.contains(respuestaCorrecta);
+
+		return res;
 	}
 
-	map.put(PreguntaTest.class, () )
-	*/
+	/*
+	 * public void accept(Visitor v) { v.visitPreguntaTest(this); }
+	 * 
+	 * map.put(PreguntaTest.class, () )
+	 */
 }

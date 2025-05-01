@@ -97,7 +97,7 @@ public abstract class Pregunta {
 	}
 	
 	public boolean hasImagen() {
-		return this.imagen != null;
+		return this.imagen != null && this.imagen.getImagen() != null;
 	}
 	
 	public boolean hasEnunciado() {
@@ -109,6 +109,22 @@ public abstract class Pregunta {
 
 	public abstract JPanel getPanel();
 
+	public boolean checkParsing() {
+		boolean valido = true;
+
+		if (pista != null) {
+			valido = valido && !pista.isBlank();
+		}
+
+		valido = valido && segundos > 0;
+
+		if (hasImagen()) {
+			valido = valido && imagenURL != null && !imagenURL.isBlank();
+		}
+
+		return valido;
+	}
+	
 	public boolean hasPista() {
 		return pista != null;
 	}

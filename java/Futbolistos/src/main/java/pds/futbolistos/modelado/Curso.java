@@ -94,7 +94,7 @@ public class Curso {
 	}
 	
 	public boolean hasImagen() {
-		return this.imagen != null;
+		return this.imagen != null && this.imagen.getImagen() != null;
 	}
 
 	public BufferedImage getImagen() {
@@ -128,5 +128,16 @@ public class Curso {
 	}
 	// Comparación por ID por si el usuario importa varias veces el mismo curso y queremos distinguir las sesiones
 	// Si no, reanudaría la primera sesión en la lista de sesiones del usuario.
+	
+	public boolean checkParsing() {
+
+		boolean res = nombre != null && !nombre.isBlank() && descripcion != null && !descripcion.isBlank();
+
+		res = res && this.bloquesDeContenido.size() >= 1
+				&& bloquesDeContenido.stream().allMatch(bc -> bc.checkParsing());
+
+		return res;
+	}
+
 
 }

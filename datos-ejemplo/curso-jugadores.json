@@ -1,14 +1,12 @@
 {
   "nombre": "Jugadores de Fútbol Legendarios",
   "descripcion": "Conoce a los jugadores más icónicos de la historia del fútbol: sus logros, equipos y curiosidades.",
-  "imagen_url": "curso-jugadores/curso.png",
   "bloques_de_contenido": [
     {
       "preguntas": [
         {
           "tipo_pregunta": "flashcard",
           "segundos": 15,
-          "imagen_url": "curso-jugadores/1.png",
           "anverso": "¿Qué número utilizó Diego Maradona en el Mundial de 1986?",
           "reverso": "El número 10."
         },
@@ -48,8 +46,6 @@
           "segundos": 10,
           "imagen_url": "curso-jugadores/5.png",
           "respuestas": [
-            "Chelsea",
-            "Real Madrid",
             "Manchester City",
             "Bayern Múnich"
           ],

@@ -47,5 +47,17 @@ public class PreguntaFlashcard extends Pregunta {
 	public JPanel getPanel() {
 		return new PanelPreguntaFlashcard(this);
 	}
+	
+	@Override
+	public boolean checkParsing() {
+		boolean res = super.checkParsing();
+
+		res = res && getEnunciado() == null;
+		res = res && anverso != null && !anverso.isBlank();
+		res = res && reverso != null && !reverso.isBlank();
+
+		return res;
+	}
+
 
 }

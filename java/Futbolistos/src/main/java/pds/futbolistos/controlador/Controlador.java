@@ -169,41 +169,67 @@ public class Controlador {
 		ObjectMapper objectMapper = factoriaMapper.getMapper(formato);
 		try {
 			JsonNode rootNode = objectMapper.readTree(f);
-			String urlImagenCurso = rootNode.get("imagen_url").asText();
-			File imagenCursoFile = new File(f.getParentFile(), urlImagenCurso);
 
-			Curso c = objectMapper.treeToValue(rootNode, Curso.class);
-
-			try {
-				c.setImagen(ImageIO.read(imagenCursoFile));
-			} catch (IOException e) {
-				System.err.println("No se pudo leer la imagen del curso: " + imagenCursoFile.getAbsolutePath());
+			// Solo intentar cargar imagen si existe la propiedad
+			File imagenCursoFile = null;
+			if (rootNode.has("imagen_url") && !rootNode.get("imagen_url").isNull()) {
+				String urlImagenCurso = rootNode.get("imagen_url").asText();
+				if (!urlImagenCurso.isBlank()) {
+					imagenCursoFile = new File(f.getParentFile(), urlImagenCurso);
+				}
 			}
 
+			// Convertimos a Curso
+			Curso c = objectMapper.treeToValue(rootNode, Curso.class);
+
+			// Cargar imagen del curso si se pudo resolver
+			if (imagenCursoFile != null && imagenCursoFile.exists()) {
+				try {
+					c.setImagen(ImageIO.read(imagenCursoFile));
+				} catch (IOException e) {
+					System.err.println("No se pudo leer la imagen del curso: " + imagenCursoFile.getAbsolutePath());
+				}
+			}
+
+			// Verificación básica del curso importado
+			if (c.getNombre() == null || c.getBloquesDeContenido() == null || c.getBloquesDeContenido().isEmpty()) {
+				System.err.println("Curso inválido: falta nombre o bloques de contenido");
+				return false;
+			}
+
+			// Cargar imágenes de preguntas si están definidas
 			for (BloqueDeContenido bloque : c.getBloquesDeContenido()) {
+				if (bloque.getPreguntas() == null)
+					continue;
 				for (Pregunta pregunta : bloque.getPreguntas()) {
 					String urlPregunta = pregunta.getImagenURL();
 					if (urlPregunta != null && !urlPregunta.isBlank()) {
 						File imgPreguntaFile = new File(f.getParentFile(), urlPregunta);
-						try {
-							pregunta.setImagen(ImageIO.read(imgPreguntaFile));
-						} catch (IOException e) {
-							System.err.println(
-									"No se pudo cargar la imagen de la pregunta: " + imgPreguntaFile.getAbsolutePath());
+						if (imgPreguntaFile.exists()) {
+							try {
+								pregunta.setImagen(ImageIO.read(imgPreguntaFile));
+							} catch (IOException e) {
+								System.err.println("No se pudo cargar la imagen de la pregunta: "
+										+ imgPreguntaFile.getAbsolutePath());
+							}
 						}
 					}
 				}
 			}
 
 			// Guardamos el curso
-			bbdd.usuarioImportaCurso(usuarioAct, c);
-			return true;
+			if (c.checkParsing()) {
+				bbdd.usuarioImportaCurso(usuarioAct, c);
+				return true;
+			}
+			return false;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
+
 
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)

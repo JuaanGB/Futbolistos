@@ -16,7 +16,7 @@ public class ConversorImagenJPA implements AttributeConverter<ImagenJPA, byte[]>
 
 	@Override
 	public byte[] convertToDatabaseColumn(ImagenJPA imagen) {
-		if (imagen == null || imagen.getImagen() ==  null)
+		if (imagen == null || imagen.getImagen() == null)
 			return null;
 		return imagen.getImagenBytes();
 	}

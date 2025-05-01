@@ -46,4 +46,8 @@ public class BloqueDeContenido {
 	public boolean addPregunta(Pregunta p) {
 		return preguntas.add(p);
 	}
+	
+	public boolean checkParsing() {
+		return this.preguntas.size() >= 1 && preguntas.stream().allMatch( p -> p.checkParsing() );
+	}
 }
