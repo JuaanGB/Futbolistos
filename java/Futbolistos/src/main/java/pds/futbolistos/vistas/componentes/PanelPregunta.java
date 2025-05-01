@@ -97,7 +97,7 @@ public abstract class PanelPregunta extends JPanel {
 	protected abstract void gestionarPreguntaRespondida(boolean respondida);
 
 	// Dibujar el panel
-	protected void personalizarDisplay(Pregunta p) {
+	private void personalizarDisplay(Pregunta p) {
 		if (p.hasEnunciado())
 			txtrEnunciado.setText(p.getEnunciado());
 		if (!Controlador.getInstancia().quedanPistasDisponibles() || !p.hasPista())
@@ -111,7 +111,7 @@ public abstract class PanelPregunta extends JPanel {
 		lblTiempoRestante.setText("Tiempo: " + tiempoRestante + "s");
 	}
 
-	protected void inicializarComponentes() {
+	private void inicializarComponentes() {
 
 		// Se utiliza un fondo oscuro acorde con la estética de VentanaPrincipal
 		setBackground(new Color(30, 30, 30));

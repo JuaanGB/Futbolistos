@@ -53,6 +53,10 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 	public String getRespuestaCorrecta() {
 		return respuestaCorrecta;
 	}
+	
+	public int getNumRespuestas() {
+		return respuestas.size();
+	}
 
 	@Override
 	public boolean isRespuestaValida(String respuesta) {

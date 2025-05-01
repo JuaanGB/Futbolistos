@@ -31,12 +31,11 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 	public PanelPreguntaCompletar(PreguntaCompletar p) {
 		super(p);
 		pc = p;
+		inicializarComponentes();
 		anadirAcciones();
 	}
 
-	@Override
-	protected void inicializarComponentes() {
-		super.inicializarComponentes();
+	private void inicializarComponentes() {
 
 		this.panelRespuestas.setLayout(new GridLayout(2, 1));
 
@@ -58,11 +57,6 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 		panelCampoYBoton.add(botonValidar);
 
 		this.panelRespuestas.add(panelCampoYBoton);
-	}
-	
-	@Override
-	protected void personalizarDisplay(Pregunta p) {
-		super.personalizarDisplay(p);
 	}
 
 	@Override
