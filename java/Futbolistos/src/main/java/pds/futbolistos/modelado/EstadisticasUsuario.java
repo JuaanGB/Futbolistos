@@ -71,6 +71,14 @@ public class EstadisticasUsuario {
 	public int getTiempoTotalDeUso() {
 		return tiempoTotalDeUso;
 	}
+	
+	public String getMediaPistasPorCursoRedondeado() {
+		if (cursosRealizados == 0) {
+			return "0.00";
+		}
+		float media = (float) pistasConsultadas / cursosRealizados;
+		return String.format("%.2f", media);
+	}
 
 	public String getTiempoTotalDeUsoFormateado() {
 		int horas = tiempoTotalDeUso / 3600;
@@ -90,23 +98,23 @@ public class EstadisticasUsuario {
 	public Map<LocalDate, Integer> getHistorialRachas(int numDias) {
 		List<Map.Entry<LocalDate, Integer>> entradas = new ArrayList<>(historialRachas.entrySet());
 
+		// Ordenamos por fecha ascendente (cronológico)
+		entradas.sort(Map.Entry.comparingByKey());
+
 		int total = entradas.size();
 		int desde = Math.max(0, total - numDias);
 
 		List<Map.Entry<LocalDate, Integer>> ultimasEntradas = entradas.subList(desde, total);
 
-		// Ahora las invertimos porque el orden es el de inserción
-		List<Map.Entry<LocalDate, Integer>> ordenCronologico = new ArrayList<>(ultimasEntradas);
-		Collections.reverse(ordenCronologico);
-
-		// Las pasamos a un LinkedHashMap para mantener ese orden
+		// Preservamos el orden en un LinkedHashMap
 		Map<LocalDate, Integer> resultado = new LinkedHashMap<>();
-		for (Map.Entry<LocalDate, Integer> entry : ordenCronologico) {
+		for (Map.Entry<LocalDate, Integer> entry : ultimasEntradas) {
 			resultado.put(entry.getKey(), entry.getValue());
 		}
 
 		return resultado;
 	}
+
 
 
 	// Funcionalidad

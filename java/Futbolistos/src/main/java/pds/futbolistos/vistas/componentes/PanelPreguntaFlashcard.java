@@ -37,6 +37,7 @@ public class PanelPreguntaFlashcard extends PanelPregunta {
 
 		this.txtFlashcard = FactoriaComponentes.crearTextArea(3, 20);
 		txtFlashcard.setFont(new Font("Arial", Font.PLAIN, 20));
+		txtFlashcard.setText(this.p.getAnverso());
 		txtFlashcard.setEditable(false);
 		this.panelRespuestas.add(txtFlashcard);
 
@@ -62,7 +63,6 @@ public class PanelPreguntaFlashcard extends PanelPregunta {
 
 	private void anadirAcciones() {
 
-		txtFlashcard.setText(this.p.getAnverso());
 		botonVerReverso.addActionListener(e -> {
 			if (!mostrandoReverso) {
 				txtFlashcard.setText(p.getReverso());

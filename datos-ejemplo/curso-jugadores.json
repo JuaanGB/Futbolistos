@@ -1,6 +1,7 @@
 {
   "nombre": "Jugadores de Fútbol Legendarios",
   "descripcion": "Conoce a los jugadores más icónicos de la historia del fútbol: sus logros, equipos y curiosidades.",
+  "imagen_url": "curso-jugadores/curso.png",
   "bloques_de_contenido": [
     {
       "preguntas": [
@@ -92,7 +93,6 @@
           "imagen_url": "curso-jugadores/9.png",
           "respuestas": [
             "7",
-            "8",
             "10",
             "11"
           ],

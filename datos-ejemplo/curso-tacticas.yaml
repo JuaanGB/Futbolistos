@@ -1,0 +1,70 @@
+nombre: Tácticas y Alineaciones en el Fútbol
+descripcion: Aprende sobre las formaciones más utilizadas, sus fortalezas, debilidades y cómo influyen en el juego.
+imagen_url: curso-tacticas/0.png
+bloques_de_contenido:
+  - preguntas:
+      - tipo_pregunta: flashcard
+        segundos: 15
+        anverso: ¿Cuál es la alineación más comúnmente asociada con el estilo "tiki-taka"?
+        reverso: 4-3-3
+
+      - tipo_pregunta: test
+        enunciado: ¿Qué alineación favorece un enfoque más defensivo con cinco defensores?
+        pista: Incluye tres centrales y dos carrileros.
+        segundos: 15
+        imagen_url: curso-tacticas/2.png
+        respuestas:
+          - 4-4-2
+          - 5-3-2
+          - 4-3-3
+          - 3-4-3
+        respuesta_correcta: 5-3-2
+
+      - tipo_pregunta: completar
+        enunciado: En la táctica 4-2-3-1, ¿cómo se llama normalmente al jugador que se ubica entre los dos medios defensivos y el delantero?
+        pista: Suele ser el organizador ofensivo.
+        segundos: 15
+        imagen_url: curso-tacticas/3.png
+        respuesta_correcta: Mediapunta
+
+  - preguntas:
+      - tipo_pregunta: flashcard
+        segundos: 15
+        anverso: ¿Qué sistema prioriza el juego por bandas con extremos bien abiertos?
+        reverso: 4-3-3
+
+      - tipo_pregunta: test
+        enunciado: ¿Qué formación es más utilizada para presionar alto desde el inicio del partido?
+        pista: Tiene tres delanteros que ejercen presión.
+        segundos: 15
+        imagen_url: curso-tacticas/6.png
+        respuestas:
+          - 4-2-3-1
+          - 4-3-3
+          - 5-4-1
+          - 4-4-2
+        respuesta_correcta: 4-3-3
+
+      - tipo_pregunta: completar
+        enunciado: ¿Qué posición ocupa el jugador que actúa como enlace defensivo en el medio campo?
+        pista: Suelen llamarlo así en el 4-3-3.
+        segundos: 15
+        respuesta_correcta: pivote
+
+  - preguntas:
+      - tipo_pregunta: flashcard
+        segundos: 15
+        anverso: ¿Cuál es la principal ventaja del sistema 3-5-2?
+        reverso: Mayor control en el centro del campo y amplitud con carrileros
+
+      - tipo_pregunta: test
+        enunciado: En una alineación 4-4-2 en rombo, ¿dónde se ubica el mediocentro ofensivo?
+        pista: Detrás de los delanteros.
+        segundos: 15
+        respuestas:
+          - Defensa
+          - Con el portero
+          - En una banda
+          - Detrás de delanteros
+        respuesta_correcta: Detrás de delanteros
+

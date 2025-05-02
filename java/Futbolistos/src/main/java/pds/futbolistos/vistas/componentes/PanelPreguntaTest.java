@@ -28,19 +28,12 @@ public class PanelPreguntaTest extends PanelPregunta {
 
 	public PanelPreguntaTest(PreguntaTest p) {
 		super(p);
-		//setBackground(new Color(30, 30, 30)); // Fondo oscuro
 		this.pt = p;
 		inicializarComponentes();
 		añadirAcciones();
 	}
 
 	private void añadirAcciones() {
-		for (int i = 0; i < pt.getNumRespuestas(); i++) {
-			JButton boton = FactoriaComponentes.crearBoton(pt.getRespuesta(i));
-			boton.setPreferredSize(new Dimension(200,50));
-			panelRespuestas.add(boton);
-			botones.add(boton);
-		}
 		for (JButton boton : botones) {
 			boton.addActionListener(e -> {
 				detenerTemporizador(true);
@@ -63,6 +56,12 @@ public class PanelPreguntaTest extends PanelPregunta {
 		panelRespuestas.setBackground(new Color(30, 30, 30));
 
 		botones = new ArrayList<>();
+		for (int i = 0; i < pt.getNumRespuestas(); i++) {
+			JButton boton = FactoriaComponentes.crearBoton(pt.getRespuesta(i));
+			boton.setPreferredSize(new Dimension(200,50));
+			panelRespuestas.add(boton);
+			botones.add(boton);
+		}
 
 	}
 

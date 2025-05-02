@@ -2,6 +2,7 @@ package pds.futbolistos.vistas;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -35,34 +36,63 @@ public class VentanaEstadisticasUsuario extends JFrame {
 
 		EstadisticasUsuario stats = Controlador.getInstancia().getEstadisticasDeUsuarioAct();
 
+		// Panel que contendrá gráficos y estadísticas
+		JPanel panelCentro = new JPanel(new BorderLayout());
+		panelCentro.setBackground(new Color(30, 30, 30));
+
+		// Panel de gráficos
 		JPanel panelGraficos = new JPanel(new GridLayout(1, 3, 10, 10));
 		panelGraficos.setBackground(new Color(30, 30, 30));
 		panelGraficos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
 		panelGraficos.add(crearGraficoTarta(stats));
 		panelGraficos.add(crearGraficoBarras(stats));
 		panelGraficos.add(crearGraficoLineas(stats));
+
+		// Panel con estadísticas de texto
+		JPanel panelEstadisticasTexto = new JPanel(new GridLayout(1, 2, 20, 0));
+		panelEstadisticasTexto.setBackground(new Color(30, 30, 30));
+		panelEstadisticasTexto.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
 
 		JLabel lblTiempo = FactoriaComponentes
 				.crearLabel("Tiempo total de uso: " + stats.getTiempoTotalDeUsoFormateado());
 		lblTiempo.setFont(new Font("Arial", Font.BOLD, 18));
 		lblTiempo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTiempo.setForeground(Color.WHITE);
-		lblTiempo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
 
-		getContentPane().add(panelGraficos, BorderLayout.CENTER);
-		getContentPane().add(lblTiempo, BorderLayout.SOUTH);
+		JLabel lblRacha = FactoriaComponentes
+				.crearLabel("Mejor racha: " + stats.getMejorRachaDias() + " días seguido/s (actual: " + stats.getRachaDiasActual() + ")");
+		lblRacha.setFont(new Font("Arial", Font.BOLD, 18));
+		lblRacha.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRacha.setForeground(Color.WHITE);
+		
+		JLabel lblPistas = FactoriaComponentes
+				.crearLabel("Pistas consultadas: " + stats.getPistasConsultadas() + " (" + stats.getMediaPistasPorCursoRedondeado() + " pistas/curso)");
+		lblPistas.setFont(new Font("Arial", Font.BOLD, 18));
+		lblPistas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPistas.setForeground(Color.WHITE);
+
+		panelEstadisticasTexto.add(lblPistas);
+		panelEstadisticasTexto.add(lblTiempo);
+		panelEstadisticasTexto.add(lblRacha);
+
+		// Añadir gráficos y estadísticas al panel central
+		panelCentro.add(panelGraficos, BorderLayout.CENTER);
+		panelCentro.add(panelEstadisticasTexto, BorderLayout.SOUTH);
+
+		// Añadir el panel central al centro del JFrame
+		getContentPane().add(panelCentro, BorderLayout.CENTER);
 
 		setVisible(true);
 	}
+
 
 	private JPanel crearGraficoTarta(EstadisticasUsuario stats) {
 		int acertadas = stats.getPreguntasAcertadas();
 		int fallos = stats.getPreguntasRespondidas() - acertadas;
 
 		DefaultPieDataset<String> dataset = new DefaultPieDataset<>();
-		dataset.setValue("Bien", acertadas);
 		dataset.setValue("Mal", Math.max(0, fallos));
+		dataset.setValue("Bien", acertadas);
 
 		JFreeChart chart = ChartFactory.createPieChart("Aciertos vs. Fallos", dataset, true, true, false);
 		chart.setBackgroundPaint(new Color(30, 30, 30));
@@ -122,7 +152,7 @@ public class VentanaEstadisticasUsuario extends JFrame {
 
 		Map<LocalDate, Integer> historial = stats.getHistorialRachas(NUM_DIAS_HISTORIAL_RACHA);
 		for (Map.Entry<LocalDate, Integer> entry : historial.entrySet()) {
-			dataset.addValue(entry.getValue(), "Racha", entry.getKey().toString()); // Fecha como String
+			dataset.addValue(entry.getValue(), "Racha", entry.getKey().toString());
 		}
 
 		JFreeChart chart = ChartFactory.createLineChart("Evolución de la Racha", "Fecha", "Días", dataset,
@@ -131,9 +161,13 @@ public class VentanaEstadisticasUsuario extends JFrame {
 		chart.setBackgroundPaint(new Color(30, 30, 30));
 		CategoryPlot plot = chart.getCategoryPlot();
 		plot.setBackgroundPaint(new Color(40, 40, 40));
-		plot.getRenderer().setSeriesPaint(0, new Color(255, 200, 0)); // Color de la línea
 
-		// Colores para título y ejes
+		LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+		renderer.setSeriesPaint(0, new Color(255, 200, 0));
+		renderer.setSeriesShapesVisible(0, true);
+		renderer.setSeriesLinesVisible(0, true);
+		plot.setRenderer(renderer);
+
 		chart.getTitle().setPaint(Color.WHITE);
 		plot.getDomainAxis().setLabelPaint(Color.WHITE);
 		plot.getRangeAxis().setLabelPaint(Color.WHITE);

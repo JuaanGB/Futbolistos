@@ -39,7 +39,7 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 
 		this.panelRespuestas.setLayout(new GridLayout(2, 1));
 
-		this.lblCadenaOculta = FactoriaComponentes.crearLabel("<cadena_oculta>");
+		this.lblCadenaOculta = FactoriaComponentes.crearLabel(pc.getCadenaOculta());
 		lblCadenaOculta.setFont(new Font("Arial", Font.PLAIN, 20));
 		this.panelRespuestas.add(lblCadenaOculta);
 
@@ -58,19 +58,8 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 
 		this.panelRespuestas.add(panelCampoYBoton);
 	}
-
-	@Override
-	protected void gestionarPreguntaRespondida(boolean respondida) {
-		if (!respondida) {
-			JOptionPane.showMessageDialog(this,
-					"¡Tiempo agotado! La respuesta correcta era:\n" + pc.getRespuestaCorrecta());
-		}
-
-	}
 	
 	private void anadirAcciones() {
-		this.lblCadenaOculta.setText(pc.getCadenaOculta());
-		
 		ActionListener accion = e -> {
             detenerTemporizador(true);
             if (Controlador.getInstancia().validarRespuesta(pc, entradaTexto.getText())) {
@@ -85,6 +74,15 @@ public class PanelPreguntaCompletar extends PanelPregunta {
 		
 		botonValidar.addActionListener(accion);
 		entradaTexto.addActionListener(accion); // Validar al pulsar enter en lugar del clic en el botón
+	}
+	
+	@Override
+	protected void gestionarPreguntaRespondida(boolean respondida) {
+		if (!respondida) {
+			JOptionPane.showMessageDialog(this,
+					"¡Tiempo agotado! La respuesta correcta era:\n" + pc.getRespuestaCorrecta());
+		}
+
 	}
 
 }
