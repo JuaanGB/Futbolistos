@@ -18,7 +18,7 @@ public class PanelPreguntaTemplate extends PanelPregunta {
 
     // Nuevos componentes
 
-    public PanelPreguntaTest(Pregunta p) {
+    public PanelPreguntaTemplate(PreguntaNueva p) {
         super(p);
         // Configuración adicional
     }
@@ -47,7 +47,7 @@ Dicha interfaz podría ser considerada funcional pues únicamente tiene un méto
 
 ```java
 public interface EstrategiaAprendizaje {
-	List<Pregunta> calcularOrden(Curso c);
+    List<Pregunta> calcularOrden(Curso c);
 }
 ```
 
@@ -63,8 +63,20 @@ Para añadir una nueva estrategia, simplementar agregar nueva directiva
 estrategias.put("Nueva estrategia", new NuevaEstrategia());
 ```
 
-estrategias.put("Estrategia nueva", new EstrategiaNueva());``
-
 en el método `inicializarEstrategias()`.
 
-## ¿Cómo agregar nuevos formatos de serialización
+## ¿Cómo agregar nuevos formatos de serialización?
+
+### 1. Añadir nuevo `ObjectMapper` en clase `FactoriaObjectMapper.java`.
+
+Al igual que la factoría anterior, ésta también contiene un mapa que relaciona la extensión con el `ObjectMapper` a emplear.
+
+Por ejemplo, si quisiéramos añadir soporte para el formato `XML`, deberíamos añadir la línea
+
+```java
+mappers.put("xml", new XMLMapper());
+```
+
+en el método `inicializarMapa()` (además de las dependencias pertinentes en el fichero `pom.xml`).
+
+La extensibilidad se logra nada más añadiendo esa línea, ya que desde las ventanas se llama al método `getExtensionesValidas()`, que interactúa con el mapa de la factoría.

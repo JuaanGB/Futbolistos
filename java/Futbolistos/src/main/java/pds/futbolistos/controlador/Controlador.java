@@ -230,7 +230,9 @@ public class Controlador {
 		}
 	}
 
-
+	public String[] getExtensionesValidas() {
+		return factoriaMapper.getExtensionesValidas();
+	}
 
 	// CASO DE USO: ACTUALIZAR ESTADÍSTICAS DE USUARIO (al acabar el curso)
 	public void actualizarEstadisticasUsuario() {

@@ -118,9 +118,9 @@ public class Registro extends JFrame {
 		ActionListener togglePasswordVisibility = e -> {
 			JCheckBox source = (JCheckBox) e.getSource();
 			if (source == chkMostrarPassword) {
-				txtPassword.setEchoChar(chkMostrarPassword.isSelected() ? '\0' : '·');
+				txtPassword.setEchoChar(chkMostrarPassword.isSelected() ? '\0' : '*');
 			} else if (source == chkMostrarConfirmPassword) {
-				txtConfirmPassword.setEchoChar(chkMostrarConfirmPassword.isSelected() ? '\0' : '·');
+				txtConfirmPassword.setEchoChar(chkMostrarConfirmPassword.isSelected() ? '\0' : '*');
 			}
 		};
 

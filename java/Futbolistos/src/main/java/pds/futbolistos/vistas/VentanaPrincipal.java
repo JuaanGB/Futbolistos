@@ -105,8 +105,9 @@ public class VentanaPrincipal extends JFrame {
 
 	private void cargarCursoDesdeFichero() {
 		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON y YAML (*.json, *.yaml, *.yml)",
-				"json", "yaml", "yml");
+		String[] extensiones = Controlador.getInstancia().getExtensionesValidas();
+		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de serialización " + String.join(", ", extensiones),
+				extensiones);
 		fileChooser.setFileFilter(filtro);
 
 		int seleccion = fileChooser.showOpenDialog(this);

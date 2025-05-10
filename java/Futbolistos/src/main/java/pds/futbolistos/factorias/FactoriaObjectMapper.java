@@ -1,5 +1,10 @@
 package pds.futbolistos.factorias;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -8,6 +13,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 public class FactoriaObjectMapper {
 
 	private static FactoriaObjectMapper instancia;
+	private Map<String, ObjectMapper> mappers;
+	
+	public FactoriaObjectMapper() {
+		inicializarMapa();
+	}
 
 	public static FactoriaObjectMapper getInstancia() {
 		if (instancia == null) {
@@ -15,17 +25,21 @@ public class FactoriaObjectMapper {
 		}
 		return instancia;
 	}
+	
+	private void inicializarMapa() {
+		mappers = new HashMap<>();
+		mappers.put("json", new ObjectMapper());
+		mappers.put("yaml", new ObjectMapper(new YAMLFactory()));
+		mappers.put("yml", new ObjectMapper(new YAMLFactory()));
+	}
 
 	public ObjectMapper getMapper(String extension) {
-		switch (extension.toLowerCase()) {
-		case "json":
-			return new ObjectMapper();
-		case "yaml":
-		case "yml":
-			return new ObjectMapper(new YAMLFactory());
-		default:
-			throw new IllegalArgumentException("Formato no soportado: " + extension);
-		}
+		return mappers.get(extension);
+	}
+	
+	public String[] getExtensionesValidas() {
+		return mappers.keySet().stream()
+				.toArray(String[]::new);
 	}
 
 }
