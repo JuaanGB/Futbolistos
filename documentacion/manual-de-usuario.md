@@ -8,7 +8,7 @@
 - [Importar curso](#importar-curso)
 - [Realizar un curso / Reanudar progreso](#realizar-un-curso--reanudar-progreso)
 - [Mostrar estadísticas](#mostrar-estadísticas)
-- [Formato de importación de cursos](#formato-de-importacion-de-cursos)
+- [Formato de importación de cursos](#formato-de-importación-de-cursos)
 
 ---
 
@@ -16,15 +16,15 @@
 
 <img title="" src="img/login.png" alt="" width="236" data-align="center">
 
-Inicialmente no dispones de una cuenta de usuario para utilizar la aplicación. Así que deberás pulsar el botón de **Registrar***.
+Inicialmente no dispones de una cuenta de usuario para utilizar la aplicación. Así que deberás pulsar el botón de **Registrar**.
 
 ## Registro de usuarios.
 
 <img title="" src="img/registro.png" alt="" width="338" data-align="center">
 
-Introduciremos nuestros credenciales deseados para la cuenta. Podemos observar la contraseña introducida clicando el botón con el icono del ojo. 
+Introduciremos nuestras credenciales deseadas para la cuenta. Podemos observar la contraseña introducida clicando el botón con el icono del ojo. 
 
-El sistema notificará si ya existe un usuario con dicho nombre o la contraseña y su confirmación no coincide.
+El sistema notificará si ya existe un usuario con dicho nombre o si la contraseña y su confirmación no coinciden.
 
 ## Ventana principal.
 
@@ -32,13 +32,13 @@ Tras el registro, deberemos introducir de nuevo nuestras credenciales de acceso 
 
 <img title="" src="img/ventana-principal.png" alt="" width="398" data-align="center">
 
-Desde aquí podemos cargar cursos desde ficheros o ver las estadísticas. Aunque de poco sirve ver las estadísticas cuando no hemos realizado ningún curso todavía.
+Desde aquí podemos cargar cursos desde ficheros o ver las estadísticas. Aunque de poco sirve ver las estadísticas si no hemos realizado ningún curso todavía.
 
 ## Importar curso.
 
 Clicaremos el botón **Importar curso** y seleccionaremos el fichero que contiene el curso completo. Se muestran los formatos válidos en el selector de fichero.
 
-Los ficheros de cursos deben seguir un formato minucioso, tal y como se explica [aquí](#formato-de-importacion-de-cursos).
+Los ficheros de cursos deben seguir un contenido minucioso, tal y como se explica [aquí](#formato-de-importación-de-cursos).
 
 <img title="" src="img/ventana-principal-tras-importar.png" alt="" width="398" data-align="center">
 
@@ -54,7 +54,7 @@ Tras esto, se mostrará la primera pregunta, donde todas ellas tienen un tiempo 
 
 <img title="" src="img/realizar-curso.png" alt="" width="234" data-align="center">
 
-En cualquier momento del curso, podemos **guardar su estado** para retomarlo más adelante. Clicaremos el botón **Guardar estado** del margen inferior.
+En cualquier momento del curso, podemos **guardar su estado** para retomarlo más adelante. Clicaremos el botón **Guardar estado** en el margen inferior de la ventana.
 
 Cuando volvamos a retomarlo, no se sugerirá una estrategia de aprendizaje, sino que se le indicará al alumno que se va a retomar la sesión previamente guardada:
 
@@ -70,9 +70,9 @@ Todas las estadísticas son visibles para el usuario en la ventana asociada al b
 
 <img src="img/estadisticas.png" title="" alt="" data-align="center">
 
-## Formato de importación de cursos
+## Formato de importación de cursos.
 
-### Atributos necesarios para cada entidad
+### Atributos necesarios para cada entidad.
 
 Si estás considerando poner algún atributo como `null`, **no lo incluyas**.
 
@@ -80,50 +80,54 @@ Si estás considerando poner algún atributo como `null`, **no lo incluyas**.
 
 **Curso**
 
-- `nombre`: No puede ser blanco (es decir, no sólo formado por espacios).
-- `descripcion`: No puede ser blanca.
-- `imagen_url` (opcional): Si se incluye, no puede ser blanca.
-- `bloques_de_contenido`: Debe contener al menos un bloque de contenido.
+| Atributo               | Obligatorio | Información adicional                          |
+| ---------------------- | ----------- | ---------------------------------------------- |
+| `nombre`               | Sí          | No puede ser una cadena vacía.                 |
+| `descripcion`          | Sí          | No puede ser una cadena vacía.                 |
+| `imagen_url`           | No          | Si se incluye, no puede ser una cadena vacía.  |
+| `bloques_de_contenido` | Sí          | Debe contener al menos un bloque de contenido. |
 
 ---
 
 **Bloque de contenido**
 
-- `preguntas`: Debe contener al menos una pregunta.
+| Atributo    | Obligatorio | Información adicional                |
+| ----------- | ----------- | ------------------------------------ |
+| `preguntas` | Sí          | Debe contener al menos una pregunta. |
 
 ---
 
 **Pregunta (reglas aplicables a todos los subtipos)**
 
-- `tipo_pregunta`: Debe ser uno de los valores reconocidos (`flashcard`, `test`, `completar`, etc.).
+| Atributo        | Obligatorio | Información adicional                                                             |
+| --------------- | ----------- | --------------------------------------------------------------------------------- |
+| `tipo_pregunta` | Sí          | Debe ser uno de los valores reconocidos (`flashcard`, `test`, `completar`, etc.). |
+| `segundos`      | Sí          | Debe ser mayor que 0.                                                             |
+| `pista`         | No          | Si se incluye, no puede ser una cadena vacía.                                     |
+| `imagen_url`    | No          | Si se incluye, no puede ser una cadena vacía.                                     |
 
-- `segundos`: Debe ser mayor que 0.
+**Si `tipo_pregunta` es `flashcard`:**
 
-- `pista` (opcional): Si se incluye, no puede ser blanca.
+| Atributo    | Obligatorio | Información adicional                    |
+| ----------- | ----------- | ---------------------------------------- |
+| `anverso`   | Sí          | No puede ser una cadena vacía.           |
+| `reverso`   | Sí          | No puede ser una cadena vacía.           |
+| `enunciado` | No          | No debe incluir un atributo `enunciado`. |
 
-- `imagen_url` (opcional): Si se incluye, no puede ser blanca.
+**Si `tipo_pregunta` es `completar`:**
 
-- Si `tipo_pregunta` es `flashcard`:
-  
-  - `anverso`: No puede ser blanco.
-  
-  - `reverso`: No puede ser blanco.
-  
-  - No debe incluir `enunciado`.
+| Atributo             | Obligatorio | Información adicional          |
+| -------------------- | ----------- | ------------------------------ |
+| `enunciado`          | Sí          | No puede ser una cadena vacía. |
+| `respuesta_correcta` | Sí          | No puede ser una cadena vacía. |
 
-- Si `tipo_pregunta` es `completar`:
-  
-  - `enunciado`: No puede ser blanco.
-  
-  - `respuesta_correcta`: No puede ser blanca.
+#### **Si `tipo_pregunta` es `test`:**
 
-- Si `tipo_pregunta` es `test`:
-  
-  - `enunciado`: No puede ser blanco.   
-  
-  - `respuestas`: Debe ser una lista con al menos dos elementos, y ninguno puede ser blanco o `null`.
-  
-  - `respuesta_correcta`: Debe estar incluida dentro de `respuestas`.
+| Atributo             | Obligatorio | Información adicional                                                                     |
+| -------------------- | ----------- | ----------------------------------------------------------------------------------------- |
+| `enunciado`          | Sí          | No puede ser una cadena vacía.                                                            |
+| `respuestas`         | Sí          | Debe ser una lista con al menos dos elementos, y ninguno puede una cadena vacía o `null`. |
+| `respuesta_correcta` | Sí          | Debe estar incluida dentro de `respuestas`.                                               |
 
 ---
 

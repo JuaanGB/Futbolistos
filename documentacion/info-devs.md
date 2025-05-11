@@ -1,8 +1,21 @@
 # Información para desarrolladores.
 
-## ¿Cómo añadir nuevos tipos de Pregunta?
+## Contenido
 
-### 1. Jerarquía de PanelPregunta.
+- [¿Cómo añadir nuevos tipos de pregunta?](#cómo-añadir-nuevos-tipos-de-pregunta)
+  - [1. Jerarquía de `PanelPregunta`](#1-jerarquía-de-panelpregunta)
+  - [2. Clase Java que hereda de `Pregunta`](#2-clase-java-que-hereda-de-pregunta)
+- [¿Cómo añadir nuevas estrategias de aprendizaje?](#cómo-añadir-nuevas-estrategias-de-aprendizaje)
+  - [1. Crear nueva clase que implemente la interfaz `EstrategiaAprendizaje`](#1-crear-nueva-clase-que-implemente-la-interfaz-estrategiaaprendizajejava)
+  - [2. Añadir la nueva estrategia a `FactoriaEstrategiasAprendizaje.java`](#2-añadir-la-nueva-estrategia-a-factoriaestrategiasaprendizajejava)
+- [¿Cómo agregar nuevos formatos de serialización?](#cómo-agregar-nuevos-formatos-de-serialización)
+  - [1. Añadir nuevo `ObjectMapper` en clase `FactoriaObjectMapper.java`](#1-añadir-nuevo-objectmapper-en-clase-factoriaobjectmapperjava)
+
+---
+
+## ¿Cómo añadir nuevos tipos de pregunta?
+
+### 1. Jerarquía de `PanelPregunta`.
 
 - Clase principal: `PanelPregunta`
   - Contiene todos los elementos comunes de un panel de pregunta: enunciado, foto (opcional), botón de pista, tiempo restante...
