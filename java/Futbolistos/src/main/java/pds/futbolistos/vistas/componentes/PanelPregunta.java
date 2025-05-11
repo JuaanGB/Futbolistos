@@ -162,25 +162,18 @@ public abstract class PanelPregunta extends JPanel {
 		add(Box.createVerticalGlue());
 
 		// Se aumenta el tamaño del botón "Pista"
-		btnPista = new JButton("Pista");
+		btnPista = FactoriaComponentes.crearBoton("Pista");
 		btnPista.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnPista.setBackground(new Color(0, 204, 102));
-		btnPista.setForeground(Color.WHITE);
-		btnPista.setFocusPainted(false);
-		btnPista.setBorder(null);
-		btnPista.setFont(new Font("Arial", Font.BOLD, 16));
-		btnPista.setPreferredSize(new Dimension(200, 50));
-		btnPista.setMaximumSize(new Dimension(200, 50));
+		btnPista.setPreferredSize(new Dimension(130, 40));
+		btnPista.setMaximumSize(new Dimension(130, 40));
 		add(btnPista);
 
 		add(Box.createVerticalGlue());
 
 		// Configuración visual del temporizador
-		lblTiempoRestante = new JLabel("Tiempo: " + tiempoRestante + "s");
+		lblTiempoRestante = FactoriaComponentes.crearLabel("Tiempo: " + tiempoRestante + "s");
 		lblTiempoRestante.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTiempoRestante.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTiempoRestante.setFont(new Font("Arial", Font.BOLD, 16));
-		lblTiempoRestante.setForeground(Color.WHITE);
 		add(lblTiempoRestante);
 	}
 

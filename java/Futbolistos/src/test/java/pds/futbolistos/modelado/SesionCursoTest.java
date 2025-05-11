@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -123,5 +125,15 @@ public class SesionCursoTest {
 		assertEquals("1", pregunta1.getRespuestaCorrecta(), "La respuesta correcta debe coincidir.");
 		assertEquals("Pista Pregunta 1", pregunta1.getPista(), "La pista debe coincidir.");
 		assertEquals(10, pregunta1.getSegundos(), "El tiempo de respuesta debe coincidir.");
+	}
+	
+	@ParameterizedTest
+	@CsvSource({ 
+		"1, true",
+		"0, false"
+	})
+	public void testQuedanPistasDisponibles(int pistasRestantes, boolean esperado) {
+		sesion.setPistasRestantes(pistasRestantes);
+		assertEquals(esperado, sesion.quedanPistasDisponibles());
 	}
 }

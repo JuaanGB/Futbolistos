@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -110,6 +112,19 @@ public class EstadisticasUsuarioTest {
 		estadisticas.registrarCierre(cierre);
 
 		assertEquals(1800, estadisticas.getTiempoTotalDeUso());
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"0, 0, '0,00'",
+		"5, 2, '2,50'",
+		"2, 3, '0,67'"
+	})
+	public void testGetMediaPistasPorCursoRedondeado(int pistas, int cursos, String res) {
+		estadisticas.setPistasConsultadas(pistas);
+		estadisticas.setCursosRealizados(cursos);
+		System.out.println(estadisticas.getMediaPistasPorCursoRedondeado());
+		assertEquals(res, estadisticas.getMediaPistasPorCursoRedondeado());
 	}
 
 

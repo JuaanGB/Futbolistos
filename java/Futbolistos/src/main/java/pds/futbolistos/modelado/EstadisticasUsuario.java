@@ -72,9 +72,17 @@ public class EstadisticasUsuario {
 		return tiempoTotalDeUso;
 	}
 	
+	public void setCursosRealizados(int cursosRealizados) {
+		this.cursosRealizados = cursosRealizados;
+	}
+	
+	public void setPistasConsultadas(int pistasConsultadas) {
+		this.pistasConsultadas = pistasConsultadas;
+	}
+	
 	public String getMediaPistasPorCursoRedondeado() {
 		if (cursosRealizados == 0) {
-			return "0.00";
+			return "0,00";
 		}
 		float media = (float) pistasConsultadas / cursosRealizados;
 		return String.format("%.2f", media);
