@@ -2,24 +2,14 @@ package pds.futbolistos.controlador;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 
-import org.hibernate.Hibernate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import pds.futbolistos.bd.BaseDeDatos;
 import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import pds.futbolistos.factorias.FactoriaObjectMapper;
@@ -27,9 +17,6 @@ import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.EstadisticasUsuario;
 import pds.futbolistos.modelado.Pregunta;
-import pds.futbolistos.modelado.PreguntaCompletar;
-import pds.futbolistos.modelado.PreguntaFlashcard;
-import pds.futbolistos.modelado.PreguntaTest;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.Usuario;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
@@ -224,7 +211,9 @@ public class Controlador {
 			}
 			return false;
 
-		} catch (IOException e) {
+		} catch (Exception e) {
+			// Error al importar
+			System.out.println("Resumen de error: ");
 			e.printStackTrace();
 			return false;
 		}

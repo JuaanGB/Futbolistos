@@ -1,7 +1,25 @@
 package pds.futbolistos.vistas;
 
-import org.jfree.chart.*;
-import org.jfree.chart.plot.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.util.Map;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.chart.title.LegendTitle;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -10,14 +28,6 @@ import org.jfree.data.general.DefaultPieDataset;
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.EstadisticasUsuario;
 import pds.futbolistos.vistas.componentes.FactoriaComponentes;
-
-import javax.swing.*;
-import java.awt.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.List;
 
 public class VentanaEstadisticasUsuario extends JFrame {
 

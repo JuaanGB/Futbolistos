@@ -1,12 +1,7 @@
 package pds.futbolistos.bd;
 
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

@@ -1,10 +1,8 @@
 package pds.futbolistos.modelado.estrategias;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
 

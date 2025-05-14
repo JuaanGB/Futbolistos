@@ -1,12 +1,13 @@
 package pds.futbolistos.modelado;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +16,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import pds.futbolistos.modelado.Curso;
-import pds.futbolistos.modelado.Pregunta;
-import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
 

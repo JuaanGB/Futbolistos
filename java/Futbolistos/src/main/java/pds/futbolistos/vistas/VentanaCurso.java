@@ -1,6 +1,21 @@
 package pds.futbolistos.vistas;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.Pregunta;
@@ -8,10 +23,6 @@ import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.vistas.componentes.FactoriaComponentes;
 import pds.futbolistos.vistas.componentes.PanelEstadisticasCurso;
 import pds.futbolistos.vistas.componentes.PanelPregunta;
-
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class VentanaCurso extends JFrame {
 

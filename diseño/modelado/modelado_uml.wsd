@@ -1,69 +1,47 @@
 @startuml
-' Entidades del dominio
-
-entity Usuario
-entity Alumno
-entity Creador
-
 Usuario <|-- Alumno
 Usuario <|-- Creador
 
-entity Curso
-entity SesionCurso
-entity BloqueContenidos
-entity Pregunta
-entity PreguntaTest
-entity PreguntaCompletar
-entity Flashcard
-entity EstrategiaAprendizaje
-entity Secuencial
-entity Aleatorio
-entity Espaciada
-entity Pista
+' Usuario posee estadísticas
+Usuario *-- "1" EstadisticasUsuario : posee
 
-entity Estadistica
-entity CursoCompartido
-entity Badge
-
-' Relaciones
-
-' Un Usuario crea uno o más Cursos
-Creador *-- "*" Curso : crea
-
-' Compartición: Un Usuario comparte cursos con otros
-Alumno "1" o-- "*" CursoCompartido : comparte
-CursoCompartido "1" o-- "1" Curso : referencia
-CursoCompartido "1" o-- "1" Alumno : destinatario
-
-' Un Curso se compone de uno o más BloqueContenidos
-Curso "1..*" -- "1..*" BloqueContenidos : contiene
-
-' Cada BloqueContenidos incluye una o más Preguntas
-BloqueContenidos "1" *-- "1..*" Pregunta : incluye
-
-' Herencia de tipos de Pregunta
+' Estructura de los cursos
+Curso *-- "1..*" BloqueContenidos : contiene
+class Pregunta {
+  - pista[0,1]
+}
+BloqueContenidos *-- "1..*" Pregunta : incluye
 Pregunta <|-- PreguntaTest
 Pregunta <|-- PreguntaCompletar
 Pregunta <|-- Flashcard
 
-' Pistas de pregunta
-Pregunta *-- "0..1" Pista : se puede resolver con
+' Creador crea cursos.
+' Nota: Se asume que un creador puede tener cero o más cursos, pero cada curso es creado por un único creador.
+Creador *-- "0..*" Curso : crea
 
-' Herencia de tipos de EstrategiaAprendizaje
-EstrategiaAprendizaje <|-- Secuencial
-EstrategiaAprendizaje <|-- Aleatorio
-EstrategiaAprendizaje <|-- Espaciada
+' Compartición de curso.
+' Cada CursoCompartido es compartido por un único Creador y recibido por un único Alumno.
+Creador "1" -- "0..*" CursoCompartido : comparte
+Alumno "1" -- "0..*" CursoCompartido : recibe
 
-' Un Curso utiliza una Estrategia de Aprendizaje
-SesionCurso "*" -- "1" EstrategiaAprendizaje : utiliza
+' Referencia de CursoCompartido a Curso
+' Cada CursoCompartido referencia exactamente 1 Curso; 
+' un Curso puede estar referenciado en 0..* CursoCompartido.
+CursoCompartido "1" -- "0..*" Curso : referencia a
 
-' El progreso de un Curso se guarda mediante EstadoCurso
-Usuario *-- "*" SesionCurso : realiza
-Curso "1" -- "*" "SesionCurso" : asociada a
+' Usuario realiza SesionCurso
+' Cada SesionCurso la realiza un único Usuario, quien puede tener 0..* sesiones a medio.
+Usuario *-- "0..*" SesionCurso : realiza
 
-' Estadísticas de uso generadas por el Usuario
-Usuario *-- "*" Estadistica : genera
+' Relación de SesionCurso con Curso
+' Cada SesionCurso se asocia a 1 Curso; un Curso puede tener 0..* SesionCurso.
+Curso "1" -- "0..*" SesionCurso : asociada a
 
-' Gamificación: Relación muchos a muchos entre Usuario y Badge
-Usuario "*" -- "*" Badge : posee
+' Una SesionCurso emplea una EstrategiaAprendizaje
+SesionCurso "*" -- "1" EstrategiaAprendizaje : emplea
+EstrategiaAprendizaje <|-- EstrategiaSecuencial
+EstrategiaAprendizaje <|-- EstrategiaAleatoria
+EstrategiaAprendizaje <|-- EstrategiaEjecucionEspaciada
+
 @enduml
+

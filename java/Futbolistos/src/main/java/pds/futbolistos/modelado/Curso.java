@@ -1,23 +1,15 @@
 package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-
-import javax.imageio.ImageIO;
 
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Convert;
@@ -133,6 +125,10 @@ public class Curso {
 
 		boolean res = nombre != null && !nombre.isBlank() && descripcion != null && !descripcion.isBlank();
 
+		if (imagenURL != null) {
+			res = res && !imagenURL.isBlank();
+		}
+		
 		res = res && this.bloquesDeContenido.size() >= 1
 				&& bloquesDeContenido.stream().allMatch(bc -> bc.checkParsing());
 

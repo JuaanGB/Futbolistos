@@ -8,6 +8,7 @@
         {
           "tipo_pregunta": "flashcard",
           "segundos": 15,
+          "imagen_url": "curso-jugadores/1.png",
           "anverso": "¿Qué número utilizó Diego Maradona en el Mundial de 1986?",
           "reverso": "El número 10."
         },

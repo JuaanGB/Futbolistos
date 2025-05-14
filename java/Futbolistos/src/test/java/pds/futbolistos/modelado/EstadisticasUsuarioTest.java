@@ -1,21 +1,15 @@
 package pds.futbolistos.modelado;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
-import pds.futbolistos.modelado.Curso;
-import pds.futbolistos.modelado.EstadisticasUsuario;
-import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
 
 /**

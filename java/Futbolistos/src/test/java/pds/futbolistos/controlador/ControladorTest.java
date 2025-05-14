@@ -1,5 +1,16 @@
 package pds.futbolistos.controlador;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,7 +20,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
 import pds.futbolistos.bd.BaseDeDatos;
-import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.BloqueDeContenido;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.Pregunta;
@@ -18,16 +28,6 @@ import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.Usuario;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
 import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
-
-import static org.mockito.Mockito.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 
 /**

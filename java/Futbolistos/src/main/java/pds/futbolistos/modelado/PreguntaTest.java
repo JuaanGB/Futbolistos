@@ -1,21 +1,16 @@
 package pds.futbolistos.modelado;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+
 import javax.swing.JPanel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import pds.futbolistos.modelado.convertidores.ConversorListaDeCadenas;
 import pds.futbolistos.vistas.componentes.PanelPreguntaTest;
@@ -77,6 +72,7 @@ public class PreguntaTest extends Pregunta /* implements Visitable */ {
 		res = res && respuestaCorrecta != null && !respuestaCorrecta.isBlank();
 
 		res = res && respuestas.size() >= 2;
+		res = res && respuestas.size() <= 4;
 		res = res && respuestas.stream().allMatch(r -> r != null && !r.isBlank());
 
 		res = res && respuestas.contains(respuestaCorrecta);

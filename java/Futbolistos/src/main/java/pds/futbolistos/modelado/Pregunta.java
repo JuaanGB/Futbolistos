@@ -1,17 +1,13 @@
 package pds.futbolistos.modelado;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -118,8 +114,8 @@ public abstract class Pregunta {
 
 		valido = valido && segundos > 0;
 
-		if (hasImagen()) {
-			valido = valido && imagenURL != null && !imagenURL.isBlank();
+		if (imagenURL != null) {
+			valido = valido && !imagenURL.isBlank();
 		}
 
 		return valido;

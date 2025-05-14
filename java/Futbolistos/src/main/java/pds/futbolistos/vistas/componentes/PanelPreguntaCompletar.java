@@ -1,25 +1,21 @@
 package pds.futbolistos.vistas.componentes;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import pds.futbolistos.controlador.Controlador;
-import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.modelado.PreguntaCompletar;
-import pds.futbolistos.modelado.PreguntaTest;
-import pds.futbolistos.vistas.VentanaCurso;
-
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 
 public class PanelPreguntaCompletar extends PanelPregunta {
 

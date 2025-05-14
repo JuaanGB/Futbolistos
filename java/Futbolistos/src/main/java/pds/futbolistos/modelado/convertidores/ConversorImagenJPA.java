@@ -1,14 +1,5 @@
 package pds.futbolistos.modelado.convertidores;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
-import java.sql.SQLException;
-
-import javax.imageio.ImageIO;
-
 import jakarta.persistence.AttributeConverter;
 import pds.futbolistos.modelado.ImagenJPA;
 

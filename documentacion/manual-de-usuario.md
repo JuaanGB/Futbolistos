@@ -123,11 +123,11 @@ Si estás considerando poner algún atributo como `null`, **no lo incluyas**.
 
 #### **Si `tipo_pregunta` es `test`:**
 
-| Atributo             | Obligatorio | Información adicional                                                                     |
-| -------------------- | ----------- | ----------------------------------------------------------------------------------------- |
-| `enunciado`          | Sí          | No puede ser una cadena vacía.                                                            |
-| `respuestas`         | Sí          | Debe ser una lista con al menos dos elementos, y ninguno puede una cadena vacía o `null`. |
-| `respuesta_correcta` | Sí          | Debe estar incluida dentro de `respuestas`.                                               |
+| Atributo             | Obligatorio | Información adicional                                                                                 |
+| -------------------- | ----------- | ----------------------------------------------------------------------------------------------------- |
+| `enunciado`          | Sí          | No puede ser una cadena vacía.                                                                        |
+| `respuestas`         | Sí          | Debe ser una lista con un número de elementos entre 2 y 3, y ninguno puede una cadena vacía o `null`. |
+| `respuesta_correcta` | Sí          | Debe estar incluida dentro de `respuestas`.                                                           |
 
 ---
 

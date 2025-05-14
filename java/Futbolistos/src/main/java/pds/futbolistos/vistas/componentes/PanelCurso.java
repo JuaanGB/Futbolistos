@@ -1,19 +1,26 @@
 package pds.futbolistos.vistas.componentes;
 
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.Set;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import pds.futbolistos.controlador.Controlador;
-import pds.futbolistos.factorias.FactoriaEstrategiasAprendizaje;
 import pds.futbolistos.modelado.Curso;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.modelado.estrategias.EstrategiaAprendizaje;
-import pds.futbolistos.modelado.estrategias.EstrategiaSecuencial;
 import pds.futbolistos.vistas.VentanaCurso;
-import pds.futbolistos.vistas.componentes.FactoriaComponentes;
-
-import java.awt.*;
-import java.util.ResourceBundle.Control;
-import java.util.Set;
 
 public class PanelCurso extends JPanel {
 

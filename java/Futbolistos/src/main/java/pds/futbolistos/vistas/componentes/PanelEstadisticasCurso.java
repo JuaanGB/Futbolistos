@@ -1,16 +1,21 @@
 package pds.futbolistos.vistas.componentes;
 
-import javax.swing.*;
+import static pds.futbolistos.vistas.componentes.FactoriaComponentes.crearLabel;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.SesionCurso;
 import pds.futbolistos.vistas.VentanaPrincipal;
-
-import static pds.futbolistos.vistas.componentes.FactoriaComponentes.*;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class PanelEstadisticasCurso extends JPanel {
 	private static final long serialVersionUID = 1L;

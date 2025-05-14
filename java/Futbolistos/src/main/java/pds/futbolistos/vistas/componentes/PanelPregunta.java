@@ -1,15 +1,29 @@
 package pds.futbolistos.vistas.componentes;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.HierarchyEvent;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import pds.futbolistos.controlador.Controlador;
 import pds.futbolistos.modelado.Pregunta;
 import pds.futbolistos.vistas.VentanaCurso;
-import pds.futbolistos.vistas.VentanaPrincipal;
-
-import java.awt.*;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
 
 public abstract class PanelPregunta extends JPanel {
 

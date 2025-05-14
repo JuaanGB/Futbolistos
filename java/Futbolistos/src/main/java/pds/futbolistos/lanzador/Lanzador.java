@@ -1,6 +1,7 @@
 package pds.futbolistos.lanzador;
 
 import java.awt.EventQueue;
+
 import javax.swing.UIManager;
 
 import pds.futbolistos.vistas.Login;
