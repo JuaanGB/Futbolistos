@@ -9,7 +9,7 @@
 - [Realizar un curso / Reanudar progreso](#realizar-un-curso--reanudar-progreso)
 - [Mostrar estadísticas](#mostrar-estadísticas)
 - [Formato de importación de cursos](#formato-de-importación-de-cursos)
-- [Ficheros de ejemplo](ficheros-de-ejemplo)
+- [Ficheros de ejemplo](#ficheros-de-ejemplo)
 
 ---
 
