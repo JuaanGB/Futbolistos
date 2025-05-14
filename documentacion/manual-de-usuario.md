@@ -9,6 +9,7 @@
 - [Realizar un curso / Reanudar progreso](#realizar-un-curso--reanudar-progreso)
 - [Mostrar estadísticas](#mostrar-estadísticas)
 - [Formato de importación de cursos](#formato-de-importación-de-cursos)
+- [Ficheros de ejemplo](ficheros-de-ejemplo)
 
 ---
 
@@ -132,3 +133,9 @@ Si estás considerando poner algún atributo como `null`, **no lo incluyas**.
 ---
 
 Si has seguido correctamente esta guía, el curso se importará correctamente. Si no, mostrará un mensaje de error de que hay errores en el formato.
+
+## Ficheros de ejemplo.
+
+En la carpeta [datos-ejemplo](../datos-ejemplo) hay dos cursos (uno en formato JSON y, el otro, en YAML) para importarlos directamente. También hay un fichero de base de datos de ejemplo.
+
+La información de ambos ficheros está explicada [aquí](../datos-ejemplo/información.md).
